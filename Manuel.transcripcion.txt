@@ -1,0 +1,531 @@
+Idioma detectado: es (prob=0.915)
+
+[00:00:00.000 -> 00:00:11.170] compartir pantalla, listo.
+[00:00:11.170 -> 00:00:20.130] Voy a abrirme por acá un Excel, como siempre, para rallar.
+[00:00:20.130 -> 00:00:24.090] Y quedamos entonces, claro.
+[00:00:24.090 -> 00:00:24.570] ¿Qué pasó?
+[00:00:24.570 -> 00:00:26.210] ¿Yo no se puedo echar acá, echar eso?
+[00:00:26.210 -> 00:00:46.820] Qué raro.
+[00:00:46.820 -> 00:01:14.610] Ya me intento Excel, sí.
+[00:01:14.610 -> 00:01:21.290] Y entonces vamos acá a listar como tareas.
+[00:01:21.290 -> 00:01:24.170] Entonces, la primera y más importante es,
+[00:01:24.170 -> 00:01:36.580] es el data cherry con datos reales y FR, ¿sí?
+[00:01:36.580 -> 00:01:38.220] Y FR, ya sabes qué es lo que es.
+[00:01:38.220 -> 00:01:42.740] Es el proceso que lo entrega, que entrega los datos,
+[00:01:42.740 -> 00:01:47.020] que de momento están entregando en CUAM, ¿sí?
+[00:01:47.020 -> 00:01:52.700] Yo sé que de esto ya hiciste un apuntamiento.
+[00:01:52.700 -> 00:01:53.940] Falta de probarlo.
+[00:01:53.940 -> 00:01:56.140] Yo sé que ahí se van a presentar un montón de errores.
+[00:01:56.140 -> 00:01:58.220] Yo sé que eso va a ser normal.
+[00:01:58.220 -> 00:02:03.290] Pero éstas quizás de las más importantes, ¿sí?
+[00:02:03.290 -> 00:02:10.780] El segundo que tenemos es orquestar con el framework.
+[00:02:10.780 -> 00:02:13.460] Con el framework, ¿sí?
+[00:02:13.460 -> 00:02:17.340] Este framework ya está desplegado, ¿sí?
+[00:02:17.340 -> 00:02:20.180] Ya está funcionando.
+[00:02:20.180 -> 00:02:26.860] Y ya tenemos los archivos input que se necesitan para
+[00:02:26.860 -> 00:02:28.260] ejecutar.
+[00:02:28.260 -> 00:02:37.330] Este final es como el menor de los problemas, ¿vale?
+[00:02:37.330 -> 00:02:45.660] El tercero es data cherry con datos reales,
+[00:02:45.660 -> 00:02:49.380] orquestar con el framework bash.
+[00:02:49.380 -> 00:02:51.420] Es que no quiero poner ordenamiento todavía.
+[00:02:51.420 -> 00:02:55.300] No sé qué venir antes de esto.
+[00:02:55.300 -> 00:02:59.620] El tema es reconciliar datos.
+[00:02:59.620 -> 00:03:02.180] Esto yo no estoy trabajando.
+[00:03:02.180 -> 00:03:03.820] Pero para que lo tengas en visual,
+[00:03:03.820 -> 00:03:14.270] esto es comparar teradata contra redshift y esto es con base
+[00:03:14.270 -> 00:03:24.160] a una data de users doministrada por teradata.
+[00:03:24.160 -> 00:03:25.360] Esto ya está súper adelantado.
+[00:03:25.360 -> 00:03:30.520] Solamente falta es comparar, ¿sí?
+[00:03:30.520 -> 00:03:37.820] El cuatro es ordenamiento.
+[00:03:37.820 -> 00:03:43.220] Esto, ordenamiento, lo primero que tienes que saber es,
+[00:03:43.220 -> 00:03:49.060] ya existe la lógica SQL, ¿sí?
+[00:03:49.060 -> 00:03:53.060] Enquídar, toca mover esos archivos.
+[00:03:53.060 -> 00:03:57.650] Enquídar, ¿sí?
+[00:03:57.650 -> 00:04:04.730] Ahora, la próxima tarea es moverlos a ambiente,
+[00:04:04.730 -> 00:04:09.530] moverlos a ambiente Experian.
+[00:04:09.530 -> 00:04:15.450] Y allí, para probarlos, vamos a moquear datos, ¿sí?
+[00:04:15.450 -> 00:04:25.570] Entonces, para moquear datos, vamos a partir del hecho de que
+[00:04:25.570 -> 00:04:34.530] partimos de la base, partimos de la base de que ya tenemos una,
+[00:04:34.530 -> 00:04:37.370] partimos de la base que ya tenemos una parte de datos
+[00:04:37.370 -> 00:04:43.650] moqueados, que es lo que hace unificación, ¿sí?
+[00:04:43.650 -> 00:04:49.530] Regla 1, regla 2 y regla 3, que acá tenemos, si recuerdas,
+[00:04:49.530 -> 00:04:58.090] tenemos 20,000 personas, que son más o menos unos 43,000
+[00:04:58.090 -> 00:05:04.010] RPUs o registros, que es RPUs 40, que es la sigla de relación
+[00:05:04.130 -> 00:05:08.350] con la persona ubicación.
+[00:05:08.350 -> 00:05:13.990] Y lo que es conveniente hacer es, de esa base,
+[00:05:13.990 -> 00:05:18.190] partamos y creemos lo otro que necesitamos para poder probar
+[00:05:18.190 -> 00:05:20.030] ordenamiento.
+[00:05:20.030 -> 00:05:23.950] Entonces, en un ordenamiento es necesario que leas bastante,
+[00:05:23.950 -> 00:05:26.310] igual, como te digo, ya está construido.
+[00:05:26.310 -> 00:05:32.110] Hay que mover la lógica de quídar a Experian y hay
+[00:05:32.110 -> 00:05:37.190] un cursor, así es el tema de inversión, ¿sí?
+[00:05:37.190 -> 00:05:41.510] ¿Qué es importante entender?
+[00:05:41.510 -> 00:05:45.430] Acuérdate que hagamos un resumen reconocer.
+[00:05:45.430 -> 00:05:56.450] Es el proceso de medir el mejor canal de contactabilidad,
+[00:05:56.450 -> 00:05:58.570] ¿sí?
+[00:05:58.570 -> 00:06:01.980] Para un usuario.
+[00:06:01.980 -> 00:06:06.020] Y esto puede ser por dirección física,
+[00:06:06.020 -> 00:06:08.660] aquí es donde estuvo unificación,
+[00:06:08.660 -> 00:06:13.910] con todas sus tres reglas.
+[00:06:13.910 -> 00:06:17.830] Luego viene el otro canal es e-mail,
+[00:06:17.830 -> 00:06:20.550] el otro canal es celular.
+[00:06:20.550 -> 00:06:31.790] El celular de otro canal es el teléfono FIM, ¿sí?
+[00:06:31.790 -> 00:06:41.800] Y estos canales de contactabilidad, todos estos,
+[00:06:41.800 -> 00:06:47.570] tienen una serie de fases, ¿sí?
+[00:06:47.570 -> 00:06:50.770] Creo que son como cuatro fases.
+[00:06:50.770 -> 00:06:54.530] Y todo esto lo vamos a medir en el proceso que se llama
+[00:06:54.530 -> 00:07:12.520] ordenamiento, ordenamiento.
+[00:07:12.520 -> 00:07:19.340] Entonces, ordenamiento es el proceso que va a generar al
+[00:07:19.340 -> 00:07:33.570] final una cosa que se llaman el escor de contactabilidad.
+[00:07:33.570 -> 00:07:36.490] Toda esta parte ya existe transformada en código
+[00:07:36.490 -> 00:07:44.710] contactabilidad, ¿sí?
+[00:07:44.710 -> 00:07:48.030] Eso básicamente para que refrescamos memoria,
+[00:07:48.030 -> 00:07:53.030] lo que dice es, a Andrés Bonilla como usuario,
+[00:07:53.030 -> 00:07:56.550] lo pueden encontrar más fácil en la dirección física,
+[00:07:56.550 -> 00:07:58.430] tal dirección.
+[00:07:58.430 -> 00:08:02.590] A Francisco Pella lo pueden ubicar más fácil por celular, ¿sí?
+[00:08:02.590 -> 00:08:04.870] Más o menos eso es lo que va a entregar,
+[00:08:04.870 -> 00:08:06.790] o eso es lo que dice funcionalmente,
+[00:08:06.790 -> 00:08:09.990] el escor de contactabilidad, ¿sí?
+[00:08:09.990 -> 00:08:13.150] Este tema de ordenamiento es para este sprint,
+[00:08:13.150 -> 00:08:16.270] es para empezar a entenderlo, para empezar a hacer la
+[00:08:16.270 -> 00:08:17.990] creación de los datos moquiados,
+[00:08:17.990 -> 00:08:23.990] para comprender al detalle la lógica funcional.
+[00:08:23.990 -> 00:08:26.950] Y la idea es que lo vayas comprendiendo de tal manera
+[00:08:26.950 -> 00:08:30.750] para que el día de mañana, yo creo que ya el sprint 9,
+[00:08:30.750 -> 00:08:33.150] o sea, no este que sigue, sino el siguiente,
+[00:08:33.150 -> 00:08:36.830] podamos hacer el workshop y tú lideres el workshop para que
+[00:08:36.830 -> 00:08:46.570] puedas entregar a ti.
+[00:08:46.570 -> 00:08:51.930] Para ordenamiento, nos sentamos y revisamos cómo es mejor
+[00:08:51.930 -> 00:08:54.370] hacer el workshop, cuántas sesiones toca crear,
+[00:08:54.370 -> 00:08:56.930] yo creo que toca crear una sesión por fase,
+[00:08:56.930 -> 00:08:58.810] no creo, podría ser.
+[00:08:58.810 -> 00:09:02.010] O crear una sesión para cubrir los fases, dependiendo.
+[00:09:02.010 -> 00:09:04.770] Ahí vamos revisando puntualmente, ¿sí?
+[00:09:04.770 -> 00:09:08.490] Entonces, este tema que al final, digamos,
+[00:09:08.490 -> 00:09:15.170] que va a estar como muy enfocado en los temas de contactar,
+[00:09:15.170 -> 00:09:20.140] de perdón en los temas de workshop,
+[00:09:20.140 -> 00:09:27.290] esto es con la intención de que esto,
+[00:09:27.290 -> 00:09:32.670] bueno, sacó por acá esto.
+[00:09:32.670 -> 00:09:41.980] Esto es, digamos, con el objetivo de que Andrés,
+[00:09:41.980 -> 00:09:50.540] Andrés tenga más visibilidad dentro de el expediente.
+[00:09:50.540 -> 00:10:05.830] Sí, listo.
+[00:10:05.830 -> 00:10:11.630] Y esto es con el objetivo de sumarte para que
+[00:10:11.670 -> 00:10:16.030] vayas tomando temas que yo estoy seguro que ya puedes manejar
+[00:10:16.030 -> 00:10:19.790] completamente, porque ya conoces el proceso.
+[00:10:19.790 -> 00:10:21.670] Y porque yo sé de tus habilidades,
+[00:10:21.670 -> 00:10:24.710] yo lo pude ver desde que hiciera el proceso de entrevista y
+[00:10:24.710 -> 00:10:25.110] etcétera.
+[00:10:25.110 -> 00:10:28.630] Y lo que hemos tenido que hablar a la CASC es que hemos hecho muy
+[00:10:28.630 -> 00:10:31.910] pocas sesiones y los resultados se han visto,
+[00:10:31.910 -> 00:10:34.710] sí, el tema de los steps procedure,
+[00:10:34.710 -> 00:10:37.630] el tema del apuntamiento a las tablas que si no hay
+[00:10:37.630 -> 00:10:39.950] cierto, faltan las pruebas.
+[00:10:39.950 -> 00:10:45.830] Ha sido aquí un trabajo importante que se ha ejecutado.
+[00:10:45.830 -> 00:10:49.870] Entonces, ¿qué es lo que yo te propongo?
+[00:10:49.870 -> 00:10:59.750] Y de paso te voy a dar la visual de lo que se va a sumar ahora.
+[00:10:59.750 -> 00:11:06.230] Y es que se va a sumar un Wall Street 5 que va a ser el
+[00:11:06.230 -> 00:11:09.590] consumo del producto BASH.
+[00:11:09.590 -> 00:11:10.990] Eso está por llegar.
+[00:11:10.990 -> 00:11:13.390] Por atarizarse, suma una parte del proyecto que está por
+[00:11:13.390 -> 00:11:16.470] atarizar, ¿sí?
+[00:11:16.470 -> 00:11:19.310] Y esto va a ser una parte que es BASH y una parte que es
+[00:11:19.310 -> 00:11:21.430] límite, ¿sí?
+[00:11:21.430 -> 00:11:24.150] Entonces, para que más o menos entendamos qué es lo que
+[00:11:24.150 -> 00:11:29.630] significa esto, esto lo que significa es nosotros estamos
+[00:11:29.630 -> 00:11:32.550] haciendo todo el cálculo del reconocer y el reconocer va
+[00:11:32.550 -> 00:11:35.430] a entregar este esfuerzo de contactabilidad y de alguna
+[00:11:35.430 -> 00:11:39.470] manera eso lo vamos a ver en diferentes tablas, ¿sí?
+[00:11:39.470 -> 00:11:43.470] Entonces, vamos a tener una tabla 1 de salida, una tabla 2 que
+[00:11:43.470 -> 00:11:47.270] va a decir otras cosas y, bueno, no tengo claro cuántas cosas
+[00:11:47.270 -> 00:11:50.630] van a salir acá, pero yo sé que cuando hagas el ejercicio de
+[00:11:50.630 -> 00:11:54.070] entender ordenamiento, bueno, que ya sabes de unificación,
+[00:11:54.070 -> 00:11:57.790] vas a entender que la salida de reconocer va a estar en
+[00:11:57.790 -> 00:12:01.070] diferentes tablas dentro de récord, ¿sí?
+[00:12:01.070 -> 00:12:04.830] Pero todo esto que está acá que es información, que es
+[00:12:04.830 -> 00:12:10.870] para que información, información, más información y
+[00:12:10.870 -> 00:12:15.590] esto para que información de lo que sea, ¿sí?
+[00:12:15.590 -> 00:12:20.550] Todo esto tiene sentido en la medida que esto aporte
+[00:12:20.550 -> 00:12:25.790] funcionalmente y resuelva problemas del mundo real, ¿sí?
+[00:12:25.790 -> 00:12:30.670] Y aquí es donde entran los productos, los productos que
+[00:12:30.670 -> 00:12:32.350] van a consumir.
+[00:12:32.390 -> 00:12:36.910] Esto que está acá que es el resultado de reconocer, ¿sí?
+[00:12:36.910 -> 00:12:40.030] Entonces, para que no vayas entendiendo, voy a colocar esto
+[00:12:40.030 -> 00:12:48.810] por acá y esto es el resultado de reconocer, resultado
+[00:12:48.810 -> 00:12:54.870] reconocer, ¿sí?
+[00:12:54.870 -> 00:12:57.430] Entonces, ¿qué significan estos productos?
+[00:12:57.430 -> 00:13:01.430] Estos productos que acá vienen y es lo que está
+[00:13:01.430 -> 00:13:05.300] próximo por aterrizar.
+[00:13:05.300 -> 00:13:08.880] Significa lo siguiente.
+[00:13:08.880 -> 00:13:14.000] Significa es que un suscriptor, haz de cuenta un
+[00:13:14.000 -> 00:13:17.000] suscriptor es como una entidad bancaria, ¿recuerda?
+[00:13:17.000 -> 00:13:20.040] Como van Colombia, o lo que sea, me lo sé, por acá hay un
+[00:13:20.040 -> 00:13:29.660] nequito o algo así.
+[00:13:29.660 -> 00:13:39.190] Me lo sé, por acá hay, bueno, digamos, un suscriptor como
+[00:13:39.190 -> 00:13:42.350] con este nequito, ¿sí?
+[00:13:42.350 -> 00:13:48.510] Dice, yo tengo una base de datos de usuarios 1, ¿sí?
+[00:13:48.510 -> 00:13:51.750] Entonces, por acá está Andrés.
+[00:13:51.750 -> 00:13:53.270] Por acá está Francisco.
+[00:13:53.270 -> 00:13:55.950] Y por acá está Marcela.
+[00:13:55.950 -> 00:13:58.870] Y por acá está comiendo, ¿sí?
+[00:13:58.870 -> 00:14:03.150] Y entonces, este suscriptor dice, OK, yo voy a usar el canal de
+[00:14:03.150 -> 00:14:08.510] Batch y necesito validar cuál es el canal de contactabilidad
+[00:14:08.510 -> 00:14:12.710] más sencillo que yo pueda tener para ubicar a estos
+[00:14:12.710 -> 00:14:14.390] usuarios, ¿sí?
+[00:14:14.390 -> 00:14:16.350] Entonces, ¿qué es lo que hace el proceso?
+[00:14:16.350 -> 00:14:19.790] El proceso que se tiene que implementar es que esta
+[00:14:19.790 -> 00:14:22.910] información se pueda cruzar con esta información que
+[00:14:22.910 -> 00:14:27.150] entrego a reconocer y reconocer le pueda decir, ah, sí,
+[00:14:27.150 -> 00:14:32.710] Andrés lo puede ubicar en la dirección 1, a Francisco lo
+[00:14:32.710 -> 00:14:38.190] puede ubicar al celular X, a Marcela la puede ubicar en el
+[00:14:38.190 -> 00:14:43.630] teléfono fico y a Julián lo puede ubicar desde un correo
+[00:14:43.630 -> 00:14:45.830] electrónico, ¿sí?
+[00:14:45.830 -> 00:14:48.990] Entonces, claro, esto implica todo un proceso que se tiene
+[00:14:48.990 -> 00:14:52.430] que diseñar, que seguramente en las próximas semanas estará
+[00:14:52.430 -> 00:14:56.230] ahí como realizando y, etcétera, ¿sí?
+[00:14:56.230 -> 00:14:58.790] Entonces, esto mismo va a funcionar en Batch.
+[00:14:58.790 -> 00:15:03.910] O sea, en Batch significa que tú lo cargas hoy y la respuesta
+[00:15:03.910 -> 00:15:08.350] te la da en un par de horas o en un par de días, ¿sí?
+[00:15:08.350 -> 00:15:11.830] Y está en línea, que es exactamente esto que estamos
+[00:15:11.830 -> 00:15:15.110] acá hablando, pero la diferencia es que esto tiene que
+[00:15:15.110 -> 00:15:17.790] ser, digamos, que en casi tiempo real,
+[00:15:17.790 -> 00:15:23.350] exactamente este mismo resultado que está acá, ¿sí?
+[00:15:23.350 -> 00:15:27.670] Entonces, me parece importante mencionarte esto porque el
+[00:15:27.670 -> 00:15:32.030] proyecto ahora ya no toca pensarlo, solamente verse como es
+[00:15:32.030 -> 00:15:36.350] reconocer, sino que hay que pensarlo en lo que reconocer
+[00:15:36.350 -> 00:15:40.310] aporta a los productos que se conectan allí, ¿sí?
+[00:15:40.310 -> 00:15:42.870] Y eventualmente se van a conectar muchos más productos,
+[00:15:42.870 -> 00:15:47.700] pero estos que están llegando son como los principales.
+[00:15:47.700 -> 00:15:52.260] ¿Hasta allí me sigues?
+[00:15:52.260 -> 00:15:56.100] Listo, vale, entonces, ahora sí, volvamos a nuestro presente.
+[00:15:56.100 -> 00:15:58.100] Nuestro presente es esto, ¿sí?
+[00:15:58.100 -> 00:16:01.860] Entonces, yo te voy a colocar acá en colorcitos lo que es lo más
+[00:16:01.860 -> 00:16:03.340] importante.
+[00:16:03.340 -> 00:16:06.220] Esto de data sharing con datos reales, esto es súper
+[00:16:06.220 -> 00:16:08.860] importante, o sea, esto es lo más importante,
+[00:16:08.860 -> 00:16:11.380] lo más importante de todo, ¿sí?
+[00:16:11.380 -> 00:16:14.780] Necesitamos lograr esa configuración de data sharing
+[00:16:14.780 -> 00:16:17.780] con los datos reales, así sea que nos toque probar a
+[00:16:17.780 -> 00:16:19.620] punta de tickets, lanzando tickets,
+[00:16:19.660 -> 00:16:22.500] por eso es lo que yo te recomiendo acá.
+[00:16:22.500 -> 00:16:31.150] Lo que yo te recomiendo es realizar pruebas de escritorio
+[00:16:31.150 -> 00:16:41.090] con cursor para saber si las tablas que usas y las columnas
+[00:16:41.090 -> 00:16:49.040] que usas, si están bien configuradas, ¿sí?
+[00:16:49.040 -> 00:16:52.760] Como tú tienes acceso a Cuba, tú puedes ver la metadata de
+[00:16:52.760 -> 00:16:54.560] esas tablas, ¿sí?
+[00:16:54.560 -> 00:16:58.280] Si tú le estás diciendo que en el esto el procedimiento que
+[00:16:58.280 -> 00:17:01.200] sea que hayas creado, pero en el acuntamiento real,
+[00:17:01.200 -> 00:17:07.520] le estás diciendo, ¿tienes que buscar la tabla X, PM, data,
+[00:17:07.520 -> 00:17:15.840] IFR, punto, column, OK, counter, perdón,
+[00:17:15.840 -> 00:17:19.910] counter, así, ¿sí?
+[00:17:19.910 -> 00:17:23.220] Contr, ¿sí?
+[00:17:23.220 -> 00:17:27.140] Entonces, revisa si de verdad esa tabla tiene las
+[00:17:27.140 -> 00:17:29.100] columnas, ¿sí?
+[00:17:29.100 -> 00:17:34.020] Acá yo te pongo a revisar si esa tabla de verdad tiene
+[00:17:34.020 -> 00:17:43.260] las columnas que le estás diciendo que usen, ¿sí?
+[00:17:43.260 -> 00:18:02.280] Y todavía más importante, revisemos si, revisemos si
+[00:18:02.280 -> 00:18:09.640] esa tabla y esa columna, si es la que responde,
+[00:18:09.680 -> 00:18:19.830] la necesidad, necesidad de negocio, ¿sí?
+[00:18:19.830 -> 00:18:23.230] Esto todavía es mucho más importante.
+[00:18:23.230 -> 00:18:24.790] ¿Cómo sabemos esto?
+[00:18:24.790 -> 00:18:36.630] Esto lo sabemos con el XPM y el mapeo que se hizo en Quiro.
+[00:18:36.630 -> 00:18:41.190] Quiro tiene estas respuestas, ¿sí?
+[00:18:41.190 -> 00:18:43.550] Entonces, esta tarea que está acá,
+[00:18:43.550 -> 00:18:45.150] aunque es cierto que faltan las pruebas,
+[00:18:45.150 -> 00:18:47.630] que tú ya hiciste un apuntamiento,
+[00:18:47.630 -> 00:18:51.670] yo recomendaría avanzar con esto rápidamente,
+[00:18:51.670 -> 00:18:59.830] que tengamos esa certeza, que tengamos esa claridad para que
+[00:18:59.830 -> 00:19:04.110] en efecto podamos ir firmes, porque mira que la tarea no es
+[00:19:04.110 -> 00:19:07.390] menor, es data cherry, que tú sabes que es de arquitectura
+[00:19:07.390 -> 00:19:12.230] final y ya es con datos reales y una tristeza que los datos
+[00:19:12.230 -> 00:19:13.790] sigan estando solamente en Cuba,
+[00:19:13.790 -> 00:19:16.950] para los que vamos a tener el día de mañana en desarrollo,
+[00:19:16.950 -> 00:19:23.680] ¿sí?
+[00:19:23.680 -> 00:19:26.080] El data cherry se va a hacer de Cuba a Cuba,
+[00:19:26.080 -> 00:19:30.160] o desarrollo a desarrollo, así es.
+[00:19:30.160 -> 00:19:32.800] Por lo que decir que el otro redshift,
+[00:19:32.800 -> 00:19:36.960] el último que pedimos acceso, el de reconocer,
+[00:19:36.960 -> 00:19:39.480] ese redshift va a tener también ambiente de Cuba,
+[00:19:39.480 -> 00:19:41.240] va a tener ambiente de desarrollo,
+[00:19:41.240 -> 00:19:44.560] va a tener ambiente de demo y de producción.
+[00:19:44.560 -> 00:19:46.840] Debe tener todos los ambientes para que eventualmente
+[00:19:46.880 -> 00:19:53.450] podamos mover la solución hasta producción.
+[00:19:53.450 -> 00:20:04.560] ¿Listo?
+[00:20:04.560 -> 00:20:06.840] Inicialmente los datos están en Cuba,
+[00:20:06.840 -> 00:20:10.320] entonces nos tocaría probar con Cuba contra Cuba,
+[00:20:10.320 -> 00:20:14.440] o sea, Cuba del redshift en donde están los datos.
+[00:20:14.440 -> 00:20:18.360] O sea, lo voy a pintar como por acá, para que quede claro.
+[00:20:18.360 -> 00:20:24.320] Aquí tenemos el redshift donde están las tablas.
+[00:20:24.320 -> 00:20:34.100] Las tablas están en el esquema de IFR, ¿sí?
+[00:20:34.100 -> 00:20:42.070] Y acá tenemos el otro redshift, que es...
+[00:20:42.070 -> 00:20:43.910] Este es el redshift de buro.
+[00:20:43.910 -> 00:20:45.710] Acuérdate, es el de buro.
+[00:20:45.710 -> 00:20:48.630] Algunos lo llaman también el redshift de procesos patch,
+[00:20:48.630 -> 00:20:58.050] porque realmente ese es el nombre puntual, ¿sí?
+[00:20:58.050 -> 00:21:05.050] Y aquí está el redshift del proceso reconocer.
+[00:21:05.050 -> 00:21:06.730] ¿Qué vamos a hacer?
+[00:21:06.730 -> 00:21:13.660] El proceso reconocer, ¿sí?
+[00:21:13.660 -> 00:21:17.280] Acá están.
+[00:21:17.360 -> 00:21:22.200] Espera, me voy a colombar, le doy esto por acá y esto por acá, ¿sí?
+[00:21:22.200 -> 00:21:25.920] Entonces, en este redshift del reconocer,
+[00:21:25.920 -> 00:21:30.480] va a ir el store procedure 1 de la regla 1,
+[00:21:30.480 -> 00:21:33.640] el store procedure de la regla 2,
+[00:21:33.640 -> 00:21:38.500] y el store procedure de la regla 3.
+[00:21:38.500 -> 00:21:41.500] Y eso va a leer los datos que están acá.
+[00:21:41.500 -> 00:21:48.100] Acá están todas las tablas que necesita el proceso reconocer,
+[00:21:48.100 -> 00:21:50.780] que son las tablas que tú llamas piasten, ¿sí?
+[00:21:50.820 -> 00:21:54.780] Ese de contripartis que me estaba diciendo y los de location,
+[00:21:54.780 -> 00:22:02.140] o sea, acá está el de xpm, xpm, ifrm, location,
+[00:22:02.140 -> 00:22:07.660] y por acá está el xpm, ifrm, contri,
+[00:22:07.660 -> 00:22:09.060] que me estás mencionando y, bueno,
+[00:22:09.060 -> 00:22:12.140] todas las otras que sea que se necesiten, ¿sí?
+[00:22:12.140 -> 00:22:16.940] Entonces, el data sharing es, como hiciste en QDA,
+[00:22:16.940 -> 00:22:20.100] vas a leer, vas a ejecutar acá,
+[00:22:20.100 -> 00:22:27.260] y aquí vas a leer la información que necesitas, ¿sí?
+[00:22:27.260 -> 00:22:30.900] Pero el producto final va a que las tablas
+[00:22:30.900 -> 00:22:33.260] que estamos mencionando acá, estas tablas,
+[00:22:33.260 -> 00:22:38.380] mira, cuando te dije que esto entregaba unas tablas,
+[00:22:38.380 -> 00:22:43.300] estas tablas van a quedar en el redshift del reconocer.
+[00:22:43.300 -> 00:22:49.460] Entonces acá van a quedar las tablas finales del producto
+[00:22:49.460 -> 00:23:04.120] reconocer. ¿Me sigue, sí?
+[00:23:04.120 -> 00:23:06.080] Es la misma información, sí.
+[00:23:06.080 -> 00:23:19.200] Es la misma información.
+[00:23:19.200 -> 00:23:20.960] Tiene que ser en Cuba, sí, es cierto,
+[00:23:20.960 -> 00:23:29.120] porque en DEF no tenemos la información que necesitamos.
+[00:23:29.120 -> 00:23:32.160] El correcto de, cuando dices la pailant,
+[00:23:32.160 -> 00:23:37.440] te referes a cuál, la pailant para muernos entre ambientes.
+[00:23:37.440 -> 00:23:40.760] El pailant funciona inicialmente desplegando un
+[00:23:40.760 -> 00:23:43.800] desarrollo, y luego de que funciona el desarrollo,
+[00:23:43.800 -> 00:23:45.840] nos movemos a cubano.
+[00:23:45.840 -> 00:23:48.200] Pero como no tenemos datos en desarrollo,
+[00:23:48.200 -> 00:23:51.560] por eso es que la opción es que no vamos a usar el pailant
+[00:23:51.560 -> 00:23:56.280] para movernos, sino que vamos a usar un ticket.
+[00:23:56.280 -> 00:23:59.160] Pero el ticket no necesita que hagamos cosas en desarrollo.
+[00:23:59.160 -> 00:24:02.120] O sea, es decir, olvídate de desarrollo,
+[00:24:02.120 -> 00:24:04.720] por lo menos en las próximas semanas.
+[00:24:04.720 -> 00:24:06.600] Todo lo vamos a trabajar en Cuba,
+[00:24:06.600 -> 00:24:09.480] porque en Cuba es donde están los datos.
+[00:24:09.480 -> 00:24:12.720] Pero en Cuba tú no puedes ejecutar directamente,
+[00:24:12.720 -> 00:24:19.560] porque aún no sé si este cubano y este rectil reconocer,
+[00:24:19.560 -> 00:24:22.520] si tengamos el derecho de ejecutar directamente.
+[00:24:22.520 -> 00:24:25.840] Eso tocaría probarlo, porque los estroprocedor se conectan acá,
+[00:24:25.840 -> 00:24:27.960] se ejecutan acá.
+[00:24:27.960 -> 00:24:31.160] Esto aguantaría probarlo, porque si nosotros podemos ejecutar
+[00:24:31.160 -> 00:24:36.680] el estroprocedor acá y que el portavaco lea directamente,
+[00:24:36.680 -> 00:24:39.960] sería buenísimo porque nos ahorramos crear el ticket para
+[00:24:39.960 -> 00:24:42.800] que alguien más nos haga la ejecución.
+[00:24:42.800 -> 00:24:46.960] Es que el problema del ticket para que me lo entiendas es que el
+[00:24:46.960 -> 00:24:51.680] ticket es para decirle, oiga, ingeniero de base de datos,
+[00:24:51.680 -> 00:24:55.600] usted que si tiene permisos, ayúdeme a ejecutar estos
+[00:24:55.600 -> 00:24:58.240] tres estroprocedor.
+[00:24:58.240 -> 00:25:01.440] Y cuando salga el resultado, dígame cómo quedó,
+[00:25:01.440 -> 00:25:03.280] esperando que salga bien, pero yo sé que las pruebas
+[00:25:03.280 -> 00:25:06.840] ejecución no van a funcionar, es un normal.
+[00:25:06.840 -> 00:25:12.080] Entonces para evitar esto, hagamos la prueba de si nosotros
+[00:25:12.080 -> 00:25:17.920] podemos ejecutar en ambiente cubano estos estroprocedor y que
+[00:25:17.920 -> 00:25:20.560] el portavaco pueda leer acá, con el usuario que se haga que se
+[00:25:20.560 -> 00:25:21.720] asintene por debajo.
+[00:25:21.720 -> 00:25:23.600] ¿De pronto si lo puedas hacer directo?
+[00:25:23.600 -> 00:25:27.240] No lo sé, las orejas es que caigo en cuenta.
+[00:25:27.240 -> 00:25:31.480] Pero eso es parte de la prueba que tendríamos que hacer.
+[00:25:31.480 -> 00:25:39.660] Que esto es igualito a lo mismo que hiciste en QIDAR, igualito.
+[00:25:39.660 -> 00:25:44.140] Y esto, vale, y aquí también va a quedar ordenamiento, ¿no?
+[00:25:44.140 -> 00:25:47.780] O sea, acá también va a quedar los estroprocedor de
+[00:25:47.780 -> 00:25:48.580] ordenamiento.
+[00:25:48.580 -> 00:25:51.700] Estos síndes, cuando estos estroprocedor son, esto ya lo
+[00:25:51.700 -> 00:25:54.700] defines tú cuando estén asiento como el análisis que
+[00:25:54.700 -> 00:25:56.300] corresponde.
+[00:25:56.300 -> 00:26:07.660] ¿Sí?
+[00:26:07.660 -> 00:26:09.860] No, ya lo tenemos.
+[00:26:09.860 -> 00:26:11.140] Ya.
+[00:26:11.140 -> 00:26:13.180] Sí, revisa tu correo y tú ya debes de tener las
+[00:26:13.180 -> 00:26:14.500] credenciales ahí.
+[00:26:14.500 -> 00:26:18.260] Es lo que hemos estado pedaleando desde la semana pasada.
+[00:26:18.260 -> 00:26:22.060] Revisalas porque si no las tienes, nos toca, entonces,
+[00:26:22.060 -> 00:26:40.500] revisar qué fue lo que pasó.
+[00:26:40.500 -> 00:26:54.660] Si no, entonces, revisamos de una vez cómo quedó eso.
+[00:26:54.660 -> 00:27:02.060] ¿Qué fue lo que le llegó el lunes?
+[00:27:02.060 -> 00:27:05.620] No, pero, pues, mirámos.
+[00:27:05.620 -> 00:27:21.430] Sí, se enviármelo por el Experian y yo estoy acá
+[00:27:21.430 -> 00:27:26.260] buscando el RTN.
+[00:27:26.260 -> 00:27:31.300] Entonces, el RTN me dice que ya está cerrado, que es el
+[00:27:31.300 -> 00:27:36.300] que pedimos para reconocer BASH, sí, así se llama.
+[00:27:36.300 -> 00:27:37.620] ¿Y qué dice?
+[00:27:37.620 -> 00:27:47.140] Dice, cerrado completado, fue abierto.
+[00:27:47.140 -> 00:27:49.580] ¿Pero qué dice esto?
+[00:27:49.580 -> 00:28:02.010] Andrés Campa probó, dice, mal, ya no sé qué.
+[00:28:02.010 -> 00:28:07.090] Aceso aplicativo, se ha sido probado.
+[00:28:07.090 -> 00:28:54.430] Y es esto, abierto, aprobado, acceso aplicativos.
+[00:28:54.430 -> 00:28:59.640] Ya te les va a pasar por ahí, por el Experian.
+[00:28:59.640 -> 00:29:02.960] Pero ya vamos a cambiar al chat, Leonardo.
+[00:29:02.960 -> 00:29:04.440] Son éxitos.
+[00:29:04.440 -> 00:29:22.280] El desarrollo y el de CUAM, el de CUAM.
+[00:29:22.280 -> 00:29:27.480] Pero si hay una cosa rara allí que no está funcionando
+[00:29:27.480 -> 00:29:37.840] con una bebida, pero si no.
+[00:29:37.840 -> 00:29:57.710] Entonces, ese correo que entén envió el sistema,
+[00:29:57.710 -> 00:30:01.110] envía mi factorioso porque ya lo enviamos al grupo de
+[00:30:01.110 -> 00:30:19.890] Experian.
+[00:30:19.890 -> 00:30:21.850] Entonces, vamos a hacer lo siguiente.
+[00:30:21.850 -> 00:30:25.730] Vamos a enviar los tickets al grupo para que claran los
+[00:30:25.730 -> 00:30:35.400] acudidos, qué serían estos.
+[00:30:35.400 -> 00:30:37.240] Porque todos van a poner para cánano,
+[00:30:37.240 -> 00:30:45.100] van a estar de ese equipo, o sea, de ese equipo.
+[00:30:45.100 -> 00:31:26.940] Necesitamos tu amable apoyo con los siguientes tickets.
+[00:31:26.940 -> 00:31:31.780] Estos tickets, tal, tal, tal.
+[00:31:31.780 -> 00:31:35.140] Estos tickets, tal, tal.
+[00:31:35.140 -> 00:31:40.400] Los tickets, los siguientes tickets.
+[00:31:40.400 -> 00:31:46.770] Los siguientes tickets fueron creados para solicitar
+[00:31:46.770 -> 00:32:05.380] el permiso de Andrés Bonilla al redshift de reconocer.
+[00:32:05.380 -> 00:32:18.020] Estos tickets se encuentran cerrados, pero en el correo de
+[00:32:18.020 -> 00:32:31.060] Andrés, no sé, pero al correo de Andrés, no han enviado
+[00:32:31.060 -> 00:32:41.910] las experiencias.
+[00:32:41.910 -> 00:32:46.190] Entonces, esto es una verdad que no ayuda con esto.
+[00:32:46.190 -> 00:32:52.280] Claro, ahí ya lo han viendo.
+[00:32:52.280 -> 00:32:53.760] Ahora vamos a hacer lo siguiente.
+[00:32:53.760 -> 00:33:05.040] Sobre el ticket, sobre el ticket de Cuba, que es este,
+[00:33:05.040 -> 00:33:08.400] voy a dejar una nota.
+[00:33:08.400 -> 00:33:10.800] Así que es progreso hasta ahí.
+[00:33:10.800 -> 00:33:12.480] ¿Cústume?
+[00:33:12.480 -> 00:33:16.060] OK.
+[00:33:16.060 -> 00:33:20.860] Entonces, voy a colocar acá, buen día.
+[00:33:20.860 -> 00:33:28.500] Buen día, el ticket aparece cerrado, pero las credenciales
+[00:33:28.500 -> 00:33:37.440] no han sido enviadas al correo de Andrés Bonilla.
+[00:33:37.440 -> 00:33:46.650] Y tanto de Andrés Bonilla.
+[00:33:46.650 -> 00:33:51.120] Listo, aquí lo voy a dejar en el desarrollo.
+[00:33:51.120 -> 00:33:55.460] Están bien, porque igual es desarrollo,
+[00:33:55.460 -> 00:34:01.660] entonces, yo le hago más fuerza a que esta gente de EDF
+[00:34:01.660 -> 00:34:21.740] pueda dejar la tokenización en desarrollo.
+[00:34:21.740 -> 00:34:32.740] Y también lo voy a dejar acá.
+[00:34:32.740 -> 00:34:34.940] Listo, ya le dejamos documentado allí.
+[00:34:34.940 -> 00:34:39.310] Ya le dejamos acá para que nos ayude.
+[00:34:39.310 -> 00:34:40.110] Y liste.
+[00:34:40.110 -> 00:34:44.030] Pero ahora, sin volviendo acá a la pantalla compartida,
+[00:34:44.030 -> 00:34:47.830] este es el objetivo, listo?
+[00:34:47.830 -> 00:34:50.270] Listo, entonces, no sé si tengas alguna pregunta,
+[00:34:50.430 -> 00:34:51.910] para este sprint.
+[00:34:58.180 -> 00:35:04.460] Si, entonces, este sprint, vamos hasta el tema del data sharing
+[00:35:04.460 -> 00:35:07.980] con los datos reales, el tema de orquestar con el frango.
+[00:35:07.980 -> 00:35:11.300] La verdad es que no tiene nada del otro mundo.
+[00:35:11.300 -> 00:35:12.780] Yo ya sé cómo es el ejercicio.
+[00:35:12.780 -> 00:35:15.420] Yo te apoyo, Flouragin, que al final,
+[00:35:15.420 -> 00:35:19.140] el orquestador es decirle, a través de un archivo,
+[00:35:19.140 -> 00:35:22.860] es decirle, primero, quiero que ejecute este procedure
+[00:35:22.860 -> 00:35:31.180] cuando este termine ejecute este y así sucesivamente.
+[00:35:31.180 -> 00:35:32.900] Exacto.
+[00:35:32.900 -> 00:35:35.340] El tema de reconciliar datos, esto lo trabajamos en común.
+[00:35:35.340 -> 00:35:37.700] Esto ya está súper avanzado.
+[00:35:37.700 -> 00:35:40.100] Yo te preocupes que ahí yo lo termino,
+[00:35:40.100 -> 00:35:43.540] pero yo te sumo para que veas el bolero porque esto nos va a
+[00:35:43.540 -> 00:35:47.340] tocar seguir haciendo lo cada vez que vayamos avanzando.
+[00:35:47.340 -> 00:35:50.980] Y ordenamiento, hay que trabajarlo.
+[00:35:50.980 -> 00:35:52.460] Ojalá pudiéramos.
+[00:35:52.460 -> 00:35:55.820] Lo más importante, lo que más me interesa de ordenamiento,
+[00:35:55.820 -> 00:35:58.500] es que logres entender la lógica de ordenamiento,
+[00:35:58.500 -> 00:35:59.660] qué es lo que hace.
+[00:35:59.660 -> 00:36:01.500] Funcionalmente hablando, ¿sí?
+[00:36:01.500 -> 00:36:03.980] ¿Y cuáles son los pasos y cuáles son las reglas que usa?
+[00:36:03.980 -> 00:36:07.140] Porque yo creo que va a haber reglas para poder decir qué
+[00:36:07.140 -> 00:36:10.260] prima sobre qué para elegir cuál es el mejor canal de
+[00:36:10.260 -> 00:36:13.780] contactabilidad, ¿sí?
+[00:36:13.780 -> 00:36:18.300] Si podemos, de una vez, ponerle en cursor para que pueda
+[00:36:18.300 -> 00:36:20.980] hacer la transformación a los estos procedure con los datos
+[00:36:20.980 -> 00:36:22.700] que hace, etcétera, etcétera.
+[00:36:22.700 -> 00:36:23.620] Super bien, ¿sí?
+[00:36:23.620 -> 00:36:24.660] Eso no es sumarí.
+[00:36:24.660 -> 00:36:27.340] Pero lo que te digo, lo que más interesa son estos dos puntos
+[00:36:27.340 -> 00:36:29.980] de acario.
+[00:36:29.980 -> 00:36:33.500] Esto lo voy a colocar acá como el polo naranja.
+[00:36:33.500 -> 00:36:45.150] Sí, esto es.
+[00:36:45.150 -> 00:36:48.030] No, los que yo te pasé fueron los de unificación.
+[00:36:48.030 -> 00:36:55.070] Los otros están en la carpeta que yo te compartí de Quiron,
+[00:36:55.070 -> 00:36:57.190] ¿te acuerdas?
+[00:36:57.190 -> 00:37:00.420] Aquí están.
+[00:37:00.420 -> 00:37:01.020] Aquí están.
+[00:37:01.020 -> 00:37:10.540] Me le pregunto dónde quedaron los SQLs del redshift que
+[00:37:10.540 -> 00:37:16.100] tiene la logica de ordenamiento.
+[00:37:16.100 -> 00:38:21.620] Ordenamiento.
+[00:38:21.620 -> 00:38:23.820] Entonces, mira, acá quedaron, mira.
+[00:38:23.820 -> 00:38:27.700] Es ordenamientoesquemas.sql, porque eso es un tema como
+[00:38:27.700 -> 00:38:28.700] de tal unos esquemas.
+[00:38:29.020 -> 00:38:33.020] Escorre en dirección, escorre en teléfono, escorre en celular,
+[00:38:33.020 -> 00:38:33.980] escorre en imbérico.
+[00:38:33.980 -> 00:38:37.380] Estos son los cuatro canales que estábamos hablando, ¿sí?
+[00:38:37.380 -> 00:38:40.180] Para hacer eso, escorre en usa unas características.
+[00:38:40.180 -> 00:38:43.580] Ahí vas a investigar cuáles son esas características.
+[00:38:43.580 -> 00:38:46.100] Hace un tema de consolidación de persistencia.
+[00:38:46.100 -> 00:38:48.580] Consolvía en los cuatro canales, más persiste de orden
+[00:38:48.580 -> 00:38:49.620] prioridad, ¿ok?
+[00:38:49.620 -> 00:38:50.660] Eso creo que lo mencionó.
+[00:38:50.660 -> 00:38:53.140] Ah, sabes qué es bueno.
+[00:38:53.140 -> 00:38:55.620] ¿Tú esto viste en la sesión de criterios de aceptación de
+[00:38:55.620 -> 00:38:57.740] ordenamiento de ayer?
+[00:38:57.740 -> 00:38:58.300] ¿Sí?
+[00:38:58.300 -> 00:39:02.260] A ver, Edgar hizo una presentación que pareció completa
+[00:39:02.260 -> 00:39:04.260] de esos criterios de aceptación.
+[00:39:04.260 -> 00:39:07.540] Cogamos esos criterios de aceptación que él envió
+[00:39:07.540 -> 00:39:11.060] y crucemos contra este código que está acá, ¿sí?
+[00:39:11.060 -> 00:39:13.860] Y que revises si estamos cumpliendo todos esos criterios
+[00:39:13.860 -> 00:39:15.700] y si no, tiene falta.
+[00:39:15.700 -> 00:39:16.860] Y si no, ¿qué?
+[00:39:16.860 -> 00:39:20.340] Y si no, ¿y si no, si no, si no, si no, si no, si no,
+[00:39:20.340 -> 00:39:23.060] si no, si no, si no, si no, si no, si no, si no, si no,
+[00:39:23.060 -> 00:39:26.980] y lo que falta es que complete el código para que tengamos eso
+[00:39:26.980 -> 00:39:29.500] listo de una vez, ¿sí?
+[00:39:29.500 -> 00:39:30.340] Y esto, ¿ok?
+[00:39:30.340 -> 00:39:31.260] Esto es no le parezco, ¿vale?
+[00:39:31.260 -> 00:39:33.740] Esto es un checklist que yo había creado para poder ejecutar
+[00:39:33.740 -> 00:39:34.780] en ambiente QDR.
+[00:39:34.780 -> 00:39:38.500] Esto ya tiene pruebas en ambiente QDR y funciona.
+[00:39:38.500 -> 00:39:41.620] Este proyecto es mucho más pesado que el proceso de unificación,
+[00:39:41.620 -> 00:39:41.980] ¿vale?
+[00:39:41.980 -> 00:39:45.540] Como para que lo tengas como el visual.
+[00:39:45.540 -> 00:39:47.260] Entonces, mira, aquí ya está.
+[00:39:47.260 -> 00:39:49.500] Ya con esto ya te puedes guiar, pero lo que nota la verdad
+[00:39:49.500 -> 00:39:52.460] absoluta son los criterios de aceptación que envió Edgar,
+[00:40:13.990 -> 00:40:16.270] sí, espérame, yo subo, no, pero yo sé que ya está ahí,
+[00:40:16.270 -> 00:40:19.150] porque eso está antes de ese rato, pero ya le estoy diciendo
+[00:40:19.150 -> 00:40:30.500] que haga un push para que suba y tú le haces ahorita un pull,
+[00:40:30.500 -> 00:40:37.210] pero estoy seguro que está ahí.
+[00:40:37.210 -> 00:40:57.720] Ah, tú no estás a la rama.
+[00:40:57.720 -> 00:41:20.540] O sea, tú no tienes esta carpeta de Quiro.
+[00:41:20.540 -> 00:41:21.820] Yo creí que todavía es descargado.
+[00:41:21.820 -> 00:41:32.920] Esto te había creado como tu rama.
+[00:41:32.920 -> 00:41:35.480] Pero cualquiera que sea el ejercicio, igual ya te pasó los
+[00:41:35.480 -> 00:42:42.020] archivos, esperad.
+[00:42:42.020 -> 00:42:49.030] Yo creo que ya no está subiendo.
+[00:42:49.030 -> 00:42:52.380] Listo.
+[00:42:52.380 -> 00:42:55.620] Y entonces, ahora sí ven revisado acá los archivos en local
+[00:42:55.620 -> 00:42:58.700] donde la que habían quedado.
+[00:42:58.700 -> 00:43:15.510] Quedaron en Warrish, Warrish, ordenamiento Redshift, Warrish,
+[00:43:15.510 -> 00:43:23.550] ordenamiento, SRS, Redshift.
+[00:43:23.550 -> 00:43:25.070] Y acá están, mira.
+[00:43:25.070 -> 00:43:32.580] Ya te los voy a pasar por acá.
+[00:43:32.580 -> 00:43:36.300] Entonces, son estos archivos que están acá.
+[00:43:36.340 -> 00:43:48.860] Este de esquemas te lo va a pasar junto con esto y esto.
+[00:43:48.860 -> 00:43:54.020] No, pero es para ambiente que daron para que revisaras.
+[00:43:54.020 -> 00:44:11.410] Pero los que interesan son estos.
+[00:44:11.410 -> 00:44:40.900] Listo, ahí te los envíe.
+[00:44:40.900 -> 00:44:43.780] Listo, alguna otra pregunta, dudan?
+[00:44:43.780 -> 00:44:50.620] Alguna sugerencia que, listo, vale, perfecto.
+[00:44:50.620 -> 00:44:51.580] Listo, buenísimo.
+[00:44:51.580 -> 00:44:56.340] Entonces, dale y la siguiente semana entonces vemos cómo se
+[00:44:56.380 -> 00:45:00.180] va a seguir llevándose a André en bloque, pero hacia esos
+[00:45:00.180 -> 00:45:03.420] archivos que nos lo vemos también y a que en efecto tengas
+[00:45:03.420 -> 00:45:08.180] allí como mayor lerasgón dentro de lo que se está haciendo
+[00:45:08.180 -> 00:45:10.780] con estos temas técnicos y por supuesto, pues,
+[00:45:10.780 -> 00:45:12.500] mayor visibilidad y de carriquente,
+[00:45:12.500 -> 00:45:14.500] que yo creo que ya te has podido dar cuenta que Spigen
+[00:45:14.500 -> 00:45:23.920] es bastante, bastante grande sitio.
+[00:45:23.920 -> 00:45:25.280] El excel, ah, listo.
+[00:45:25.280 -> 00:45:28.590] Ya te lo paso.
+[00:45:28.590 -> 00:45:39.440] Listo?
+[00:45:39.560 -> 00:45:47.060] Si, como ser visual.
+[00:45:47.060 -> 00:46:01.220] Y ya te lo voy a enviar por acá.
+[00:46:01.220 -> 00:46:05.910] Listo, ahí te lo envíen.
+[00:46:05.910 -> 00:46:09.430] Listo, dale, entonces descansa y nos vemos entonces el martes
+[00:46:09.430 -> 00:46:11.470] después de puente largo y seguimos avanzando.
+[00:46:11.470 -> 00:46:13.470] Muchas gracias por todo el trabajo y cualquier cosa
+[00:46:13.470 -> 00:46:16.820] no me comentes.
+[00:46:16.820 -> 00:46:18.340] Listo, vale, hombre, que estés bien.
+[00:46:18.340 -> 00:46:20.220] Cuídate.
+[00:46:20.220 -> 00:46:21.740] Chao.

@@ -1,0 +1,292 @@
+Idioma detectado: en (prob=0.899)
+
+[00:00:13.780 -> 00:00:48.290] good good leonard okay um so you don't have a pg admin in start rdb viewer right on your machine
+[00:00:54.510 -> 00:01:17.870] company portal yes oh right can you please update your section even i think yesterday you missed it
+[00:01:17.870 -> 00:01:46.930] which is i copied it from yesterday's section it was half i don't see your screen um it's not
+[00:02:08.420 -> 00:03:06.060] the other yep just one minute i'll share my screen sure okay
+[00:03:21.660 -> 00:03:39.860] you know i'm sharing it here so once you have the pg admin installed um you can connect to the
+[00:03:40.580 -> 00:03:49.220] instance i have actually uh connected to them so yeah um okay it's already taking the pass
+[00:03:50.180 -> 00:03:59.940] so this is the database they have requested to backup you know i think it's um a recon
+[00:04:08.220 -> 00:04:14.700] normally i do a backup using command prompt but we can initiate a backup using this also
+[00:04:15.420 -> 00:04:25.010] but i uh prefer to take it from command prompt and i've installed postgres on my machine so
+[00:04:25.730 -> 00:04:34.450] so yeah so i need to uh redirect to this path where i have the postgres bin files
+[00:04:35.410 -> 00:04:48.320] so let me close this this this was for uh yeah now i'm using both the pg admin and command prompt
+[00:04:48.320 -> 00:05:19.150] i will explain you why first i i get the credentials from cyberac i can connect it using
+[00:05:19.310 -> 00:05:26.590] through uh pg admin uh when you initially want to set up right you just have to go to this
+[00:05:30.930 -> 00:05:38.210] object explorer it will ask for a new connection say uh right click and create
+[00:05:38.930 -> 00:05:47.170] server group or connect to server some and you just have to mention the details about
+[00:05:47.170 -> 00:05:55.810] the uh instance that we are connecting if i go to properties um here under connection it will ask
+[00:05:55.810 -> 00:06:10.140] you the host name so this we get it from snowflake let me open it here
+[00:06:13.500 -> 00:06:19.660] the host details if you have it handy you can use that otherwise you can connect to snowflake
+[00:06:19.660 -> 00:06:56.530] and get those information so postgres instance model that we recently created and launched which is
+[00:06:56.530 -> 00:07:05.410] ar and if we are connecting to prod um i just click here and this is the all the 16 that we
+[00:07:05.410 -> 00:07:12.210] discussed in otr i just wanted to fio you see right okay okay so let me just make a note of it here
+[00:07:12.370 -> 00:07:19.570] the same thing is updated here in the uh connection string and this is the default port
+[00:07:20.850 -> 00:07:26.530] so i just mentioned that then the snowflake admin and the credentials are from cyberac
+[00:07:28.370 -> 00:07:35.410] if i do a search for snowflake admin right there are four instances so each instance is
+[00:07:35.410 -> 00:07:45.010] password as as stored here this is prod dev dev qa this is for global credit segment gc
+[00:07:45.810 -> 00:07:48.690] this is for the corporate service which we newly created
+[00:07:55.410 -> 00:08:00.130] so we retrieve the passwords from there and then connect to the postgres instance
+[00:08:01.090 -> 00:08:07.250] you can run the queries directly from here or if you want to back it up you can use that
+[00:08:08.610 -> 00:08:15.170] one of the reason why i do this is um as i see it it's normally when we do a restore right now
+[00:08:15.170 -> 00:08:24.130] on the lower level on the um dev or qa environment due to permission i end up getting an error
+[00:08:24.930 -> 00:08:32.290] so the last last time also the same thing happened uh because of permission i was not able to do a
+[00:08:32.290 -> 00:08:42.210] restore on the existing um database i tried uh with uh using an option called no privileges
+[00:08:42.210 -> 00:08:50.610] no owners um even that did not work so what i did was i restore the database with a different name
+[00:08:50.850 -> 00:09:00.130] then drop the existing setup since existing database then renamed it back to the newer one and then
+[00:09:05.140 -> 00:09:32.180] apply the permission back back on those uh database um i did not get you every single set up uh
+[00:09:32.180 -> 00:09:42.140] purpose of sorry sorry about that okay they want the prod data to be accessible in the lower
+[00:09:42.220 -> 00:09:50.540] environment and the lower environment has a different service account so this uses a
+[00:09:50.540 -> 00:09:57.580] different account production as a different account okay let me show you this um if i go to query
+[00:09:59.340 -> 00:10:07.260] create script right this opens in a new query window and it gives me the permission here you see
+[00:10:07.260 -> 00:10:13.660] right um the connect permission are uh with regards to this account this is the service account
+[00:10:14.940 -> 00:10:21.500] so this is a different account so when we do a restore we will have the latest data here on
+[00:10:21.500 -> 00:10:31.500] the lower environment dev or qa but the accounts would still be production one so we will have to
+[00:10:31.500 -> 00:10:39.660] restore it without no privileges and then apply the um dev account permission that is what i did last
+[00:10:39.660 -> 00:10:47.820] time so the purpose of this is uh live data is restored into the lower environment and whatever
+[00:10:47.820 -> 00:10:54.060] testing they want to do they can do on this thing or development they are planning to do right in
+[00:10:54.060 -> 00:11:00.620] the q way or dev environment they can work on that and they have the live data only the one
+[00:11:00.620 -> 00:11:06.300] which is used in prod so that is the requirement from the application
+[00:11:19.440 -> 00:11:26.960] prod i don't need it i just have to get the details for the q way and um dev account
+[00:11:27.760 -> 00:11:38.140] so for now what i do is go to command prompt connect to a bin folder of postgres which
+[00:11:38.140 -> 00:11:47.100] is installed on my machine this is my vdi machine so inside this okay not here
+[00:11:48.860 -> 00:12:07.250] program files postgres 18 this is the bin path normally i go to this path only because the
+[00:12:07.250 -> 00:12:25.300] exe files are all present here whatever commands are company portal yes db viewer if you want to use
+[00:12:25.300 -> 00:12:32.980] it you can use it i am using postgres pg admin and postgres SQL that is the two things that i
+[00:12:32.980 -> 00:12:45.300] majorly require post that um as per the confluence page which chris i connect to the instance and
+[00:12:45.300 -> 00:12:58.980] then perform a backup of it so i am taking a latest backup locally on my machine
+[00:13:00.500 -> 00:13:07.460] and then now using that file to restore it on the dev environment or the q way environment
+[00:13:17.360 -> 00:13:24.960] i have already um have the commands already set up with me i am just showing it for your
+[00:13:25.280 -> 00:13:32.000] just that update which i already discussed so here you see once i connected the validation of those i
+[00:13:32.000 -> 00:13:39.680] felt when i said i run this commands uh the uh pgo stand uh postgres instance and the uh pass
+[00:13:39.680 -> 00:13:46.080] branch and raised another another mr for uh in the production but uh can i just say we are
+[00:13:46.080 -> 00:13:52.080] connecting uh i am confused uh this is not the mrs first because i think mrs changes i have all these
+[00:13:52.240 -> 00:13:59.120] commands so i can say something like that 10 files changed instead of two files uh i'm just i'm just
+[00:13:59.120 -> 00:14:07.200] going to open that right your branch yeah so what i did is i deleted that branch same thing you can
+[00:14:07.200 -> 00:14:12.560] get the details from the uh snowflake car site get pulled these information created a feature
+[00:14:12.560 -> 00:14:18.400] branch like the most information and uh and then i put my changes and do that we use by
+[00:14:18.400 -> 00:14:23.520] default this is the one which we were going for all the instance and then when i created this is the
+[00:14:23.520 -> 00:14:28.800] default data this and the password is they get it from side and everything is working as expected
+[00:14:29.440 -> 00:14:36.320] but when i created the mr i run this command to q way branch this is to connect to the host
+[00:14:36.320 -> 00:14:43.200] can set the host details then those were changed i think mr has committed into those brands i mean
+[00:14:43.200 -> 00:14:50.720] mr was also working on this you can mention this information in the backup command also that is also
+[00:14:50.720 -> 00:14:57.360] you can directly mention the details but what i do is i first set this and then just run only the
+[00:14:57.360 -> 00:15:16.670] backup command i have the password i'll just say but you can copy it from the uh cyber
+[00:15:16.670 -> 00:15:27.230] app this part is 10 i am connected to the uh instance now i run this command to backup i
+[00:15:27.230 -> 00:15:36.590] create a dump file so this will create with the latest name uh and i've used a date command
+[00:15:36.590 -> 00:15:43.870] to get the uh date timestamp on this so this is i'm taking it locally on my machine
+[00:15:44.830 -> 00:16:03.890] so i run this this is under postgres depth so you can also save it uh locally on your machine
+[00:16:03.890 -> 00:16:26.770] the backup file yeah these are all backups which i took yesterday so i'm just moving it to
+[00:16:27.970 -> 00:16:38.940] archive folder so now i'm running this command so it would generate the file here you see
+[00:16:39.180 -> 00:16:48.290] right it is generating the file so based on the size it would take some time to finish
+[00:16:54.640 -> 00:17:01.360] this is this is the backup file dump file that we are creating backup of production
+[00:17:08.030 -> 00:17:16.190] no the other files are old files which i uh took a backup so every month we are supposed to
+[00:17:16.190 -> 00:17:25.860] maintain the backup of these databases so i take a manual backup of those and place it in a
+[00:17:25.860 -> 00:17:33.700] NAS volume that is again backed up by uh vendor which is retained for a long time in case if user
+[00:17:33.700 -> 00:17:41.940] wanted that backup right we have a backup file for longer retention normally snowflake retains
+[00:17:41.940 -> 00:17:50.740] 10 days of backup so any changes done and if user wanted to retrieve that right from uh
+[00:17:50.740 -> 00:17:57.860] snowflake itself up to 10 days we can retain but say if it is older than 10 days right so
+[00:17:57.860 -> 00:18:03.140] that backup would not be there so for that purpose what i am doing is taking a backup manually
+[00:18:04.020 -> 00:18:09.620] placing it in one of our volumes that is being backed up by a vendor called cohesity
+[00:18:10.500 -> 00:18:17.060] they take care of all the backups in car life so they retain it for a longer time say if i wanted
+[00:18:17.220 -> 00:18:23.220] it after six months i can retrieve that so those are the files which you saw earlier which i had backed up
+[00:18:25.140 -> 00:18:32.020] once the command completes it will move on to the next line so backup is done this file is there
+[00:18:33.620 -> 00:18:43.380] now we have to restore it i can't do a restore with the same name because uh because of the
+[00:18:43.380 -> 00:18:50.500] permission last time i tried that that did not work i got an error message i can show you that
+[00:18:50.500 -> 00:19:00.900] also what i got so for that uh as a work around um i i did reach out to the vendor and they said
+[00:19:00.900 -> 00:19:08.820] that um this is expected because um of the permission um either we have to use that option
+[00:19:08.820 -> 00:19:16.660] called as um no privileges or no owner still i was not able to do so as a work around what i did
+[00:19:16.660 -> 00:19:25.220] i created with the new name drop the existing db then rename the new one to the whole one
+[00:19:25.940 -> 00:19:47.600] and apply the permissions whatever is required for that yeah yeah for some reason i'm not able to
+[00:19:49.840 -> 00:20:07.970] yeah yes um it's the same you see right pg uh set pg port user database everything it's the same
+[00:20:09.570 -> 00:20:18.290] here even um if i give a psql and if i want to list the databases i just put a backslash and
+[00:20:18.290 -> 00:20:25.970] it will list all the databases then you can exit the psql so it's almost the same
+[00:20:27.490 -> 00:20:44.290] even i have added that date time stamp now one thing what i would suggest is um in the q way
+[00:20:52.880 -> 00:21:02.640] so gc record q way is the one they said um we need to retain it right so let me go to create script
+[00:21:10.030 -> 00:21:17.630] if you see these are the privileges that the service account has rw is the service account
+[00:21:18.350 -> 00:21:25.710] the this is the um okay not sorry this is the role and this is the service account svc
+[00:21:26.910 -> 00:21:32.350] so we are what we are doing we are granting the permission to the role and assigning that role
+[00:21:32.350 -> 00:21:38.590] to the service account so we can manage it similar to snuff like role-based access only
+[00:21:39.550 -> 00:21:46.990] so that is what we have done here and then on each uh tables right or tables or schema
+[00:21:47.630 -> 00:21:52.670] it has some permissions so i am just scripting this out for my reference
+[00:21:54.110 -> 00:22:03.520] i am uh keeping it in mode battles let me change the language to rescue
+[00:22:13.120 -> 00:22:20.160] this is right now one day showing um the permission which is there on the database but i also need
+[00:22:20.160 -> 00:22:22.880] the privileges information on the schema level
+[00:22:24.640 -> 00:22:30.720] so this is the only schema that they have normally i do the same thing script it out
+[00:22:51.340 -> 00:22:56.460] this is on the schema level and this is on the database this i have pulled it for q
+[00:23:12.080 -> 00:23:19.200] gc record q way so now we can restore it on q way right now i am connected to prod
+[00:23:20.160 -> 00:23:27.760] so i can open a new uh command prompt and connect to q way instance same process
+[00:23:28.960 -> 00:23:38.000] connect to the mince redirect the path to the bin folder where i have the um
+[00:23:38.400 -> 00:23:55.010] um pg dump files mince postgres uh exe files available so put the same and and i can update
+[00:23:55.010 -> 00:24:04.290] the same thing like uh okay i will show you based on this only so now i need to connect
+[00:24:04.290 -> 00:24:17.010] to the qh host right so i should be open a new tab yeah this this host name we have to copy it
+[00:24:17.010 -> 00:24:25.570] okay if if you're following right yeah this one is still yes yes that's what uh i go here i'm just
+[00:24:25.570 -> 00:24:33.330] showing you if you're following from the confluence page right um in that case you can
+[00:24:33.330 -> 00:24:43.810] copy it from there and change it so i've already done this and saved it so it will be faster for me
+[00:24:45.090 -> 00:24:50.450] that is what i have stored it in the one note one for my reference i have already done
+[00:24:50.450 -> 00:24:54.930] not pull out so like we'll have to store both of the confluence so i don't have to
+[00:24:55.090 -> 00:24:59.170] in go copy and do it in the code to point to
+[00:24:59.170 -> 00:25:04.450] same thing if you see 47 and by dynamically using certain 47 environment variables or maybe
+[00:25:05.250 -> 00:25:11.250] you know using uh it in the code so that's where i was still confused like if we have any use case
+[00:25:11.250 -> 00:25:17.810] wherein we use these type of config files which are in the code then the command will report
+[00:25:17.810 -> 00:25:23.410] everything and then update since i have it handy with me i will use this for now we do not have any
+[00:25:23.410 -> 00:25:29.570] such use case right and if there is any use case we are going to handle it through a variable or we will
+[00:25:29.570 -> 00:25:37.810] create macros reduce the time we have different profiles so when you run the dbt command using
+[00:25:37.810 -> 00:25:44.290] a qa otherwise i need to spend some time to have this command prepared and then so similarly
+[00:25:44.290 -> 00:25:50.690] if there is any use case comes then we'll create we'll take care of that programmatically i think
+[00:25:51.650 -> 00:25:58.690] we have one suggestion here i've seen this process many times well okay the psql command
+[00:25:58.690 -> 00:26:06.130] also i will just show you so this connects to the postgres instance if i give um dot slash health
+[00:26:07.490 -> 00:26:11.730] and i mentioned this uh it will list out all the databases here um
+[00:26:14.050 -> 00:26:20.130] these are the one user databases which are there on the qa environment if i click enter
+[00:26:20.130 -> 00:26:42.700] it will show the other databases enter okay it is individually showing each line but normally
+[00:26:42.700 -> 00:26:52.620] it shows everything then yeah and then it goes here but i for some reason now i'm not able to see
+[00:26:52.620 -> 00:27:01.500] the um system databases the one which are here right um postgres snowflake monitoring those
+[00:27:01.500 -> 00:27:07.500] also would come up here uh i don't know why it is not showing that thing that that we are asking here
+[00:27:07.500 -> 00:27:16.300] then i can do like we have already like having a if i if i want to run a command right um a postgres
+[00:27:16.300 -> 00:27:23.100] command i can run directly here we currently can take sir grant kind of permission again again
+[00:27:23.100 -> 00:27:28.860] this uh is not going to stop grant privileges if i want to run through command prompt right i can do it
+[00:27:28.860 -> 00:27:38.620] in this uh postgres this is currently connected to the default database so we have to set it to
+[00:27:38.620 -> 00:27:46.620] whichever database we want to run the postgres command and we can run that command through command prompt
+[00:27:46.620 -> 00:27:52.620] if you are doing it through command prompt or other option is you can run the commands directly
+[00:27:52.620 -> 00:27:59.020] going here but opening a new query window and you can run those alter commands or grant commands
+[00:27:59.020 -> 00:28:06.700] you can directly run that is also one option which you can use i'm just explaining in case if you
+[00:28:06.700 -> 00:28:13.260] had to run because uh after sometime we'll have to apply the privileges right we are going to do that
+[00:28:13.260 -> 00:28:21.340] but for now i'm uh exiting this i'm going to command prompt i have just moved
+[00:28:23.580 -> 00:28:28.780] okay now i need to perform or restore take accountability of such things on our own
+[00:28:31.470 -> 00:28:36.590] yeah changes that mario is working on that is going to save a lot of time you know yes we spend a
+[00:28:36.590 -> 00:28:42.350] lot of time in resolving these conflicts so this is the command that i'll be using where it says no
+[00:28:42.350 -> 00:28:49.390] owner no privileges i need to so it will not apply the privileges from production leo is there if
+[00:28:49.390 -> 00:28:54.190] there's anything that's blocking you other than the deal currency on your other ticket can you
+[00:28:54.190 -> 00:29:05.170] just ping me um and cc mario there okay this is the part where i have the friend robin all the
+[00:29:05.170 -> 00:29:11.650] questions answered no no doubts yes okay i don't think you need to create that sub task for he
+[00:29:11.650 -> 00:29:19.330] confirmed that athena and that ar sublet everything matches so so you can i make it as something like
+[00:29:19.330 -> 00:29:28.060] you everyone so or the name is different okay thanks guys just update the log i'll i'll definitely
+[00:29:28.940 -> 00:29:46.270] look at it later today thanks thank you i can run this command okay this is the latest backup
+[00:29:46.270 -> 00:30:02.590] which i took error input file appears to be a text format please use psql i think i have
+[00:30:02.590 -> 00:30:45.280] to let me refresh and save the tb got restored but uh here i don't see any changes coming up
+[00:30:55.950 -> 00:31:01.870] if i'm running a command this is since i'm doing a restore right normally what i do is
+[00:31:02.590 -> 00:31:07.950] i run now pg restore command once that is done there is something called a squary history
+[00:31:08.670 -> 00:31:14.590] which will tell me if that command was executed successfully or not you see right
+[00:31:15.310 -> 00:31:22.030] if i'm running some statements this i ran previously so it's showing me that this was executed okay
+[00:31:22.030 -> 00:31:49.870] maybe if i go here i should be able to see that this is q way okay there are no history here but
+[00:31:50.510 -> 00:31:56.830] on the current day when you run the session or whatever commands you apply it uh i that is
+[00:31:56.830 -> 00:32:03.230] the reason i use this to run a command some grand kind of statements that will confirm
+[00:32:03.310 -> 00:32:10.430] whether it was applied or not even in the uh command prompt it will tell give me a statement
+[00:32:10.430 -> 00:32:15.630] saying it was successful but this did not run successfully that is the reason it came in
+[00:32:15.630 -> 00:32:44.400] error just one minute i will check what what just this is a little bit confusing uh because even
+[00:32:44.400 -> 00:33:40.340] i am doing it only for the second time i think um last time i ran this command to backup
+[00:33:40.340 -> 00:33:51.520] the dump so there are some options like iphone f which means um a particular parameter is there i
+[00:33:51.520 -> 00:34:36.590] think i did not use in my previous command yeah yeah okay it has iphone f okay here you see this
+[00:34:36.590 -> 00:34:43.230] command i type a new then we mentioned mentioned the database name host name so instead of mentioning
+[00:34:43.230 -> 00:34:51.870] here in the command line what i do is i already set that in the command itself set the pg db name and
+[00:34:52.510 -> 00:35:05.040] do that okay i think this was the command which i used fc prod you know this one is for
+[00:35:05.040 -> 00:36:13.340] prod for the backup only so let me have this this is backing up
+[00:36:14.940 -> 00:36:31.730] i did run so once they come i'd uh fully restart back set up right okay it's done now
+[00:36:40.210 -> 00:37:31.390] so this one i don't think it caught up right now if it was okay let me
+[00:37:34.560 -> 00:38:00.770] okay okay sorry um i get it what what is the problem um i remember last time what i did i
+[00:38:00.770 -> 00:38:06.050] actually created a database and then did at least so that was my bad
+[00:38:06.850 -> 00:38:27.460] okay here is the database right so i create a new one now this is the one and you see here
+[00:38:28.260 -> 00:38:40.700] there are no schemas available sorry yeah this is my bad now this should work
+[00:38:44.210 -> 00:39:03.070] so it's running later i once i apply the permission i will drop the existing one
+[00:39:03.950 -> 00:39:11.390] and then change but what i do is to be on a safer side i even back it up
+[00:39:13.310 -> 00:39:27.460] just in case so this is done if i do a refresh yeah you should be able to see the
+[00:39:28.420 -> 00:40:10.050] skin one and two query tool sorry okay it only has uh create you don't see any privileges assigned here
+[00:40:12.850 -> 00:40:21.570] you see right there are no privileges assigned so what i'll do right now drop this one this is the
+[00:40:22.530 -> 00:40:28.690] existing one right i drop this and then rename this one then apply the privileges
+[00:40:29.650 -> 00:40:52.100] okay um so these were the privileges which i applied last time grant all on database end gc
+[00:40:52.100 -> 00:41:08.100] recon rw we can validate that i just pulled it right so gc recon rw is the one and then
+[00:41:09.460 -> 00:41:15.300] we have the service account these are the roles and it has grant all and these things so
+[00:41:16.260 -> 00:41:26.100] what i'll do is um now before that uh just to be on a safer side i also try to back up this uh
+[00:41:28.340 -> 00:41:35.140] existing database in case something was not properly done or they wanted the old
+[00:41:36.020 -> 00:41:42.420] data right at least until the segment team confirms that this is fine for them
+[00:41:43.380 -> 00:41:47.620] at least until then i have i maintain one backup just in case
+[00:41:49.460 -> 00:42:09.330] so i run the same command i think i have it for the recon queue it let me change this to okay let
+[00:42:09.330 -> 00:43:18.300] me back this up sorry about that i'm taking both the type of backups uh using this uh parameter if
+[00:43:18.300 -> 00:43:33.730] and actually this does not uh uh backup the privileges so
+[00:43:35.970 -> 00:43:43.490] it only uh copies the data which are required last time what happened was normally what we do
+[00:43:43.490 -> 00:43:50.770] is in dev and ql once we create the instance and uh they ask us to create a service account
+[00:43:50.770 -> 00:43:57.490] we create the account and grant the privileges we grant them rewrite privileges on dev and ql not
+[00:43:57.490 -> 00:44:08.050] in front but dev and ql so later whatever uh uh accounts they create right or the schema they create
+[00:44:08.050 -> 00:44:16.530] or the tables whatever they create our snowflake admin account will not have permission so that
+[00:44:16.530 -> 00:44:23.730] was the issue what i had last time i had to manually or i requested them the service account
+[00:44:23.730 -> 00:44:30.210] password because once we share them the password they move it to their safe i did not have access to
+[00:44:30.210 -> 00:44:40.100] that so i requested a password from them and then um i granted the privileges to our accounts
+[00:44:40.100 -> 00:44:48.020] snowflake admin and then i was able to perform the restore that is one of the drawback here
+[00:44:48.020 -> 00:44:54.180] because if i do the same restore on sequel right i just have to give one command and the path
+[00:44:54.180 -> 00:45:00.340] to where the backup file is and i just have to script out the permission and reapply it it is
+[00:45:00.980 -> 00:45:09.860] simple there but postgres it is uh like this and i am doing it for the first time earlier i have not
+[00:45:09.860 -> 00:45:17.060] managed the postgres this is the first time where i'm managing it so whatever process i have learned
+[00:45:17.060 -> 00:45:32.080] i am doing that there might be some other process which i'm not having okay yeah
+[00:45:33.040 -> 00:45:48.800] when after we get the service account uh i apply the privileges to our snowflake admin account
+[00:45:49.680 -> 00:45:57.440] but normally this is the uh super user account actually this should have permission by default
+[00:45:58.160 -> 00:46:05.520] i don't know why that is the case say if a schema or a table is created with a different
+[00:46:05.600 -> 00:46:13.360] account right only that account will have permission i have to use that account to grant to this super
+[00:46:13.360 -> 00:46:20.080] user but this is the default account which gets generated when we create a postgres instance
+[00:46:20.080 -> 00:46:25.760] it should have privileges by default i don't understand that particular concept
+[00:46:27.680 -> 00:46:34.560] see like if we we are account admin in snowflake we can do a clone right
+[00:46:35.760 -> 00:46:45.360] but um say uh if gis pro owner prod is there right and that owner prod created a schema or a table
+[00:46:46.240 -> 00:46:53.120] i cannot access even if i'm account admin i cannot access those tables i have to get the privileges
+[00:46:53.120 -> 00:47:00.400] from that gis owner prod role to my account admin role and then work on that that is how
+[00:47:00.400 -> 00:47:24.210] yeah it doesn't postgres so once you apply the privileges right this time i did not ask because
+[00:47:24.210 -> 00:47:31.650] last time i had already applied those privileges so those are already present so we don't need to have
+[00:47:32.450 -> 00:47:45.340] means ask again for those services okay so this is done what i'll do is i will drop this one
+[00:47:46.300 -> 00:47:53.180] i have backed it up there is something called drop force i normally use that
+[00:47:54.780 -> 00:48:14.660] okay you see that right gc recognize no longer there and i rename this
+[00:48:15.940 -> 00:48:39.220] i go to properties i think that's how i did last time okay so if i have opened any query window
+[00:48:39.300 -> 00:49:17.650] with that i will have to close that oh let me close all the uh don't say yeah so now it got saved
+[00:49:17.650 -> 00:49:36.980] next thing is i need to reapply the permissions okay i go to query tool so query window these
+[00:49:36.980 -> 00:49:51.520] are the permissions which i need to apply so grant all on database gc.com
+[00:49:54.800 -> 00:50:21.650] this is not the one changing it okay so very completed successfully then i'm assigning
+[00:50:21.650 -> 00:50:30.670] that role to the service account so as we see already exists and has been granted okay it
+[00:50:30.670 -> 00:50:57.060] already has that permission yeah okay let me do connect okay completed successfully then grant all
+[00:50:57.060 -> 00:51:08.720] all schema gc account okay done okay this i granted to snowflake admin just in case if something new
+[00:51:08.720 -> 00:51:21.540] gets created our account has access to it this is already existing so then these are the of
+[00:51:22.500 -> 00:51:47.180] privileges on the tables sequences and function apply it done same done so now let's done right
+[00:51:47.900 -> 00:51:59.940] i do a refresh maybe let me do a refresh here and i do a create script so that will confirm
+[00:52:00.900 -> 00:52:08.340] the permissions are applied if you see right earlier we did not have that
+[00:52:10.100 -> 00:52:25.650] now i could see all the permissions being applied so let me close this this is what we applied same
+[00:52:25.650 -> 00:52:33.010] thing i can do a validation on the schema that's how i just confirm that the relevant permissions
+[00:52:33.090 -> 00:52:43.260] are there okay so now we are done with cubic so similarly we will do for
+[00:52:44.860 -> 00:53:36.530] depth i open new command prompt this is little bit confusing but if you do it the next time
+[00:53:36.530 -> 00:54:11.310] you will have an idea about this it's mainly because of the privileges part
+[00:54:13.380 -> 00:54:20.580] since i am a super admin right i should be able to do a restore without worrying about the privileges
+[00:54:20.580 -> 00:54:27.220] on the schema of the table if somebody a different account creates it also i should be
+[00:54:27.220 -> 00:54:48.290] still able to see that privilege but here that is not the case so so i am backing up those
+[00:54:48.290 -> 00:54:55.250] databases or i can go and i let me create one first so this is
+[00:55:02.400 -> 00:55:32.350] i create a new database create new database and that's good this is done and i will just
+[00:55:32.350 -> 00:55:53.100] script out the permission just for my reference create script sorry i just keep it handy for
+[00:55:53.180 -> 00:57:08.540] some time so i will take a backup of that database this is the source database i am just taking a backup
+[00:57:11.040 -> 00:57:33.970] i am not doing the restore i'm taking a backup after the backup is done i will restore one good
+[00:57:33.970 -> 00:57:41.170] thing here is that the privileges are consistent means the same privileges are applied on the
+[00:57:41.170 -> 00:57:56.900] tab for ql whatever grants we have right is similar to the dev and the q accounts
+[00:58:57.620 -> 00:59:08.900] yep this is locally on my machines but there is another path where i have placed the backups
+[00:59:10.500 -> 00:59:13.460] the one which i was saying right for long-term retention
+[00:59:14.420 -> 00:59:51.490] so let me open that right click file explorer so here whatever monthly backups i take right i place
+[00:59:51.490 -> 00:59:57.410] it here this is backed up by the end up so we have a long-term retention of this
+[00:59:57.970 -> 01:00:08.140] so broad separately whatever databases possible longer i have taken the dump files are here
+[01:00:11.790 -> 01:00:37.600] and out the way end up here you see there is no progress it's still zero
+[01:00:41.170 -> 01:01:03.900] and i don't see anything happening here not sure why no i don't think it got initiated also
+[01:01:35.620 -> 01:01:43.620] okay it was running i think because of a lot of fine science it did not show up let me
+[01:01:44.580 -> 01:01:56.930] delete it and wait for some time i will have to wait for some time then
+[01:01:58.450 -> 01:02:25.470] once it is fully done it should show up restore restore i think they might ask by weekly or
+[01:02:26.670 -> 01:02:35.860] once in a month also the previous restore i think i did two or three weeks back only
+[01:02:37.950 -> 01:02:46.030] and as per my discussion with global credit team they said they might want it to be a regular
+[01:02:46.030 -> 01:02:54.700] kind of activity maybe a weekly kind of a restore i don't know if we have an option to
+[01:02:56.460 -> 01:03:04.020] automate this but we'll have to check on that part if restore can be automated right we
+[01:03:04.020 -> 01:06:36.690] don't have to perform all these things yeah i think it would finish quickly for this but it looks like
+[01:06:37.250 -> 01:07:30.240] it got finished i think this one backup alarm is fine and i don't think we need other backups
+[01:07:31.120 -> 01:09:32.160] okay so this is time next story leonardo i'm doing the restore um we are there leonardo
+[01:09:36.660 -> 01:10:11.460] yeah okay okay it got done so i am dropping this this one i i had only created it to
+[01:10:13.220 -> 01:10:22.740] capture those steps in the conference page it does not have any data so this is done
+[01:10:23.700 -> 01:10:57.570] step one and it shows and skin as a gc record it's there so i do a force drop now i need to
+[01:10:57.570 -> 01:11:11.650] apply the privileges which are similar to this to grant on
+[01:11:12.610 -> 01:11:19.150] yeah and the rw account would be
+[01:12:01.200 -> 01:13:59.550] next the service account is the refresh is done i can just validate it
+[01:14:00.670 -> 01:14:06.800] it's great all missions are there
+[01:14:08.400 -> 01:14:20.380] and we can confirm to ben that this is done and they can validate and confirm as if it's fine
+[01:14:28.270 -> 01:14:38.100] soon so you got it right or you have some confusion on the steps that we perform
+[01:14:49.820 -> 01:14:57.260] but the next time you you do it i will just monitor so in case if we come across any issues
+[01:14:57.260 -> 01:15:03.900] then we can discuss and sort it out so once you do it right after that i think it will be easy for
+[01:15:03.900 -> 01:15:39.150] you watch yeah you can first install that postgres and bg atlanta on your machine okay yes leonardo
+[01:15:43.980 -> 01:16:02.820] it's done and let them check it okay i'll i'll end up calling no problem no it's fine so next time
+[01:16:02.820 -> 01:16:18.050] i will hand i don't have to do it you can take care of it right so that's good yeah thank you
