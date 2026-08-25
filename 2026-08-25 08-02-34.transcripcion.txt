@@ -1,0 +1,97 @@
+Idioma detectado: es (prob=0.915)
+
+[00:00:00.000 -> 00:00:11.080] de data. Era porque los datos solamente estaban en IFR, pero el viernes ya los dejaron en alfa.
+[00:00:11.080 -> 00:00:18.720] O sea que los esquemas son los, esos creo que están como regaditos, creo que están como xpm,
+[00:00:20.880 -> 00:00:27.840] caramba, no estamos solamente experiencing como para ver, abrir el dvver, pero al punto es el
+[00:00:27.840 -> 00:00:35.000] esquema no es el IFR data, toca buscar las otras tabletas que tienen la información de alfa.
+[00:00:35.000 -> 00:00:44.200] Entonces como para aclarar qué es ese tema de alfa y de IFR, alfa e IFR son procesos
+[00:00:44.200 -> 00:00:50.000] sombólogos que hacen más o menos lo mismo y son procesos previos a lo que estamos haciendo
+[00:00:50.000 -> 00:00:54.960] nosotros, que no son de la alcance de nosotros, pero son los procesos que entregan el input
+[00:00:54.960 -> 00:01:02.760] que nosotros necesitamos para poder hacer el reconocer. Resulta que se metió dentro de la
+[00:01:02.760 -> 00:01:10.760] ecuación el tema de IFR y alfa, porque como tú ya conoces la narrativa hay un equipo que hizo
+[00:01:10.760 -> 00:01:17.480] un desarrollo de toquenizar unos campos en particular necesarios para las reglados.
+[00:01:18.480 -> 00:01:26.280] Esa toquenización la habían hecho solamente en el proceso de IFR, pero IFR por eso es que
+[00:01:26.280 -> 00:01:34.320] yo que tú tienes muy en la cabeza IFR, raga el piso data y es porque ese proceso fue el primero el
+[00:01:34.320 -> 00:01:39.960] que le hicieron la toquenización, pero el problema de IFR es que no tiene todavía el nivel de
+[00:01:39.960 -> 00:01:46.400] madurez y consistencia de datos que si tiene el otro proceso que se llama alfa. Entonces
+[00:01:46.400 -> 00:01:53.040] claro cuando lo entregaron en IFR nosotros dijimos ok vamos a tomar los datos de IFR,
+[00:01:53.040 -> 00:01:59.640] pero cuando lo entregaron lo entregaron en el ambiente Cuba no lo entregaron en el ambiente
+[00:01:59.640 -> 00:02:06.000] desarrollo y para nosotros hacer pruebas en Cuba es muy dispendioso porque no tenemos todos
+[00:02:06.000 -> 00:02:13.120] los permisos. Entonces ¿qué dijimos nosotros? alzamos la mano y dijimos no entreguemos
+[00:02:13.120 -> 00:02:20.280] los datos en desarrollo, no importa si sea IFR o no importa si es alfa eso para mí es transparente
+[00:02:20.280 -> 00:02:30.040] pero lo necesito en desarrollo. Entonces al final para no alargarnos es vamos a hacer pruebas
+[00:02:30.040 -> 00:02:36.120] en desarrollo eso yo lo tienes claro de desarrollo a desarrollo si no vamos a usar el esquema
+[00:02:36.120 -> 00:02:45.240] de IFR vamos a usar el esquema de alfa si ahorita buscamos las tablas de alfa pero
+[00:02:45.240 -> 00:02:50.720] realmente las tablas tienen la misma estructura eso no cambia lo único que cambia es el esquema y
+[00:02:50.720 -> 00:02:55.400] ni siquiera quiero que cambia el nombre de las tablas las tablas se llaman exactamente igual me
+[00:02:55.400 -> 00:03:04.760] parece que esas tablas están en pdm de datos me parece mucho si entonces listo no sé si hasta
+[00:03:04.760 -> 00:03:27.180] allí te queda claro el tema no no no desde los restos así es así es así es así es me parece
+[00:03:27.180 -> 00:03:33.660] mucho que están en pdm raya el piso datos me parece que están ahí si ahí tú la reconoces
+[00:03:33.660 -> 00:03:39.900] porque vas a ver los nombres de xpm de raya el piso locations y xpm de raya el piso locations
+[00:03:39.900 -> 00:03:44.420] vale información creo que es la otra que es donde está la mayor parte de la información que
+[00:03:44.420 -> 00:04:16.150] necesitamos para el proceso de unificación me sigues si exacto pero lo que traigo las tablas a
+[00:04:16.150 -> 00:04:21.270] nivel de estructura o sea los campos que tú ya identificaste que es en que se necesitan son
+[00:04:21.270 -> 00:04:26.350] los mismos campos que vas a encontrar en alfa lo único que cambia es ni siquiera va a cambiar
+[00:04:26.350 -> 00:04:38.620] el nombre de la tabla cambia es el nombre del esquema en donde están no bdm de datos me parece
+[00:04:38.620 -> 00:04:46.020] mucho que están ahí bdm raya el piso datos dentro de ese esquema están están las tablas
+[00:04:46.020 -> 00:05:01.100] sino no alfa no lo vas a ver como alfa sino que lo vas a ver como bdm datos me parece mucho que
+[00:05:01.100 -> 00:05:06.620] ahí están todas las tablas que se necesitan sí pero lo que es importante revisar es que las
+[00:05:06.620 -> 00:05:14.860] tablas que estén ahí dentro de si tú revisas el xpm locations esas tablas ya deberían de
+[00:05:14.860 -> 00:05:21.940] tener los campos tokenizados si que son los campos que este equipo desarrolló eso es importante que
+[00:05:21.940 -> 00:05:28.740] lo revisemos ellos ellos dijeron el viernes pasado ya quedaron cargados pero yo no he hecho la
+[00:05:28.740 -> 00:05:37.980] revisión no sé si tú yo creo que tampoco porque estabas con el el ifr pero es importante revisar
+[00:05:37.980 -> 00:05:56.860] que si hayan quedado los campos tokenizados en el esquema de bdm datos me sigues así es listo
+[00:05:56.860 -> 00:06:04.740] entonces eso es en cuanto a lo que tiene que ver con el tema de los datos de donde es que
+[00:06:04.740 -> 00:06:10.620] vamos a coger como toda la información ahora que era lo que me mencionabas del tema de permisos
+[00:06:10.620 -> 00:06:53.750] ayer ya como hablando del data sharing ok pero no crees esquemas en reconocer batch en reconocer no
+[00:06:53.750 -> 00:06:59.150] crees porque muy seguramente nuestro usuario no tiene permisos pero usemos los que ya existen
+[00:06:59.150 -> 00:07:05.830] sí es decir yo veo que ya existe uno que se llama public usemos ese public y ahí metemos las
+[00:07:05.830 -> 00:07:16.740] tablas que necesitamos crear sí luego ya ahí es más hoy mismo escalamos que necesitamos crear
+[00:07:16.740 -> 00:07:23.380] esquemas toca de definir qué esquemas necesitamos crear sí cómo le vamos a colocar a los esquemas
+[00:07:23.380 -> 00:07:28.740] que van al vergar los datos finales o los esquemas que necesitamos para la creación de
+[00:07:28.740 -> 00:07:35.060] tablas intermedias sí porque hay que tener presente que en el récord en el red chup de
+[00:07:35.060 -> 00:07:40.700] reconocer en donde va a quedar el producto pues si tú te das cuenta ese red chup está vacío
+[00:07:40.700 -> 00:07:46.260] se no tiene nada todavía sí y es porque está recién creado y es para este proceso reconocer que
+[00:07:46.260 -> 00:07:52.220] es lo que estamos haciendo pero nosotros tenemos que definir qué esquemas toca crear cómo se van
+[00:07:52.220 -> 00:07:57.620] a llamar qué vamos a almacenar a ching yo tengo presente que ahí vamos a almacenar todo el
+[00:07:57.620 -> 00:08:05.140] producto de todo el resultado de unificación y al final todo el producto de reconocer que es
+[00:08:05.140 -> 00:08:11.100] unificación más ordenamiento pero toca definir los nombres de esas tablas si perdón de esos esquemas
+[00:08:11.100 -> 00:08:19.860] de esos esquemas entonces de momento no creemos esquemas porque no podemos eso es obvio que no
+[00:08:19.860 -> 00:08:25.220] vamos a poder pero si usemos los esquemas que ya existen el de public y ahí vamos haciendo
+[00:08:25.220 -> 00:08:57.340] las las pruebas listo qué otra pregunta con el tema del del data cherry ok pero te pide acceso
+[00:08:57.340 -> 00:09:06.260] como sea esa esa es la parte que no que no entiendo acceso como o sea si si tú intentas hacer un
+[00:09:06.260 -> 00:09:21.840] select desde el reconocer bach al proceso bach a cualquier tabla de IFR data te pide permiso ok
+[00:09:21.840 -> 00:09:52.470] o sea falta agregar un permiso o sea un gran como si desde el pdm de datos que no chiste
+[00:09:52.470 -> 00:10:22.140] pero si no chiste como lanzas una consulta de un esquema ajá ajá ok pero sí pero algo
+[00:10:22.140 -> 00:10:29.860] me algo me dice que va a pasar exactamente lo mismo sí algo me algo algo me dice que es un
+[00:10:29.860 -> 00:10:39.180] tema de que y eso toca toca escalarlo y si eso toca escalarlo y porque si si no tenemos eso
+[00:10:40.940 -> 00:10:47.500] pues estamos man pues manetados porque cómo hacemos un data cherry sin los permisos obviamente eso yo
+[00:10:47.500 -> 00:10:54.900] creo que de pronto tú lo viste inquiar pero como nosotros y somos dueños de del espacio
+[00:10:54.900 -> 00:11:00.300] seguramente Sergio yo dio los permisos que corresponden pero como tú has notado en
+[00:11:00.300 -> 00:11:06.940] expirian el tema de los permisos es súper delicado si eso de sticker para cualquier cosa
+[00:11:08.220 -> 00:11:15.620] entonces lo que se diría bueno es llegar con ese dato para la reunión de las 930 y ojalá
+[00:11:15.620 -> 00:11:20.500] pudiéramos como hacer un diagrama para poder mostrarles yo estoy intentando hacer un select
+[00:11:20.980 -> 00:11:28.900] desde mi cuenta consumidora a la cuenta productora y el usuario que yo uso en ambiente de desarrollo
+[00:11:28.900 -> 00:11:36.420] no tienen los permisos que corresponden para yo lograr hacer el select si me imagino que será
+[00:11:36.420 -> 00:11:41.540] un permiso de que es un gran de que de lectura me imagino porque al final yo le estamos leyendo
+[00:11:44.100 -> 00:11:49.380] y eso toca escalarlo porque nos toca levantar la mano con tiempo y decirles si
+[00:11:49.940 -> 00:12:14.660] porque la otra opción es hacerla por el el framework si usa un usuario supuestamente
+[00:12:14.660 -> 00:12:21.700] de administrador o como con otros privilegios pero para hacer en el framework que tendríamos que
+[00:12:21.700 -> 00:12:29.510] hacer tendríamos que montar un esto el procedimiento ok de momento hagamos la prueba si sale lo
+[00:12:29.510 -> 00:12:42.170] mismo con el bm de datos para escalarlo a ver cómo nos pueden ayudar ellos que otra pregunta
+[00:12:55.770 -> 00:13:04.410] si es importante que definamos eso listo dale entonces cuéntame entonces antes de la reunión
+[00:13:04.410 -> 00:13:10.970] de las 930 si también sale el mismo tema toma pantallazos del error que sale al momento de
+[00:13:10.970 -> 00:13:27.000] que se intente hacer para poder mencionarlo en la sección de las 930 vale listo que otro tema
+[00:13:27.080 -> 00:13:31.400] y teníamos no digamos que la prioridad esta esta semana si se atacheren
+[00:13:32.680 -> 00:13:37.080] con esos datos reales eso es lo que en lo que nos vamos a enfocar
+[00:13:38.440 -> 00:13:43.560] las te cuento que las pruebas del framework bach ya salieron exitosas la semana pasada
+[00:13:44.520 -> 00:13:49.480] ya logramos orquestar con el framework bach los estor procedidos que tú diseñaste
+[00:13:50.440 -> 00:13:56.920] y entonces esa parte ya la tenemos cerrada si porque tú sabes que el framework bach es el
+[00:13:56.920 -> 00:14:04.600] orquestador de todo el proceso y él ya ejecuta los estor procedidos de manera cascada se ha
+[00:14:04.600 -> 00:14:09.080] reglado unos reglados reglados y toda esa carneta que ya conoce los ejecutados del framework bach
+[00:14:09.080 -> 00:14:14.600] y obviamente con datos moqueados no con datos moqueados fue que se hizo ya la prueba
+[00:14:15.160 -> 00:14:20.840] entonces esta esta semana nos buscamos el espacio para poder mostrarte como funciona el framework bach
+[00:14:21.640 -> 00:14:26.920] que al final es una cosa y simple realmente no es que tenga nada nada del otro mundo
+[00:14:27.480 -> 00:14:32.760] pero lo miramos en conjunto para que tengas allí como el conocimiento de cómo es que funciona
+[00:14:32.760 -> 00:14:46.820] vale listo vale nos vemos en la sección de las 830 y me avisas antes de las 930 como te fue
+[00:14:46.820 -> 00:14:53.420] con la prueba para saber cómo escalamos listo listo vale aunque que estás bien
