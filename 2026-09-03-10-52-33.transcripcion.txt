@@ -1,0 +1,629 @@
+Idioma detectado: es (prob=0.897)
+
+[00:00:00.500 -> 00:00:14.270] Y usemos, perdón, ya había visto como por acá.
+[00:00:14.270 -> 00:00:17.130] Y es para que creemos un repositorio,
+[00:00:17.130 -> 00:00:30.820] no tengamos compartido como debería ser.
+[00:00:30.820 -> 00:00:33.620] Sí, claro, ya tengamos todo ese código que ya ese código
+[00:00:33.620 -> 00:00:36.380] está muy avanzado.
+[00:00:36.380 -> 00:00:37.940] Y es supremamente funcional.
+[00:00:37.940 -> 00:00:54.840] Y eso ya es para que lo tengamos donde va a ser.
+[00:00:54.840 -> 00:00:55.640] Entonces listo, listo.
+[00:00:55.640 -> 00:00:59.680] Tenemos acá como las cosas que yo tengo como en mente.
+[00:00:59.680 -> 00:01:04.680] Y es acá, tarea de desinformización, reconocer.
+[00:01:04.680 -> 00:01:06.400] Entonces, voy a colocar acá un primer tema que no se me
+[00:01:06.400 -> 00:01:09.480] olvide, que tiene que ver con el board string 5.
+[00:01:09.480 -> 00:01:11.120] Y tiene que ver con el red de atendimiento,
+[00:01:11.120 -> 00:01:12.840] porque te lo ponen hasta el final.
+[00:01:12.840 -> 00:01:16.520] Entonces, creemos un repositorio.
+[00:01:16.520 -> 00:01:19.640] Un repositorio para código.
+[00:01:19.640 -> 00:01:23.480] Entonces, este código tengo que explicarte que son 3 repos.
+[00:01:23.480 -> 00:01:25.720] Sí, ya te voy a mostrar cómo.
+[00:01:25.720 -> 00:01:33.760] Y un repositorio donde tengamos solamente la información
+[00:01:33.760 -> 00:01:43.130] necesaria del proyecto para contexto de quiro.
+[00:01:43.130 -> 00:01:47.810] Creo que pedirte quiro, porque ya está funcionando.
+[00:01:47.810 -> 00:01:51.610] Entonces, aquí tratemos de listar esos documentos.
+[00:01:51.610 -> 00:02:06.470] Entonces, punto MD de unificación, un punto MD de unificación,
+[00:02:06.470 -> 00:02:17.710] un punto MD de unificación, un punto MD de unificación,
+[00:02:17.710 -> 00:02:26.480] de framework bash, excelente.
+[00:02:26.480 -> 00:02:30.320] Un punto MD de excelente.
+[00:02:30.320 -> 00:02:38.930] Un punto MD de, sí, de una de los antelocáticos de este
+[00:02:38.930 -> 00:02:41.330] asunto, o luego de cinco, aunque quiero que eso no
+[00:02:41.330 -> 00:02:43.970] tenemos mucha información, acá todo va bien.
+[00:02:43.970 -> 00:02:47.130] Pero dejémoslo ahí para que lo generamos.
+[00:02:47.130 -> 00:02:57.150] Y un punto MD de pruebas core.
+[00:02:57.150 -> 00:03:00.110] Y un punto MD, si me había pensado,
+[00:03:00.110 -> 00:03:08.240] uno reconoce la unificación de un documento que hay que repashe.
+[00:03:08.240 -> 00:03:15.800] Y uno que sea de documentación.
+[00:03:15.800 -> 00:03:19.120] Porque eso toca subirlo al confluencio.
+[00:03:19.120 -> 00:03:21.720] Y no quiero que después se convertan en una bola de nieve
+[00:03:21.720 -> 00:03:27.010] que se nos vuelva súper complejo a hacer esa documentación.
+[00:03:27.010 -> 00:03:28.570] Entonces, listo.
+[00:03:28.570 -> 00:03:36.000] Tratemos acá cómo de darle de una vez a esto,
+[00:03:36.000 -> 00:03:45.330] lo que debería de contener este punto MD es un overview,
+[00:03:45.330 -> 00:03:53.200] es un overview del proyecto, entendiendo que esto es una
+[00:03:53.200 -> 00:03:58.640] migración de data a Redshift.
+[00:03:58.640 -> 00:04:00.320] Espera, me llamo, me llamo por acá.
+[00:04:00.320 -> 00:04:09.100] Acá es un XML de la arquitectura,
+[00:04:09.100 -> 00:04:25.790] da hasta cherry más todo el reconocer.
+[00:04:25.790 -> 00:04:28.390] Listo, entonces aquí, uno verbió el proyecto de migración de
+[00:04:28.390 -> 00:04:47.180] data a Redshift, que hable de los TBT de data y de más código
+[00:04:47.220 -> 00:04:52.860] compartido, de más código compartido,
+[00:04:52.860 -> 00:04:59.420] de más código compartido por Experian de data.
+[00:04:59.420 -> 00:05:01.820] Es una mano de código que está ahí, pero impresionante,
+[00:05:01.820 -> 00:05:04.220] que fue la persona en principio.
+[00:05:04.220 -> 00:05:06.980] Listo, entonces, unificación.
+[00:05:06.980 -> 00:05:13.460] Acá lo mismo, overview y alcance del proceso.
+[00:05:13.460 -> 00:05:16.140] Sí.
+[00:05:16.140 -> 00:05:26.110] Una más que sean las reglas de, si la regla es de aceptación,
+[00:05:26.110 -> 00:05:34.410] los criterios de, pues se llaman los criterios de qué es,
+[00:05:34.410 -> 00:05:37.450] que es lo que envía marcer a los criterios de,
+[00:05:37.450 -> 00:05:38.770] creo que son los criterios de aceptación,
+[00:05:38.770 -> 00:05:45.570] no son reglas de aceptación, son criterios de aceptación,
+[00:05:45.570 -> 00:05:55.110] y aquí son como las reglas de funcionamiento.
+[00:05:55.110 -> 00:06:08.150] Sí, y que se hable del código escrito en cuanto a prácticas.
+[00:06:08.150 -> 00:06:09.910] Sí.
+[00:06:09.910 -> 00:06:16.480] Y a este ordenamiento, la misma carreta.
+[00:06:16.480 -> 00:06:18.680] Overview y de aceptación, regla listo.
+[00:06:18.680 -> 00:06:24.570] Esto creo que no sería más nada.
+[00:06:24.570 -> 00:06:27.410] El framework bash, entonces el framework bash lo mismo.
+[00:06:27.410 -> 00:06:36.180] Overview y alcance el proceso.
+[00:06:36.260 -> 00:06:44.050] Una segunda que sean, un insertión a ese código,
+[00:06:44.050 -> 00:06:54.510] a todo ese código del framework, insertión a ese código del framework.
+[00:06:54.510 -> 00:06:56.550] Pues aquí voy a colocar algo antes de que se me olvide,
+[00:06:56.550 -> 00:07:05.790] usar el PDF aprobado por Experient, aprobado por Experient,
+[00:07:05.790 -> 00:07:10.350] para que nos vayamos con lo oficial.
+[00:07:10.350 -> 00:07:15.110] Y lo mismo acá, PDF aprobado por Experient y aprobado por Experient.
+[00:07:15.110 -> 00:07:20.110] Lo desincharcione a ese código del framework.
+[00:07:20.110 -> 00:07:27.670] Y creo que no es nada.
+[00:07:27.670 -> 00:07:30.110] Listo, entonces, de Geo, el mismo tema.
+[00:07:30.110 -> 00:07:35.450] Sería acá el overview, el proceso.
+[00:07:35.450 -> 00:07:39.890] Infarction es como una revisión profunda de lo que es ese
+[00:07:39.890 -> 00:07:44.360] código dentro del framework.
+[00:07:44.360 -> 00:07:52.780] Acá como una película, ¿te acuerdas?
+[00:07:52.780 -> 00:08:00.730] La revisión profunda.
+[00:08:00.730 -> 00:08:03.690] La de Leonardo DiCaprio, ¿te la puedes?
+[00:08:03.690 -> 00:08:07.330] Sí, exacto, la de él, sí.
+[00:08:07.330 -> 00:08:09.010] Listo, entonces.
+[00:08:09.010 -> 00:08:12.570] Sí, sufrió resto, ¿no?
+[00:08:12.570 -> 00:08:24.320] Sufrió resto, resto.
+[00:08:24.320 -> 00:08:26.360] Overview y alcance el proceso.
+[00:08:26.360 -> 00:08:36.710] Entonces acá que use el PDF oficial para el proceso.
+[00:08:36.710 -> 00:08:38.510] Entonces aquí el punto de media.
+[00:08:38.510 -> 00:08:41.910] Esto sí, esto sí, yo no tengo mucha información todavía.
+[00:08:41.910 -> 00:08:44.230] Le voy a dejar ahí pendiente.
+[00:08:44.230 -> 00:08:46.470] Esto de pruebas, ¿cuán?
+[00:08:46.470 -> 00:09:01.780] Sí, un cursor que para por el valor 2 va a avanzar.
+[00:09:01.780 -> 00:09:05.180] Pruebas, ¿cuán?
+[00:09:05.180 -> 00:09:15.180] Ah, entonces acá la metodología y en dónde vamos.
+[00:09:15.180 -> 00:09:21.140] Y una documentación, esto es acá enfocado a Confluence.
+[00:09:21.140 -> 00:09:35.700] Entonces, vamos a colocar enfocado a Confluence de todo el
+[00:09:35.700 -> 00:09:36.180] proyecto.
+[00:09:40.800 -> 00:09:44.480] Entonces, definamos ese documento de una vez que debería de hacer,
+[00:09:44.480 -> 00:09:46.040] ¿sí?
+[00:09:46.040 -> 00:09:47.960] ¿Y cómo debería de hacer eso?
+[00:09:47.960 -> 00:09:52.520] ¿Debería de ser como al de cuenta, como si a nosotros nos
+[00:09:52.520 -> 00:09:54.280] fueran a entregar el proceso, ¿sí?
+[00:09:54.280 -> 00:09:56.120] O sea, en proyección.
+[00:09:56.120 -> 00:09:57.840] ¿Qué pediríamos?
+[00:09:57.840 -> 00:10:02.040] Ajá, OK.
+[00:10:33.910 -> 00:10:39.390] Si un de gran media arquitectura de toda la solución,
+[00:10:39.390 -> 00:10:45.140] ¿siempre cómo hacer?
+[00:10:45.140 -> 00:10:53.020] Entonces sería el documento sería objetivo, contexto,
+[00:10:53.020 -> 00:10:56.020] cómo se desarrolló procedimientos, diagramas,
+[00:10:56.020 -> 00:11:06.520] arquitectura, el alcance.
+[00:11:06.520 -> 00:11:08.520] ¿El alcance que del proyecto?
+[00:11:08.520 -> 00:11:12.320] Sí, por ejemplo, ¿qué cosas no puede cubrir con limitaciones
+[00:11:12.320 -> 00:11:14.320] o cosas así?
+[00:11:14.880 -> 00:11:25.340] Alcance y limitaciones y poder de alcance.
+[00:11:25.340 -> 00:11:26.300] Listo.
+[00:11:26.300 -> 00:11:28.100] ¿Y una QCMLE?
+[00:11:28.100 -> 00:11:32.340] ¿Y un F que sería como?
+[00:11:32.340 -> 00:11:35.300] ¿En qué punto se va?
+[00:11:35.300 -> 00:11:39.060] ¿En qué punto estamos, por decirlo así, o el status o
+[00:11:39.060 -> 00:11:41.060] algo así?
+[00:11:41.060 -> 00:11:44.140] ¿En qué punto estamos?
+[00:11:44.140 -> 00:11:49.770] OK.
+[00:11:49.770 -> 00:11:58.550] Listo.
+[00:11:58.550 -> 00:12:00.790] Eso sería como el archivo más importante, realmente,
+[00:12:00.790 -> 00:12:01.830] cuando me entra a mirar.
+[00:12:01.830 -> 00:12:03.310] Ah, vamos aquí.
+[00:12:03.310 -> 00:12:05.510] Listo.
+[00:12:05.510 -> 00:12:08.590] Listo, ¿vale?
+[00:12:08.590 -> 00:12:10.910] Entonces, voy con los tres repos.
+[00:12:10.910 -> 00:12:20.040] Aquí sería un lonar.
+[00:12:20.040 -> 00:12:25.200] Lonar los tres repos.
+[00:12:25.200 -> 00:12:36.510] Se trae un chip para el despliegue con el compiler.
+[00:12:36.510 -> 00:12:38.870] El despliegue.
+[00:12:38.870 -> 00:12:43.930] Despliegue con el compiler.
+[00:12:43.930 -> 00:12:57.700] Llevar los estorcosidios que ya apuntan a PDF views usando el
+[00:12:57.700 -> 00:13:09.660] data sharing, de datos a través de data sharing.
+[00:13:09.660 -> 00:13:12.580] Listo, dejémoslo ahí, ahorita creamos la rama.
+[00:13:12.580 -> 00:13:16.420] Mi idea es crear una rama que se llama ordenamiento para que
+[00:13:16.420 -> 00:13:19.940] ahí maquemos todo lo que se va haciendo de ordenamiento y
+[00:13:19.940 -> 00:13:23.620] sumarlo.
+[00:13:29.410 -> 00:13:30.770] ¿Cómo sería el tema?
+[00:13:30.770 -> 00:13:36.050] ¿Será que metemos nuestro posterior a ver cómo lo es?
+[00:13:36.050 -> 00:13:40.680] Porque esto sería algo así, fíjate.
+[00:13:40.680 -> 00:13:52.990] Entriamos acá que tenemos.
+[00:13:52.990 -> 00:13:54.150] OK, pero te pido a apuntar.
+[00:13:54.150 -> 00:13:54.630] Ah, claro.
+[00:13:54.630 -> 00:13:58.230] Tienes que ver PDF views porque tienes que leer data
+[00:13:58.230 -> 00:14:02.790] cruda para los otros tipos de contacto.
+[00:14:02.790 -> 00:14:05.870] Los de e-mail, teléfono, porque hasta el momento hemos
+[00:14:05.870 -> 00:14:08.190] trabajado con dirección física.
+[00:14:08.190 -> 00:14:09.270] No faltan los otros.
+[00:14:09.270 -> 00:14:11.910] Sí, claro, tienes que apuntar acá, obviamente.
+[00:14:11.910 -> 00:14:14.910] Solamente que cuando llegues a la fase que no sé cuál es la
+[00:14:14.910 -> 00:14:18.470] de dirección, ya tienes que apuntar los datos de PDF,
+[00:14:18.470 -> 00:14:20.990] porque ya hiciste un proceso de unificación.
+[00:14:20.990 -> 00:14:22.990] Ahí yo creo que tengo que apuntar el resultado que
+[00:14:22.990 -> 00:14:24.950] entregó unificación de las reglas.
+[00:14:24.950 -> 00:14:27.230] Me parece que es así, pero bueno, entonces ahí como que lo
+[00:14:27.230 -> 00:14:28.030] revistas.
+[00:14:28.030 -> 00:14:39.010] Pero la pregunta es, a nivel de repo, va de la siguiente manera.
+[00:14:39.090 -> 00:14:50.790] Son tres repositorios, ¿sí?
+[00:14:50.790 -> 00:14:52.630] Es que, a ver, ¿cómo te ilustro esto?
+[00:14:52.630 -> 00:14:59.530] Hablo acá como, a mis palabras bien, ya sé cómo.
+[00:14:59.530 -> 00:15:03.090] Sí, es que yo no he echado el cuento y como es la vuelta
+[00:15:03.090 -> 00:15:03.590] del pilot.
+[00:15:03.590 -> 00:15:08.290] Entonces, voy a aprovechar y echarle el cuento, ¿sí?
+[00:15:08.290 -> 00:15:14.270] Resulta que hay un pilot que se encarga de desplegar
+[00:15:14.270 -> 00:15:19.430] las soluciones, ¿sí?
+[00:15:19.430 -> 00:15:27.270] Es un pilot que funciona Gira más Jenkins, ¿sí?
+[00:15:27.270 -> 00:15:36.800] Entonces, en Gira hay una historia de usuario, ¿sí?
+[00:15:36.800 -> 00:15:44.360] Y esa historia de usuario va a tener unas subtareas, ¿sí?
+[00:15:44.360 -> 00:15:47.680] Dejémoslo hasta ahí de momento.
+[00:15:47.680 -> 00:15:51.800] Entonces, el Gira que está creado es un Gira y te lo voy a
+[00:15:51.800 -> 00:15:57.640] mostrar, igual podemos crear los que necesitemos.
+[00:15:57.640 -> 00:16:21.710] Es un Gira que, entonces, este fue el que yo usé para usar el
+[00:16:21.710 -> 00:16:23.190] framework bash.
+[00:16:23.190 -> 00:16:25.750] Si el framework bash está como medio cansado, pero bueno,
+[00:16:25.750 -> 00:16:28.390] esto lo hablamos.
+[00:16:28.390 -> 00:16:32.230] Entonces, mira, este es el Gira principal, ¿sí?
+[00:16:32.230 -> 00:16:38.500] Y mira que hay tres subtareas, ¿sí?
+[00:16:38.500 -> 00:16:39.540] Hay tres subtareas.
+[00:16:39.540 -> 00:16:43.260] Ya te voy a explicar por qué, ¿sí?
+[00:16:43.260 -> 00:16:46.700] Resulta que el manque se inventó el pilot, que todavía no
+[00:16:46.700 -> 00:16:49.980] logro entender el porqué, y te lo voy a contar a ver si a punto
+[00:16:49.980 -> 00:16:53.100] te lo encuentras sentido, pero yo no logro encontrárselo.
+[00:16:53.100 -> 00:16:57.100] Digo ano para los despliegues en Redshift.
+[00:16:57.100 -> 00:16:58.420] Vamos a hacer lo siguiente.
+[00:16:58.420 -> 00:17:05.030] Vamos a crear tres repos, ¿sí?
+[00:17:05.030 -> 00:17:11.590] Entonces, en un repo vamos a colocar toda la lógica de
+[00:17:11.590 -> 00:17:16.980] creación de tablas, ¿sí?
+[00:17:16.980 -> 00:17:20.500] O sea, todo lo que tenga que ver con las pistas de las tablas
+[00:17:20.500 -> 00:17:24.500] que creamos de forma temporal viene acá, ¿sí?
+[00:17:24.500 -> 00:17:30.900] Luego, entonces, otro repo que tenga que ver con la lógica
+[00:17:30.900 -> 00:17:38.780] de negocio, o sea, todas las transformaciones, ¿sí?
+[00:17:38.780 -> 00:17:44.940] Transformaciones, ¿sí?
+[00:17:44.940 -> 00:17:49.990] ¿Y otro repo?
+[00:17:49.990 -> 00:17:50.910] Sí, totalmente.
+[00:17:50.910 -> 00:17:52.750] Yo también pienso lo mismo.
+[00:17:52.750 -> 00:17:54.190] ¿Y otro repo?
+[00:17:54.190 -> 00:17:57.110] ¿Qué dijeron? ¿Qué ese es el sistema acuerdo?
+[00:17:57.110 -> 00:18:05.390] Pero acá, al menos un resumen de un resumen horto y claro de
+[00:18:05.390 -> 00:18:13.870] para qué es cada repo necesario en el despliegue usando el
+[00:18:13.870 -> 00:18:18.020] pipeline de Redshift.
+[00:18:18.020 -> 00:18:19.180] Ya ni siquiera me acuerdo.
+[00:18:19.180 -> 00:18:46.120] Hay unos conceptos que estos manes inventaron, ¿sí?
+[00:18:46.120 -> 00:18:51.160] Yo tampoco lo he encontrado sentido y la verdad me
+[00:18:51.160 -> 00:18:53.600] ha dado tranquilidad que tú tampoco le ves el sentido.
+[00:18:53.600 -> 00:19:04.820] Yo creí que era que yo estaba sesgado, pero ya.
+[00:19:04.820 -> 00:19:06.740] Entonces, mira, esto que está acá,
+[00:19:06.740 -> 00:19:09.100] pongámosle el nombre puntual, que estos manes le colocaron a
+[00:19:09.100 -> 00:19:10.980] vuelta ya.
+[00:19:10.980 -> 00:19:18.310] Entonces, esto se llama este repo de esta manera y es para
+[00:19:18.310 -> 00:19:22.190] todo lo que tiene que ver con la estructura de la base.
+[00:19:22.190 -> 00:19:24.550] Entonces, ahí van los free tables y dice toda esta
+[00:19:24.550 -> 00:19:26.070] careta.
+[00:19:26.070 -> 00:19:28.390] Entonces, dice, es primero porque las tablas y columnas tienen
+[00:19:28.390 -> 00:19:30.590] que distirar antes que los programas o colocar toda esta
+[00:19:30.590 -> 00:19:36.290] careta que está acá, la colocar en bebida acá.
+[00:19:36.290 -> 00:19:38.970] Siento, este es el primer repo.
+[00:19:38.970 -> 00:19:41.970] Luego viene el segundo repo, es este.
+[00:19:41.970 -> 00:19:48.410] Dicen, se llama pg-q carajos, es este que está acá, ¿sí?
+[00:19:48.410 -> 00:19:53.290] Y en efecto viene todo esto.
+[00:19:53.290 -> 00:20:00.970] Dicen programas, aquí van los create o reemplazar los
+[00:20:00.970 -> 00:20:04.290] proposídios y las funciones, los replays procedure.
+[00:20:04.290 -> 00:20:07.170] Y funciones se despegan después de el primero que es este que
+[00:20:07.170 -> 00:20:10.450] está acá arriba, ¿sí?
+[00:20:10.450 -> 00:20:13.610] Dice cuando el orjento ya tiene eso sobre que ejecutarse.
+[00:20:13.610 -> 00:20:16.290] OK, entonces acá crea orjetos y acá viene como el termo de
+[00:20:16.290 -> 00:20:16.790] lógica.
+[00:20:16.790 -> 00:20:20.170] Y el último es este que está acá, tiene este nombre.
+[00:20:20.170 -> 00:20:22.250] Datos y scripts que se ejecutan tal cual,
+[00:20:22.250 -> 00:20:25.090] de ML, sites que es control y dados y pues sueltos.
+[00:20:25.090 -> 00:20:27.170] Por ejemplo, un benchmark o una certificación.
+[00:20:27.170 -> 00:20:29.530] OK, eso es lo que nosotros hacemos al final porque
+[00:20:29.570 -> 00:20:33.410] tenemos una tabla control para saber cuál fue el resultado
+[00:20:33.410 -> 00:20:35.810] de toda esta vuelta.
+[00:20:35.810 -> 00:20:44.770] Entonces esto, a colocar acá y viene de esta manera.
+[00:20:44.770 -> 00:20:49.770] Entonces, bueno, el man que hizo esto pues ya lo hizo así y nos
+[00:20:49.770 -> 00:20:53.290] amarró ahí como a usar esta vuelta de esta manera que no
+[00:20:53.290 -> 00:20:55.130] tienen mucho sentido, la verdad.
+[00:20:55.130 -> 00:20:59.030] El más, voy a apuntarle a cursor.
+[00:20:59.030 -> 00:21:06.750] ¿Cuál es el objetivo funcional de tener tres repos cuando todo
+[00:21:06.750 -> 00:21:14.740] puede estar fácilmente en uno?
+[00:21:14.740 -> 00:21:15.420] Entonces listo.
+[00:21:15.420 -> 00:21:22.780] Esto viene acá al pilot, ¿sí?
+[00:21:22.780 -> 00:21:26.420] Y cada uno de estos repos se despliega con una subtarea.
+[00:21:26.420 -> 00:21:34.280] Hasta ahí nos sigue así.
+[00:21:34.280 -> 00:21:44.020] Aló, aló, aló.
+[00:21:44.020 -> 00:21:47.660] Listo, entonces.
+[00:21:47.660 -> 00:21:50.740] Lo suelta que cuando se despliega esto,
+[00:21:50.740 -> 00:21:54.500] ahora siente el mismo esto acá, entonces toca venir,
+[00:21:54.500 -> 00:21:59.060] uno ingresa acá a la subtarea, ¿sí?
+[00:21:59.060 -> 00:22:03.260] La subtarea viene por acá y va a tener una rama asociada y va
+[00:22:03.260 -> 00:22:06.900] a tener unos cómics asociados, ¿sí?
+[00:22:06.900 -> 00:22:10.460] Porque todo esto está unido con el repositorio,
+[00:22:10.460 -> 00:22:17.190] el repositorio es de, ¿cómo se llama el repositorio de esta
+[00:22:17.190 -> 00:22:17.590] vuelta?
+[00:22:17.590 -> 00:22:19.950] De bitbockets, de bitbockets, ¿sí?
+[00:22:19.950 -> 00:22:23.470] Entonces, ese repositorio está unido con esto, etcétera,
+[00:22:23.470 -> 00:22:27.390] y desde acá es que uno despliega, ¿sí?
+[00:22:27.390 -> 00:22:31.470] Entonces, en ese orden de ideas, lo que queremos hacer
+[00:22:31.470 -> 00:22:33.790] nosotros, ¿sí?
+[00:22:33.790 -> 00:22:36.590] Es ya usar estos tres repositorios,
+[00:22:36.590 -> 00:22:40.030] pero ahora sí ya para llevar los cambios de nosotros para que
+[00:22:40.030 -> 00:22:43.630] los tengamos ya consolidados, ¿sí?
+[00:22:43.630 -> 00:22:50.390] Entonces, de tal forma que ya tengamos todo ese código
+[00:22:50.390 -> 00:22:54.550] almacenado, todo ese código guardado y se hace sencillo el
+[00:22:54.550 -> 00:22:59.790] día de mañana ya hacer cambios y nos tendo dependiendo guardadas
+[00:22:59.790 -> 00:23:04.230] y si algo pasa, me lo he dicho el megachicharrón, ¿sí?
+[00:23:04.230 -> 00:23:08.270] Entonces, esto que está acá, se lo va a pasar acá como
+[00:23:08.270 -> 00:23:16.490] imagen para que lo tengas en visual porque sobre ellos que
+[00:23:16.490 -> 00:23:20.170] tocan empezar a estructurar, ¿sí?
+[00:23:20.170 -> 00:23:21.850] Cambiar esto, esto no va a suceder.
+[00:23:21.850 -> 00:23:25.930] Eso ya lo definieron y es la forma como eso pido.
+[00:23:25.930 -> 00:23:28.290] Ahora vinemos que respondió Purso.
+[00:23:28.290 -> 00:23:30.010] La pregunta es de diseño 1 de mecánica.
+[00:23:30.010 -> 00:23:32.130] ¿Va a constatar qué ganas de verdad con tres repos
+[00:23:32.130 -> 00:23:33.650] frente a lo que, OK?
+[00:23:33.650 -> 00:23:34.930] ¿Tienes tres repos?
+[00:23:34.930 -> 00:23:38.970] No es porque el SQL no puede abrir un punto, el demo y el
+[00:23:38.970 -> 00:23:40.810] monolito 1147.
+[00:23:40.810 -> 00:23:43.090] Esto fue cuando hicimos las primeras pruebas.
+[00:23:43.090 -> 00:23:45.570] Ya estuvo en un objetivo de tratar tres clases de cambios
+[00:23:45.570 -> 00:23:47.650] por motos entregados distintos porque no tienen el mismo
+[00:23:47.650 -> 00:23:57.380] riesgo, el mismo probador y el mismo ciclo de vida.
+[00:23:57.380 -> 00:23:59.300] Ah, ya, OK.
+[00:23:59.300 -> 00:24:03.020] Eso es de pronto me dais un poquito de sentido.
+[00:24:03.020 -> 00:24:05.060] Es cierto que la práctica afecta a todos los
+[00:24:05.060 -> 00:24:06.740] consumidores y los revisantes de vea.
+[00:24:06.740 -> 00:24:11.940] OK, no debería viajar mezclado con un code de prueba.
+[00:24:11.940 -> 00:24:13.220] OK.
+[00:24:13.220 -> 00:24:15.740] Un de estos prosidos se puede reemplazar mil veces sin
+[00:24:15.740 -> 00:24:18.980] colocar datos, un esquema, se corrige un bóvil de unificación
+[00:24:18.980 -> 00:24:20.380] sin rehacer de DL.
+[00:24:20.380 -> 00:24:23.420] Eso también me hace sentido.
+[00:24:23.420 -> 00:24:26.500] Dice, ejecuta nueve fines de ML.
+[00:24:26.500 -> 00:24:28.780] Pues la certificación es un disparo operacional a menudo
+[00:24:28.780 -> 00:24:30.820] distinto por ambiente.
+[00:24:30.820 -> 00:24:32.940] No es un artefacto que hay instalado como una talón
+[00:24:32.940 -> 00:24:33.900] procedimiento.
+[00:24:33.900 -> 00:24:35.740] Eso es lo funcional.
+[00:24:35.740 -> 00:24:37.060] Promocional independiente.
+[00:24:37.060 -> 00:24:38.420] OK, listo, vale.
+[00:24:38.420 -> 00:24:41.220] Vamos a empezar a echarle como carretta eso.
+[00:24:41.220 -> 00:24:46.420] Y entonces, ahora, sin volviendo a nuestro solicitud,
+[00:24:46.420 -> 00:24:49.780] desde acá, plorar los terrepos, llevarlos a ese pesca,
+[00:24:49.780 -> 00:24:59.780] apuntan, llevarlos a ese pesca, que ya apuntan ahí,
+[00:24:59.780 -> 00:25:05.660] y usando el data sharing de datos a través del data sharing.
+[00:25:05.660 -> 00:25:11.840] Sí.
+[00:25:11.840 -> 00:25:22.020] Y le voy a pedir acá que genera un .md que lo expliquen
+[00:25:22.020 -> 00:25:30.580] y sirva de input para cualquier día para reorganizar.
+[00:25:30.580 -> 00:25:58.480] Reorganizar por bajo esta estructura.
+[00:25:58.480 -> 00:26:20.740] Solamente para el contexto de quilos.
+[00:26:20.740 -> 00:26:30.650] Listo, voy a montar de esto a curso para que lo haga por debajo.
+[00:26:31.610 -> 00:26:47.620] Y crea una rama para trazar los cambio de para la rama
+[00:26:47.620 -> 00:26:49.860] que hay a nosotros hoy en día.
+[00:26:49.860 -> 00:27:05.620] Le vamos a sacar.
+[00:27:05.620 -> 00:27:11.960] Y esto manténlo como plan.
+[00:27:11.960 -> 00:27:16.340] Y pongamos todos estos artefactos.
+[00:27:16.340 -> 00:27:26.720] Todos estos artefactos que pasan a generar y guardar en.
+[00:27:26.720 -> 00:27:31.440] Entonces, voy a buscar una ruta dentro del OneDrive.
+[00:27:31.480 -> 00:27:34.440] Porque como hay .mds, esos .mds obviamente no se sirven
+[00:27:34.440 -> 00:27:38.680] al repositorio, pero si no necesitamos tener los sincronizados
+[00:27:38.680 -> 00:27:41.440] nosotros, ¿sí?
+[00:27:41.440 -> 00:27:44.960] Pero la idea es que sobre esos .mds no deberíamos de hacer
+[00:27:44.960 -> 00:27:50.320] cambios, porque es la línea base para trabajar.
+[00:27:50.320 -> 00:27:51.920] Obviamente tú sigues con tu cursorio,
+[00:27:51.920 -> 00:27:54.080] mentalmente con tu quirolla, con toda la información que
+[00:27:54.080 -> 00:28:25.270] ya tienes.
+[00:28:25.270 -> 00:28:46.060] Listo, voy a conocer con solidad.
+[00:28:46.060 -> 00:28:49.340] Pues para antes de hacer esto, hagamos lo más importante,
+[00:28:49.340 -> 00:28:51.820] quitar ese modelo que se nos sirve para una vez.
+[00:28:51.820 -> 00:28:57.450] El modelo es súper malo, la verdad.
+[00:28:57.450 -> 00:29:03.130] Ah, mira, cambiaron esto de la optimización, balance.
+[00:29:03.130 -> 00:29:04.890] Estión, cualidad y macho, en definitiva,
+[00:29:04.890 -> 00:29:29.310] no hay más people like this, ¿OK?
+[00:29:29.310 -> 00:29:29.790] Listo.
+[00:30:00.460 -> 00:30:02.380] Listo, esperemos que termine.
+[00:30:02.380 -> 00:30:07.700] ¿Estás por ahí?
+[00:30:07.700 -> 00:30:10.820] Listo, te voy a echarle cuento el OneStream 5,
+[00:30:10.820 -> 00:30:13.460] cuentes que se avanzan, ¿sí?
+[00:30:13.460 -> 00:30:16.700] El OneStream 5, listo.
+[00:30:16.700 -> 00:30:23.980] El cuento es que el OneStream 5 va a tener lo siguiente.
+[00:30:23.980 -> 00:30:29.260] Nosotros vamos a tener el producto reconocer, ¿sí?
+[00:30:29.260 -> 00:30:31.300] Viene por acá.
+[00:30:31.300 -> 00:30:36.500] Acaba a quedar el producto reconocer.
+[00:30:36.500 -> 00:30:39.260] Y al final, esto van a ser X tablas, la verdad.
+[00:30:39.260 -> 00:30:40.780] No sé cuántas tablas, pero van a ser.
+[00:30:40.780 -> 00:30:44.500] X tablas, ¿sí?
+[00:30:44.500 -> 00:30:46.780] Eh, listo.
+[00:30:46.780 -> 00:30:48.260] Entonces, ¿qué pasa?
+[00:30:48.260 -> 00:30:53.100] El OneStream 5 es para venir y atacar un producto que se va
+[00:30:53.100 -> 00:31:05.220] a llamar patch y otro producto que se va a llamar en límite,
+[00:31:05.220 -> 00:31:07.260] ¿sí?
+[00:31:07.260 -> 00:31:10.020] Entonces, bueno, ahí toca hacer una cantidad de cosas,
+[00:31:10.020 -> 00:31:11.660] pero como para que lo tengas presente,
+[00:31:11.660 -> 00:31:15.620] esto es más o menos de la siguiente forma.
+[00:31:15.620 -> 00:31:23.860] Un usuario, perdón, un suscriptor,
+[00:31:23.860 -> 00:31:27.940] un suscriptor, por ejemplo, van a Colombia,
+[00:31:27.940 -> 00:31:39.210] quiere saber, quiere saber cuál es la forma más fácil o el
+[00:31:39.210 -> 00:31:44.730] mejor canal de comunicación para contactar a un pool de
+[00:31:44.730 -> 00:31:46.730] usuarios, ¿sí?
+[00:31:46.730 -> 00:31:55.610] Entonces, este actor que está, este actor que está acá viene
+[00:31:55.610 -> 00:32:01.970] y va a cargar un archivo, supone que es este archivo.
+[00:32:01.970 -> 00:32:04.730] Entonces, aquí viene y quiero saber por la forma de
+[00:32:04.730 -> 00:32:11.290] contactar a Andrés, la forma de contactar a Francisco y quiero
+[00:32:11.290 -> 00:32:15.210] saber si la dirección de Marcela que está,
+[00:32:15.210 -> 00:32:18.050] que yo tengo es la correcta, ¿sí?
+[00:32:18.050 -> 00:32:22.170] Entonces, él coge esto que está acá, este archivo patch,
+[00:32:22.170 -> 00:32:25.810] y esto viene y lo mete a lo que se va a diseñar en el
+[00:32:25.810 -> 00:32:27.450] porstreng 5, ¿sí?
+[00:32:27.450 -> 00:32:33.880] ¿Qué es lo que está acá?
+[00:32:33.880 -> 00:32:40.280] Y en el proceso, lo que va a hacer el desarrollo es que
+[00:32:40.280 -> 00:32:43.480] coge esta información y la va a cruzar contra el producto
+[00:32:43.480 -> 00:32:46.200] reconocer que es el que dice cuál es la forma más fácil de
+[00:32:46.200 -> 00:32:49.800] contactar, la de mayor probabilidad de contactar a Andrés,
+[00:32:49.800 -> 00:32:54.200] Francisco y Marcela y le va a devolver un resultado, ¿sí?
+[00:32:54.200 -> 00:32:59.920] Pues por acá el proceso le va a devolver exactamente lo
+[00:32:59.920 -> 00:33:16.540] mismo, viene y le va a devolver por acá, ¿sí?
+[00:33:16.540 -> 00:33:24.520] Ah, perdón, la fecha va al revés acá de esta forma, ¿listo?
+[00:33:24.520 -> 00:33:28.000] Entonces, aquí hay un montón de roles contemplados para
+[00:33:28.000 -> 00:33:29.760] este trabajo, ¿sí?
+[00:33:29.760 -> 00:33:32.800] Pues va a haber un software engineer, va a haber un
+[00:33:32.800 -> 00:33:37.400] cloud engineer y va a haber un data engineer.
+[00:33:37.400 -> 00:33:41.240] Entonces, el que me interesa es acá el data engineer, ¿sí?
+[00:33:41.240 -> 00:33:44.160] Entonces, acá estás tú.
+[00:33:44.160 -> 00:33:49.240] Entonces, en el porstreng 5, ¿qué es lo que va a hacer el
+[00:33:49.240 -> 00:33:51.080] data engineer, ¿sí?
+[00:33:51.080 -> 00:33:54.440] Tú recuerdas que nosotros hemos tenido contacto con esta
+[00:33:54.440 -> 00:34:00.640] gente donde está Julio, que son los que desarrollaron el
+[00:34:00.640 -> 00:34:07.900] módulo de estandarización, ¿lo tienes en visual?
+[00:34:07.900 -> 00:34:15.900] Te lo estoy mostrando acá en pantalla, miras el chat, ¿sí?
+[00:34:15.900 -> 00:34:22.620] Entonces, estos manes diseñaron por acá un módulo y ese
+[00:34:22.620 -> 00:34:32.810] módulo se llama estandarización, ¿sí?
+[00:34:32.810 -> 00:34:46.780] Ese módulo de estandarización necesita un
+[00:34:46.780 -> 00:34:52.630] cluster de IMR, lo voy a pintar así.
+[00:34:52.630 -> 00:34:56.510] Necesita un cluster de IMR para poder ejecutar eso que hay que
+[00:34:56.510 -> 00:35:00.330] desarrollar, ¿sí?
+[00:35:00.330 -> 00:35:04.850] Resulta que este pedacito que está acá de la estandarización y
+[00:35:04.850 -> 00:35:08.970] levantar el cluster IMR, que esto para que me lo entiendas es
+[00:35:08.970 -> 00:35:16.980] para ir una de Big Data.
+[00:35:16.980 -> 00:35:26.320] O sea, esto es procesamiento distribuido, ¿sí?
+[00:35:26.320 -> 00:35:51.570] Y aquí es donde entras tú.
+[00:35:51.570 -> 00:35:55.800] De hecho, tiene tu adiandres.
+[00:35:55.800 -> 00:36:03.680] Entonces, el trabajo del data engineer muy a alto nivel va
+[00:36:03.680 -> 00:36:05.720] a estar concentrado acá.
+[00:36:05.720 -> 00:36:09.520] En levantar este IMR, este IE, el cluster se tiene que levantar
+[00:36:09.520 -> 00:36:13.640] con el framework bash, ahí donde le damos a multirmangler al
+[00:36:13.640 -> 00:36:14.960] framework bash.
+[00:36:14.960 -> 00:36:18.360] Pero ahí hay unas tareas de Spark, de optimización, de
+[00:36:18.360 -> 00:36:21.200] tuneo, de particiones, que son las tareas que van de la mano
+[00:36:21.200 -> 00:36:23.000] con el data engineer, ¿sí?
+[00:36:23.000 -> 00:36:25.360] Por eso te colocaba acá que es un tema de Big Data, que es
+[00:36:25.360 -> 00:36:27.720] el paradigma de pensamiento distribuido.
+[00:36:27.720 -> 00:36:32.320] Entonces, acá en esta parte del Western 5 es donde entrarías
+[00:36:32.320 -> 00:36:35.760] a apoyar puntualmente en esto que te estoy mostrando.
+[00:36:35.760 -> 00:36:59.720] ¿Tienes alguna pregunta o alguna algo?
+[00:36:59.720 -> 00:37:00.720] OK.
+[00:37:00.720 -> 00:37:32.990] ¿Tienes algún tipo de respondimiento en el documento?
+[00:37:32.990 -> 00:37:49.260] Listo.
+[00:37:49.260 -> 00:37:49.860] Listo, perfecto.
+[00:37:49.860 -> 00:37:52.060] Entonces, ahora sí miremos cursores.
+[00:37:52.060 -> 00:37:54.220] Ah, pero esto, ¿qué?
+[00:37:54.260 -> 00:37:56.220] En martes de Big Pocket Productive,
+[00:37:56.220 -> 00:37:59.060] y migrar el código ahí.
+[00:37:59.060 -> 00:38:03.070] ¿Y si?
+[00:38:03.070 -> 00:38:04.270] ¿Qué código se cuelen?
+[00:38:04.270 -> 00:38:09.590] Debería relacionarse con la altura vía data sharing.
+[00:38:09.590 -> 00:38:13.630] Unificación completa, unificación más ordenamiento
+[00:38:13.630 -> 00:38:15.670] más que o todo lo migrado al reto, ¿no?
+[00:38:15.670 -> 00:38:17.610] Unificación completa, porque pues no tenemos
+[00:38:17.610 -> 00:38:20.770] ordenamiento todavía.
+[00:38:20.770 -> 00:38:23.370] Claro que para unificación completa,
+[00:38:23.370 -> 00:38:36.580] apuntando a IDF, listo.
+[00:38:36.580 -> 00:39:33.620] Tenemos a ver cómo avanzar esto.
+[00:39:33.620 -> 00:39:37.450] Entonces, miremos acá el plan.
+[00:39:37.450 -> 00:39:39.490] Pues plan, consolidación, reconocer paraquilo,
+[00:39:39.490 -> 00:39:41.490] y Python Redshift, OK.
+[00:39:41.490 -> 00:39:43.450] Un paquete único con los clérrimos,
+[00:39:43.450 -> 00:39:45.490] los clérrimos de Big Pocket.
+[00:39:45.490 -> 00:39:47.770] Lornados y poblados con unificación completa,
+[00:39:47.770 -> 00:39:49.610] apuntando, OK.
+[00:39:49.610 -> 00:39:52.330] Una guía ya para reorganizar y mantener código, OK.
+[00:39:52.330 -> 00:39:53.890] Esa es la que todavía pasará a ti para que te
+[00:39:53.890 -> 00:39:56.130] organizes tu código.
+[00:39:56.130 -> 00:39:58.810] Y ocho documentos, punto de medi,
+[00:39:58.810 -> 00:40:00.890] contexto paraquilo, un diagrama que es muy
+[00:40:00.890 -> 00:40:03.890] arquitectura, lo que quieren va a reconocer.
+[00:40:03.890 -> 00:40:05.930] Entonces, esto va a quedar así la estructura de capital.
+[00:40:05.930 -> 00:40:11.610] Reconocer con solidad, van a quedar acá los repos y los
+[00:40:11.610 -> 00:40:14.730] documentos, interferencias, PDFs, claves,
+[00:40:14.730 -> 00:40:17.610] propias, propias, proputas, y los diagrams.
+[00:40:17.610 -> 00:40:20.730] Esto, esa debería ser nuestra estructura para mantener
+[00:40:20.730 -> 00:40:43.840] toda esa guía como un control de nada.
+[00:40:43.840 -> 00:40:48.130] Listo.
+[00:40:48.130 -> 00:41:11.840] Entonces, apacen los documentos, bastan las prácticas
+[00:41:11.840 -> 00:41:24.820] de código, ordenamiento, o de Dios por en cuatro canales.
+[00:41:24.820 -> 00:41:39.380] Es lo que estás trabajando tú, Prankboard Patch.
+[00:41:39.380 -> 00:47:03.510] Listo, nosotros llamamos esta vuelta a ver cómo salimos.
+[00:47:03.510 -> 00:47:07.260] En Big Pocket, en Big Pocket.
+[00:47:07.260 -> 00:47:12.050] Ya te lo muestro.
+[00:47:12.050 -> 00:47:14.730] Están acá en Big Pocket, mira.
+[00:47:14.730 -> 00:47:16.810] Si quieres, me clonándolos.
+[00:47:16.810 -> 00:47:30.990] Todas van a pasar acá las, ah, no,
+[00:47:30.990 -> 00:47:39.100] pero eso no lo puedes plonar en tu máquina que darte.
+[00:47:39.100 -> 00:47:40.580] No, esto es un ambiente experience.
+[00:47:40.580 -> 00:47:41.580] No, no, no.
+[00:47:41.580 -> 00:47:43.740] O sea, bueno, sí, o sea, está bien.
+[00:47:43.740 -> 00:47:56.250] Eso es lo que, para crear los repos, eso sí es un ambiente
+[00:47:56.250 -> 00:47:57.250] experience.
+[00:47:57.250 -> 00:47:58.490] Ah, ya te los pasé.
+[00:47:58.490 -> 00:48:01.490] Te lo vamos a hacer por el interno de experience,
+[00:48:01.490 -> 00:48:02.970] no es bien.
+[00:48:02.970 -> 00:48:15.900] Listo, ahí te los envíes.
+[00:48:15.900 -> 00:48:18.900] Si quieres los clones y cuál es la idea.
+[00:48:18.900 -> 00:48:28.920] Ahí vas a subir, ya te voy a pasar.
+[00:48:28.920 -> 00:48:35.420] Un, dos, tres, cuatro, tres, cuatro, tres, cuatro, tres,
+[00:48:35.420 -> 00:48:38.220] cuatro, tres, cuatro, tres, cuatro, tres, cuatro,
+[00:48:38.220 -> 00:48:42.540] una, una guía para que el mismo cursor te haga la división en
+[00:48:42.540 -> 00:48:45.300] los tres repos del código que ya tienes,
+[00:48:45.300 -> 00:48:49.060] que es el código de unificación.
+[00:48:49.060 -> 00:48:53.660] Solo quiero que toca dividirlo en tres repos,
+[00:48:53.660 -> 00:48:56.940] como te estaba explicando acá con este diagrama,
+[00:48:56.940 -> 00:48:58.500] con este, por favor.
+[00:48:58.500 -> 00:49:01.980] Y también debo de una vez aplicar el refactor que yo te
+[00:49:01.980 -> 00:49:05.260] mencioné, que no sean esos estos procedidos monolíticos,
+[00:49:05.340 -> 00:49:08.540] sino que sean un poquito más experimentados.
+[00:49:08.540 -> 00:49:13.700] No sé si por regla y por escenario, sí,
+[00:49:13.700 -> 00:49:17.380] tal vez podría hacer, digamos, que lo dejo como para que lo
+[00:49:17.380 -> 00:49:20.960] revises, sí.
+[00:49:20.960 -> 00:49:25.440] Y ya sobre ese código, ahora sí, nos vamos a trabajar.
+[00:49:25.440 -> 00:49:30.400] Sobre el código que tú subas, no dices cómo se llame la
+[00:49:30.400 -> 00:49:32.680] rama donde lo subiste.
+[00:49:33.680 -> 00:49:38.800] Más bien, yo voy a crear una, es que creo que no tenemos una
+[00:49:38.800 -> 00:49:41.360] rama más fraca, increíblemente.
+[00:49:41.360 -> 00:49:44.200] O creo que sí hay, más sí hay.
+[00:49:44.200 -> 00:49:46.240] Pero para llegar hasta allá está como difícil,
+[00:49:46.240 -> 00:49:48.320] porque eso toca llegar a través del Pyranque,
+[00:49:48.320 -> 00:49:50.000] otro canson.
+[00:49:50.000 -> 00:49:54.720] Entonces, más bien, créate tú la rama para que tú subas,
+[00:49:54.720 -> 00:49:57.640] para que tú tengas la información y yo me creo una
+[00:49:57.640 -> 00:50:00.840] rama para decirte en dónde le creas un PR para que los
+[00:50:00.840 -> 00:50:02.600] tengamos fusionados.
+[00:50:02.640 -> 00:50:09.560] De tal manera que, en cambio, que tú hagas, le creas el PR,
+[00:50:09.560 -> 00:50:12.160] creo que yo no lo puedo probar, pero yo lo reviso y le pido el
+[00:50:12.160 -> 00:50:14.280] favor al hígosectuche de que lo apruebe.
+[00:50:14.280 -> 00:50:17.840] Es que eso también es un enorme que yo no puedo probar PRs.
+[00:50:17.840 -> 00:50:20.280] Si no hago entender, como para que llevemos el flujo normal
+[00:50:20.280 -> 00:50:36.430] de desarrollo de cualquier proceso de proyecto de desarrollo.
+[00:50:36.430 -> 00:50:39.670] Entonces, listo, espérame que termine y te acabo de
+[00:50:39.710 -> 00:50:44.830] compartir por el OneDrive, ya te voy a llegar un correo en
+[00:50:44.830 -> 00:50:47.350] donde están los artefactos de los documentos que acabamos
+[00:50:47.350 -> 00:51:23.690] de construir.
+[00:51:23.690 -> 00:51:33.490] Si me sigues y listo, y cuando vayas a subir los de
+[00:51:33.490 -> 00:51:37.330] ordenamiento, te creas una rama para ordenamiento,
+[00:51:37.330 -> 00:51:40.130] para poder trazarnos en diferentes arragos, como es el nuevo
+[00:51:40.130 -> 00:51:47.200] normal de desarrollo.
+[00:51:47.200 -> 00:52:02.070] Exacto, sí, tal cual.
+[00:52:02.230 -> 00:52:05.070] Entonces, ahí ya te pase los tres repos.
+[00:52:05.070 -> 00:52:09.390] Lona, no es profa, créate tu propia rama de desarrollo para
+[00:52:09.390 -> 00:52:12.790] que subas los cambios de unificación, pero los cambios
+[00:52:12.790 -> 00:52:15.990] de unificación ya suben los de lo que estamos hablando,
+[00:52:15.990 -> 00:52:19.870] apuntaba los datos reales, que el datacherencia de lectura,
+[00:52:19.870 -> 00:52:23.110] no para copiar información, sino lectura, y que los
+[00:52:23.110 -> 00:52:28.470] estos procedimientos queden divididos de una manera más
+[00:52:31.130 -> 00:52:34.490] y la información que necesites para poder ejecutar esto,
+[00:52:34.490 -> 00:52:37.850] está acá, mira, ahí ya te acabo de compartir el OneDrive,
+[00:52:37.850 -> 00:52:39.690] donde están los documentos.
+[00:52:39.690 -> 00:52:43.050] Entonces, mira, ahí están los punto M, que construimos, sí.
+[00:52:47.050 -> 00:52:54.290] El que tú tendrías que usar, sería, si este mal quiere
+[00:52:54.290 -> 00:53:00.090] hacerlo, estas son referencias de los PDFs,
+[00:53:00.690 -> 00:53:08.730] estos son los repos, estos son mis repos, y cuál fue el de la
+[00:53:08.730 -> 00:53:13.210] guía, la recomendación, ah, ahí están los meses.
+[00:53:13.210 -> 00:53:16.890] Acá igual te lo voy a pasar para que puedas salir
+[00:53:16.890 -> 00:53:18.490] estructural.
+[00:53:18.490 -> 00:53:23.850] Entonces, mira, acá te lo paso y te escribo primero,
+[00:53:23.850 -> 00:53:27.570] apuntarlos a estos procedimientos,
+[00:53:27.570 -> 00:53:34.970] ah, PDFs, usando datachering para,
+[00:53:34.970 -> 00:53:43.220] de no copiar info de redshift productor,
+[00:53:43.220 -> 00:53:56.360] ah, consumidor, ah, consumidor.
+[00:53:56.360 -> 00:54:06.000] Dos, usar el punto MD para que los estos procedimientos se
+[00:54:06.000 -> 00:54:15.620] reorganicen usando los tres rectos del despliegue del
+[00:54:15.620 -> 00:54:22.380] file de redshift, sí, el punto MD que te estoy acá pasando.
+[00:54:22.380 -> 00:54:30.300] Tercero, refactor en los restos procedimientos,
+[00:54:30.380 -> 00:54:39.490] refactor para subdividir por ese, por ese mario,
+[00:54:39.490 -> 00:54:46.740] o remis, y listo, por eso ya cerramos el capítulo de
+[00:54:46.740 -> 00:54:50.780] unificación y luego ya continuás con ordenamiento,
+[00:54:50.780 -> 00:54:58.170] y te querías dar la rama para ordenamiento, y listo.
+[00:54:58.170 -> 00:55:05.010] Ah, sí, revisalo porque si no, sí, sí, sí,
+[00:55:05.010 -> 00:55:07.010] lo me parece que alguna vez habíamos hecho prueba,
+[00:55:07.010 -> 00:55:15.180] si mal no estoy, listo, perfecto.
+[00:55:15.180 -> 00:55:19.980] Entonces, clónalos, sube tus cambios sobre la rama,
+[00:55:19.980 -> 00:55:32.430] y yo te digo después a cuál le querías pedir, listo?
+[00:55:32.430 -> 00:55:37.030] Sí, yo creo que la tendrías que clonarla desde master,
+[00:55:37.030 -> 00:55:44.180] el master que hay, el master creo que estaba así o no?
+[00:55:44.180 -> 00:55:48.100] Ah, no, en master, en master va a estar, claro,
+[00:55:48.100 -> 00:55:51.580] en master va a estar una información allí,
+[00:55:52.380 -> 00:55:56.380] pero esa información fue cuando hicimos pruebas,
+[00:55:56.380 -> 00:55:58.380] hicimos pruebas con los datos moqueados,
+[00:55:58.380 -> 00:56:01.380] pero esto no le parece bueno, eso bórralo,
+[00:56:01.380 -> 00:56:05.380] y cuando tú me lances el PR, yo te apruebo la,
+[00:56:05.380 -> 00:56:07.380] la borrada de esos archivos.
+[00:56:07.380 -> 00:56:15.180] Sí, claro, prácticamente el master va a estar solo,
+[00:56:15.180 -> 00:56:22.670] sí, así es, sí, quédate la rama a partir de master
+[00:56:22.670 -> 00:56:24.670] y ahí ya montaste tus cambios.
+[00:56:24.670 -> 00:56:33.240] Ah, bueno, listo, vale, de una, es mejor,
+[00:56:34.040 -> 00:56:40.510] listo, listo, vale, entonces framework batch de momento,
+[00:56:40.510 -> 00:56:42.510] eso está como parado,
+[00:56:42.510 -> 00:56:45.510] toca esperar a ver cómo resolver ese tema de negociación,
+[00:56:45.510 -> 00:56:49.510] entonces foco fuerte es ordenamiento,
+[00:56:49.510 -> 00:56:53.510] ordenamiento ahí el mensaje que te quiero entregar es puntual,
+[00:56:53.510 -> 00:56:59.510] sí, y es, necesitamos entender el internamiento de la A a la CETRE,
+[00:56:59.510 -> 00:57:02.510] o sea, ese proceso tiene que quedar superamente claro,
+[00:57:03.110 -> 00:57:05.110] porque vienen los workshops,
+[00:57:05.110 -> 00:57:07.110] bueno, los workshops es una consecuencia
+[00:57:07.110 -> 00:57:09.110] de que ya no funciona el código, etcétera,
+[00:57:09.110 -> 00:57:11.110] pero es un internamiento funcional,
+[00:57:11.110 -> 00:57:13.110] y de lo que hace cada uno de las fases,
+[00:57:13.110 -> 00:57:15.110] debe estar supremamente claro,
+[00:57:15.110 -> 00:57:17.110] porque eso eventualmente toca transferir,
+[00:57:17.110 -> 00:57:19.110] y toca hacer demos.
+[00:57:19.110 -> 00:57:21.110] Te acuerdas porque hicimos los demos de unificación,
+[00:57:21.110 -> 00:57:24.110] acá también toca hacer demos en ordenamiento,
+[00:57:24.110 -> 00:57:27.110] sí, entonces para que lo visualices
+[00:57:27.110 -> 00:57:29.110] al final de este sprint,
+[00:57:29.110 -> 00:57:32.110] que es el 11 de la siguiente semana,
+[00:57:32.710 -> 00:57:35.710] o sea, a más tarde del 14 del 15,
+[00:57:35.710 -> 00:57:38.710] deberíamos de estar programando una demo
+[00:57:38.710 -> 00:57:40.710] para mostrar ordenamiento funcionando,
+[00:57:40.710 -> 00:57:43.710] sí, ya sea con datos reales o datos noqueados,
+[00:57:43.710 -> 00:57:45.710] pero yo creo que es mejor hacerlo con datos reales
+[00:57:45.710 -> 00:57:47.710] como que estaba recomendando,
+[00:57:47.710 -> 00:57:50.710] sí, entonces te lo menciono de esa forma,
+[00:57:50.710 -> 00:57:53.710] porque para hacer la demo,
+[00:57:53.710 -> 00:57:56.710] es importante que tengas la claridad en todas las cosas,
+[00:57:56.710 -> 00:57:59.710] porque la demo, la idea es que tú la dirigas,
+[00:57:59.710 -> 00:58:01.710] que tú la alis, sí,
+[00:58:01.710 -> 00:58:03.710] y que puedas llevar allí
+[00:58:03.710 -> 00:58:05.710] parte por parte de una manera estructurada,
+[00:58:05.710 -> 00:58:07.710] yo creo que tú has visto más o menos
+[00:58:07.710 -> 00:58:09.710] la forma como yo intento estructurar la información
+[00:58:09.710 -> 00:58:11.710] para que se pueda entender,
+[00:58:11.710 -> 00:58:13.710] y que los artefactos reflejen como esa claridad
+[00:58:13.710 -> 00:58:15.710] de algo que es súper abstracto,
+[00:58:15.710 -> 00:58:17.710] porque en un momento hay que poner una cosa súper abstracta,
+[00:58:17.710 -> 00:58:19.710] pero de cara el funcional,
+[00:58:19.710 -> 00:58:21.710] como Edgar, Diego Reine y toda esa gente,
+[00:58:21.710 -> 00:58:24.710] pues hay que ser como muy, muy claros,
+[00:58:24.710 -> 00:58:26.710] y poder mostrar el funcionamiento,
+[00:58:26.710 -> 00:58:28.710] y seguir ganando confianza
+[00:58:28.710 -> 00:58:31.710] que estamos haciendo las cosas de acuerdo
+[00:58:31.710 -> 00:58:33.710] a los criterios de este estatus,
+[00:58:33.710 -> 00:58:35.710] y que el mundo es proporcional.
+[00:58:35.710 -> 00:58:37.710] Entonces, si te tuviera que trasunir el entregable
+[00:58:37.710 -> 00:58:39.710] de este script,
+[00:58:39.710 -> 00:58:41.710] es ordenamiento,
+[00:58:41.710 -> 00:58:43.710] también sacar números
+[00:58:43.710 -> 00:58:45.710] como los advenidos,
+[00:58:45.710 -> 00:58:47.710] sacando para unificación,
+[00:58:47.710 -> 00:58:49.710] e ir entendiendo cómo se comporta
+[00:58:49.710 -> 00:58:51.710] esa muestra de datos que tenemos allá.
+[00:58:51.710 -> 00:58:54.710] Entonces, ese sería el objetivo de este script,
+[00:58:54.710 -> 00:59:00.620] como muy, muy aterrizado.
+[00:59:00.620 -> 00:59:02.620] ¿Listo? De una, si tienes dudas,
+[00:59:02.620 -> 00:59:04.620] me encuentres por proporcistor,
+[00:59:04.620 -> 00:59:06.620] perdiente, muchas gracias.
