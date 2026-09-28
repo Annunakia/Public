@@ -1,0 +1,1739 @@
+Documento Funcional – Algoritmo de Ordenamiento.
+Ver.1.0. 
+Creado por: Andy García – Arquitecto Teradata
+Diciembre 2018.
+Objetivo:
+Explicar de una manera sencilla, los detalles de la solución desarrollada para Experian del ordenamiento de ubicaciones con ejemplos prácticos y funcionales.
+Contenido
+Descripción General del Proceso.
+Flujo de Datos del Proceso
+Etapas del proceso:
+Insumos de Direcciones y Cuentas
+Características Estándar
+Características Personalizadas
+Ordenamiento
+Apéndice: Conceptos de Negocio.
+Descripción General del Proceso.
+Dentro de la solución Reconocer Máster, Experian definió un modelo estadístico con el cual tomando la información reportada hacia el buró de las ubicaciones de las personas, pudiese identificar cual de todos los tipos (Direcciones Físicas, emails, Teléfonos Fijos, Celulares) era más probable contactar a la misma.
+Para esto, y a través de un modelo estadístico, se puede computar, puntuar y luego ordenar la información de tal forma, que se establezca una numeración ascendente para cada dato, desde el más probable (1) hasta el menos probable (n). 
+Este algoritmo se aplica por separado para cada uno de los tipos de ubicación (Dir, Email, Cel, Tel) y cada criterio es diferente y fue definido para calificar, a través de un mecanismo llamado características. (Ver Apéndice Conceptos)
+Reglas Generales de Negocio:
+Para realizar el ordenamiento de las ubicaciones se tienen en cuenta las siguientes reglas generales y que se encuentran contenidas en la lógica de negocio (Ver Apéndice A. Lógica de Negocio) requeridas por Experian:
+No se Ordenan Ubicaciones que no sean válidas, resultado de algoritmo de estandarización (Ver Documentos Algoritmo Estandarización)
+No se Ordenan Ubicaciones que hayan sido unificadas, resultado del algoritmo de unificación (Ver Documentos Algoritmo Normalización)
+Solo se ordenan ubicaciones con cuentas activas para la fuente ICBDIR (Suscriptor) y para las otras fuentes no se asocian cuentas a las personas y sus ubicaciones (Contactabilidad, CIU, etc.)
+Se generan 3 fechas de insumo por cada Persona – Cuenta – Suscriptor. Esto con el fin de cumplir con lo requerido por el algoritmo para el cálculo de número de meses de reporte. (Ver Apéndice E. Conceptos de Negocio)
+Ejemplos de Ordenamiento de Ubicaciones:
+Aquí tenemos un ejemplo de como se muestra la información ordenada para cada uno de los tipos de ubicación:
+    
+Imagen 1. Orden de probabilidad para Direcciones
+Como podemos ver en la anterior imagen, la dirección CL 11 8B 12 ED ARAMACADO AP 301 es la dirección más probable en la que se podría localizar a la persona que tenga dicha dirección asociada (Orden 1 más probable).
+Las otras direcciones también son información relevante y que puede ser explotada para su uso en cualquier nivel del buró.
+Este mismo orden aplica para los otros tipos de ubicaciones:
+Imagen 2. Orden de probabilidad para Celulares
+En la anterior imagen, podemos ver los números de celular ordenados desde el más probable (3142991919) y el menos probable (3142991419)
+Veamos cómo se comportan los teléfonos fijos:
+Imagen 3. Orden de probabilidad para Teléfonos
+Entendiendo la anterior imagen, el número 8767707 de la ciudad de Bogotá es el número más probable para realizar algún contacto mientras que el 4921760 sería el menos probable para ubicar una persona.
+Y finalmente para emails tendríamos algo como esto:
+Imagen 4. Orden de probabilidad para Emails
+De acuerdo con lo calificado por el algoritmo de ordenamiento, el email más probable para contactar a la persona sería florentinoguarin@hotmail.com.
+En resumen, podemos ver que el comportamiento para los 4 tipos de ubicaciones es el mismo, donde siempre se calcula desde el más probable (menor valor posible, 1 en estos casos) al menos probable (valores más altos en la columna orden).
+A continuación, se mostrará el diseño y flujo de datos de la solución: Inicio del proceso, subprocesos y consumo de información del modelo Reconocer y BDM para tal fin.
+Flujo de Datos de la Solución / Diseño Propuesto:
+Para el cálculo del ordenamiento, se requiere tener disponible y actualizada la información contenida en el modelo de datos Reconocer Máster y BDM (Business Data Model) de Experian.
+Reconocer Máster administra toda la información relacionada con los datos de ubicación de las personas: 
+Ubicaciones Originales: Información de todas las ubicaciones por personas, reportada por los suscriptores del buró y tal cual llega escrita textualmente al negocio sin ninguna clase de procesamiento o mejora. (Ver documentos del modelo de datos Reconocer Máster)
+Ej:
+Ubicaciones Estandarizadas: Es la información procesada, mejorada y validada por parte de varios mecanismos, que permiten tomar las ubicaciones reportadas (Email, Tel, Cel, Dir) hacia el buró y dejarlas de una manera legible y “estándar” para su consumo o uso por parte del negocio o los clientes del buró. (Ver Documento Algoritmo Estandarización).
+Ej:
+Ubicaciones Unificadas (Solo Direcciones Físicas): Es la información de direcciones físicas, que, a través de un algoritmo, permite “unificar” desde la puerta todos los complementos o en su defecto las mismas direcciones independientes de su tipo de uso (Ver apéndice Conceptos y Documento Algoritmo de Unificación)
+Ej:
+BDM guarda toda la información del Buró y esto incluye las siguientes dimensiones:
+Personas: Información de los datos personales de las personas, priorizadas por tipos y números de identificación de acuerdo con la fuente que reporte. 
+Cuentas: Toda la información de las cuentas asociadas a los suscriptores del buró. Aquí se administra la información de Saldos en Mora, meses de mora, endeudamiento, Comportamientos Activo y pasivo, etc.
+ A partir de estas fuentes de información, se realiza todo un proceso que se desprende de la siguiente manera:
+PROCESOS ORDENAMIENTO
+Generación de Insumos: En este aparte se prepara la información, de las personas que sufrieron cambios tanto en su información de ubicaciones como en sus cuentas o información del buró.
+En este punto, se realiza una identificación de las Personas (Cod Pin Persona, Id Buro Persona) dentro de ambos modelos que sufrieron cambios en sus datos, para lo cual se desglosan los siguientes diagramas de flujo:
+Diagrama 1. Proceso General de Ordenamiento
+Describimos este subproceso así:
+Carga Cata Características: Es un proceso ETL que administra la información de la tabla REC_DATOS.CARACTERISTICA que contiene todas las reglas o “queries” que se usan para el cálculo de las características personalizadas del modelo de ordenamiento. (Ver Apéndice D. Características Personalizadas)
+Calcular Atributos: Este proceso es el encargado de generar los insumos y consta de varios pasos
+Identificar Personas Dirección: Este subproceso identifica cuales son las personas que deben ser ordenadas y si sufrieron algún cambio dentro de la información de ubicaciones o cuentas. Los cambios permitidos que se identifican son: Cargue / Actualización de Ubicaciones, Estandarización de Direcciones, Unificación de Direcciones, Bloqueos de Direcciones. (Ver Apéndice B. Tablas Proceso)
+A nivel de cuenta si hay registros nuevos insertados en Cuentas, Cambios en los comportamientos o en el endeudamiento. (Ver Apéndice B. Tablas Proceso)
+Como tal, el algoritmo tiene 2 formas de establecer el universo a ordenar: A través de una fecha paramétrica al proceso de ORDENAMIENTO o en su defecto por la fecha de último ordenamiento que se almacena en una tabla de control. (Ver Apéndice E. Ejecución Proceso)
+En esta parte del proceso se genera una tabla con todas las personas que tuvieron cambios en ambos modelos de datos. No son excluyentes.
+Podemos resumir el flujo del proceso así:
+Diagrama 2. Sub Proceso Identificar Personas Direccion
+Vemos que se realiza una búsqueda en las tablas de Log’s de Reconocer y BDM, ahí se identifican que objetos del modelo sufrieron alguna actualización, inserción y se toman las respectivas personas asociadas a dichas estructuras, para luego consolidar todo en una sola entidad con todos los potenciales para ordenar. (Ver Apéndice A. Lógica de Negocio).
+Consultar Atributos Persona – Ubicación: A partir de aquí, y del insumo del paso 1.1. se toma esta tabla y se construyen los dos insumos principales para el modelo: Insumo de ubicaciones con todas las variables necesarias (Tipos de Uso, Textos de Ubicación, Latitud, Longitud, Cuenta, Persona, etc.), Insumo de Cuentas (Cuenta, Tipo de Cuenta, Portafolio, Suscriptor, etc.) y una Maestra de Comportamientos de Cuenta con la información de un (1) año por cada cuenta para su uso en la construcción de características estándar (Ver Apéndice B. Tablas Proceso).
+Dentro del flujo del proceso se representa de la siguiente manera:
+Diagrama 3. Subproceso Consultar Atributos Persona - Ubicacion
+En la imagen, podemos ver que el flujo de datos establece para el Insumo de Ubicaciones, tomar la información del modelo de BTT a nivel de Persona (Cuentas, etc.) y se toma información del Modelo Reconocer (Ubicaciones y sus derivados) para dejar a nivel de capa stage, la maestra que es input con toda la información de ubicaciones para las personas que van a ser ordenadas (Ver Apéndice A. Lógica de Negocio).
+Nota: Los subprocesos 1.3. y 1.4. no se desglosan en este documento ya que estos no fueron activados para mejorar el desempeño de la solución.
+1.5 Alistar Insumo Características: Para el alistamiento de insumos de características, se realizan varias operaciones a nivel de bases de datos que son en sí, consultas tanto al modelo de datos de reconocer (Ubicaciones) y el buró (BDM) con el ánimo de obtener todas las variables necesarias para usarlas como insumo en los cálculos de características estándar y personalizadas, para luego aplicar el respectivo ordenamiento. El proceso por cada tipo de ubicación (Dir, Email, Tel, Cel) es el mismo, ya que la normalización del modelo físico tiene tablas que guardan toda la información independientemente de las fuentes (SUS, CIU, Contactabilidad) en Reconocer.
+El proceso de explotación, a partir de la salida del subproceso 1.1. se establece la explotación con los siguientes flujos por cada uno de los tipos de ubicación:
+Insumo Cuentas:
+Diagrama 4. Detalle Subproceso Consultar Atributos Persona – Ubicación
+Donde:
+Se Identifican los lotes de los procesos que modificaron las tablas tanto en el Modelo de Reconocer como en BDM a partir de las tablas de Log (Log_TD y MetadataCargaLog) respectivamente. Esto recibe como input una fecha de ejecución o en su defecto la fecha de último ordenamiento que el proceso automáticamente administra (Ver Apéndices A. Lógica de Negocio y B. Tablas del proceso)
+Identificadas las tablas del modelo que sufrieron cambios, se procede a partir de consultas, extraer los códigos de personas (Id Buro Persona y Cod Pin Persona) de todas aquellas que sufrieron cambios con los números de lotes del paso anterior, es decir cuales lotes y sus personas son los potenciales para ordenar. (Ver Apéndice B. Tablas del proceso)
+Obtenida la base inicial de personas consolidada (Insumo Personas) se tiene el input para iniciar la búsqueda de variables y “armar las sábanas” con toda la información de Personas, Ubicaciones, Cuentas y Características estándar.
+En este punto, está toda la lógica consolidada en procedimientos almacenados de los cruces de información que se realizan dentro del modelo BDM – Reconocer para obtener la base de Cuentas que se usa para calcular Características Estándar y Personalizadas.
+Dentro de los pasos 5 y 6, se genera el alistamiento de la tabla final que guarda la información de todas las personas y sus cuentas. La salida genera la tabla REC_STAGE.CTA_TOTALES_PERSONAS_TMP3 que llamamos Insumo de Cuentas. (Ver Apéndice B. Tablas del Proceso)
+Dentro del subproceso 1.2., se ejecuta en paralelo el cálculo de la información de direcciones, que al final entrega el Insumo de Ubicaciones que no es más que la tabla REC_STAGE.DIRECCIONES_TEMP. Este proceso del cálculo de ubicaciones se realiza de acuerdo con el siguiente diagrama de flujo y aplica para todos los tipos de Ubicación (Dir, Tel, Cel, Email).
+Diagrama 5. Detalle Subproceso Consultar Atributos para Dirección Física y Ordenamiento
+Donde:
+A partir del universo de personas, se procede a realizar la búsqueda de toda la información de sus ubicaciones (Dir, Email, Cel, Tel) en el esquema de datos de Reconocer.
+Consolidada la información de Ubicaciones por Persona, que se realizó consultando el modelo de datos y generando la tabla REC_STAGE.DIRECCIONES_TEMP que es el Insumo de Ubicaciones anteriormente mencionado (Ver Apéndice B. Tablas del Proceso).
+Esta tabla se abre en diferentes vistas por cada uno de los tipos de ubicación (V_DIRECCIONES_TEMP_DF, V_DIRECCIONES_TEMP_TF, V_DIRECCIONES_TEMP_ML, V_DIRECCIONES_TEMP_TM) Direcciones Físicas, Teléfonos, emails y Celulares respectivamente. Cada una es el insumo para el cálculo de las características personalizadas que al final generan un score que nos da el ordenamiento.
+En este paso, se genera el cálculo de las características estándar a partir del Insumo de Cuentas:
+Diagrama 6. Detalle Subproceso Calcular Características Estándar y Personalizadas
+Para luego realizar finalmente el cálculo de las características personalizadas, que estas se ejecutan a través de un MOTOR (Cursor en Procedimiento Almacenado) que ejecuta secuencialmente las instrucciones almacenadas en la tabla REC_DATOS.CARACTERISTICA (Ver Apéndices A. Lógica de Negocio y B. Tablas del Proceso). 
+En este punto, toma como insumos de partida: Insumo de Ubicaciones + Insumo de Cuentas + Insumo Características Estándar = Características personalizadas por Ubicación (Ver Apéndice B. Tablas de Negocio)
+Diagrama 7. Detalle Subproceso Calcular Características Personalizadas Direcciones
+Este mismo proceso se aplica para cada uno de los tipos de ubicación, generando una tabla final que es la que almacena el resultado de las estadísticas calculadas para cada una de las características:
+Diagrama 8. Detalle Subproceso Calcular Características Personalizadas Teléfono
+Diagrama 9. Detalle Subproceso Calcular Características Personalizadas Email
+Diagrama 10. Detalle Subproceso Calcular Características Personalizadas Celular
+Finalmente, con las salidas del subproceso Calcular características Personalizadas, entrega las salidas por cada uno de los tipos de ubicación para luego realizar la actualización del campo Orden Prioridad, Orden Prioridad Anterior y Fecha Ultimo Ordenamiento en la tabla Rec_Datos.RELACION_PERSONA_UBICACION y guarda la fecha de ultimo ordenamiento en la tabla Rec_MTDAT.Control_Ordenamiento:
+Diagrama 11. Detalle Subproceso Calculo Ordenamiento
+NOTA: Toda la lógica se encuentra consolidada en procedimientos almacenados con los cruces de información que se realizan dentro del modelo BDM – Reconocer para obtener todos los insumos que se usa para calcular Características Estándar y Personalizadas. (Ver Apéndice A. Lógica de Negocio)
+Para la lógica de negocio asociada a características remitirse a los Apéndices C. Características estándar y Apéndice D. Características Personalizadas respectivamente.
+APENDICES
+CONTENIDO
+Apéndice A. Lógica de Negocio
+Apéndice B. Tablas del Proceso
+Apéndice C. Características Estándar
+Apéndice D. Características Personalizadas
+Apéndice E. Conceptos de Negocio
+Apéndice A: Lógica de Negocio
+ORDENAMIENTO_242
+A.1. Calculo de Insumo de Personas
+A.2. Calculo de Insumos de Ubicaciones, Cuentas y Comportamientos de Cuenta
+BTEQ_Caracteristicas_estandar_131
+A.3. Calculo de Insumos de Características Estandar
+BTEQ_CURSOR
+A.4. Calculo de Ordenamiento
+P0027_UBI_ORDENAMIENTO
+Apéndice B: Tablas del Proceso
+ID
+Nombre
+Descripcion
+Tipo Objeto
+Esquema
+Formula
+Inputs
+Reglas de negocio
+1
+CONTROL_ORDENAMIENTO
+Administra la fecha de ejecución del último ordenamiento con Fecha y Hora
+TBL
+REC_MTDAT
+No aplica
+No aplica
+No aplica
+2
+METADATA_ORDENAMIENTO
+Metadata con los nombres de tablas y vistas, de los modelos BDM y Reconocer para conocer las personas a Ordenar.
+TBL
+REC_MTDAT
+No aplica
+No aplica
+No aplica
+3
+DIRECCIONES_TEMP
+Tabla temporal Insumo de Ubicaciones que se construye con todos los campos necesarios para la construcción de características personalizadas
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+4
+CTA_TOTALES_PERSONAS_TMP3
+Tabla temporal Insumo de Cuentas que se construye con todos los campos necesarios para la construcción de características personalizadas y estándar
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+5
+INSUMO_CARACTERISTICA
+Tabla temporal con el resultado del cálculo de características estándar o de nivel cero (0) para las cuentas de las personas a ordenar.
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+6
+Orden_TM
+Tabla temporal con el resultado del cálculo de características personalizadas a nivel de Celulares. Esta tabla es insumo para aplicar el ordenamiento a nivel de Modelo de Datos Final
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+7
+Orden_TelF
+Tabla temporal con el resultado del número de orden para Celulares por persona. Esta tabla es insumo para aplicar el ordenamiento a nivel de Modelo de Datos Final
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+8
+Orden_Email
+Tabla temporal con el resultado del número de orden para Emails por persona. Esta tabla es insumo para aplicar el ordenamiento a nivel de Modelo de Datos Final
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+9
+Orden_Direcc
+Tabla temporal con el resultado del número de orden para Direcciones Físicas por persona. Esta tabla es insumo para aplicar el ordenamiento a nivel de Modelo de Datos Final
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+10
+DROP_TMP_CARACTERISTICA
+Maestra que contiene todos los nombres de tablas temporales para ser limpiadas antes del cálculo de características personalizadas.
+TBL
+REC_STAGE
+No aplica
+No aplica
+No aplica
+11
+CARACTERISTICA
+Maestra que administra toda la lógica de negocio del cálculo de características personalizadas. Estos queries almacenados, se ejecutan a través del SP Pro_Cursor_Caract
+TBL
+REC_DATOS
+No aplica
+No aplica
+No aplica
+VISTAS
+12
+V_Digito_Inicial
+Vista Catálogo que administra la maestra de dígitos iniciales por operador, para calcular características personalizadas para teléfonos
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+13
+V_Ind_Efectiv_Orden_Peso_Email
+Vista Catálogo que administra la maestra de Indicadores de efectividad y sus pesos, para calcular características personalizadas para emails.
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+14
+V_Operador_Ord_Cel
+Vista Catálogo que administra la maestra de dígitos iniciales por operador, para calcular características personalizadas para teléfonos
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+15
+V_Tipo_Cuenta_Ord
+Vista Catálogo que administra la maestra de Tipos de Cuentas y sus pesos, para calcular características personalizadas para direcciones
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+16
+V_Beta_Ordenamiento_Cel
+Administra Catálogo de Betas o Pesos para aplicar a los cálculos de características personalizadas de pesos para Celulares
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+17
+V_Beta_Ordenamiento_Dir
+Administra Catálogo de Betas o Pesos para aplicar a los cálculos de características personalizadas de pesos para Direcciones
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+18
+V_Beta_Ordenamiento_Email
+Administra Catálogo de Betas o Pesos para aplicar a los cálculos de características personalizadas de pesos para Email
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+19
+V_Beta_Ordenamiento_Tel
+Administra Catálogo de Betas o Pesos para aplicar a los cálculos de características personalizadas de pesos para Telefonos fijos
+VW
+REC_VISTA
+No aplica
+No aplica
+No aplica
+20
+V_DIRECCIONES_TEMP_DF
+Vista Stage que es insumo para el cálculo de características personalizadas para Direcciones físicas
+VW
+REC_STAGE
+No aplica
+REC_VISTA.DIRECCIONES_TEMP
+Se filtra solo la información de direcciones físicas por persona
+21
+V_DIRECCIONES_TEMP_ML
+Vista Stage que es insumo para el cálculo de características personalizadas para Emails
+VW
+REC_STAGE
+No aplica
+REC_VISTA.DIRECCIONES_TEMP
+Se filtra solo la información de emails por Persona
+22
+V_DIRECCIONES_TEMP_TEL
+Vista Stage que es insumo para el cálculo de características personalizadas para TELEFONOS
+VW
+REC_STAGE
+No aplica
+REC_VISTA.DIRECCIONES_TEMP
+Se filtra solo la información de TELEFONOS por Persona
+23
+V_DIRECCIONES_TEMP_TF
+Vista Stage que es insumo para el cálculo de características personalizadas para Teléfonos fijos
+VW
+REC_STAGE
+No aplica
+REC_VISTA.DIRECCIONES_TEMP
+Se filtra solo la información de Teléfonos fijos por persona
+24
+V_DIRECCIONES_TEMP_TM
+Vista Stage que es insumo para el cálculo de características personalizadas para Celulares
+VW
+REC_STAGE
+No aplica
+REC_VISTA.DIRECCIONES_TEMP
+Se filtra solo la información de Celulares por Persona
+Apéndice C: Características Estándar
+Id
+Nombre
+Característica
+Portafolio
+Observaciones
+1
+Saldo a la fecha. Esta variable se puede obtener aplicando el siguiente seudocódigo y usando como insumo el Maestro de Obligaciones:Formato: Numeric Longitud:  9.2Portafolio: Aplica para RO, IN, VE, HP, OT, COFOR each Cuenta en buró: Set 00END005 to zero Set FLAG to zero Set OPFLAG to zero Set DFLAG to zero Set VFLAG, NFLAG to zeroIF Cuenta pertenece al PortafolioSet FLAG to 1IF Cuenta is AbiertaSet OPFLAG to 1IF Run Date and Fecha Último Reporte are not null and not equal to zeroSet DFLAG to 1IF  0 <= Meses Desactualización <= 3  Set VFLAG to 1IF (Posición 13 del Vector Normalizado de Saldo <>’-‘ and Posición 13 del Vector Normalizado de Saldo >=0)Set NFLAG to 1Set 00END005= Round { [ (valor indicado por la Posición 13 del Vector Normalizado de Saldo) / Posición 13 del Vector Normalizado SMLMV ], 2} ** Redondear a dos decimales **END IFEND IFEND IFEND IFEND IFIF FLAG = 0Set 00END005 = -1  **No posee productos del portafolio**ELSEIF OPFLAG = 0Set 00END005 = -2  **No posee productos del portafolio abiertos**ELSEIF DFLAG = 0Set 00END005 = -3 **Falta alguna Fecha**ELSEIF VFLAG = 0Set 00END005 = -4 **La obligación no se encuentra actualizada a la fecha**ELSEIF NFLAG = 0Set 00END005 = -88 **No posee reporte de valores**END IFEND IFEND IFEND IFEND IFEND FOR Cuenta 
+CO00END005
+RO, IN, VE, HP, OT, CO
+Característica Estándar
+2
+Flag que indica si el producto ha tenido al menos una mora de 60 días o más en los últimos 6 meses.  Esta se calcula a través de la funciónPRODUCTO MORA(2,8,6,035) utilizando como insumo el Maestro de Obligaciones.PRODUCTO MORA(%MORA_INI,%MORA_FIN,%MESES,%NUM_CRTS)Formato: Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OTFOR each Cuenta:Set 00MOR{%NUM_CRTS} to zero  Set FLAG to zero     Set DFLAG to zero   Set VFLAG to zero        Set MFLAG to zero    Set NFLAG to zero Set INICIO to 0         Set FIN to 48      Set P to {% MESES}      Set TOLERANCIA = P/3      Set PFLAG to zero    IF Cuenta pertenece al PortafolioSet FLAG to 1IF Fecha Apertura is not null and not equal to zeroSet DFLAG to 1IF (Meses Maduración + 1) > TOLERANCIA  **calculado en meses**Set VFLAG to 1IF Meses Desactualización <= P   **calculado en meses**Set PFLAG to 1Set INICIO = (FIN – P + 1)DO N = INICIO to FINIF mora indicada en la Posición  N del Vector Normalizado de Comportamiento >= {%MORA_INI} and mora indicada en la Posición  N del Vector Normalizado de Comportamiento <= {%MORA_FIN}Set 00MOR{%NUM_CRTS} to 1END IFEND DOEND IFEND IFEND IFEND IFIF FLAG = 0Set 00MOR{%NUM_CRTS} = -1  **No posee productos del portafolio**ELSEIF DFLAG = 0Set 00MOR{%NUM_CRTS} = -2  **Falta la Fecha de Apertura **ELSEIF VFLAG = 0Set 00MOR{%NUM_CRTS} = -3 **Producto abierto muy recientemente**ELSEIF PFLAG = 0Se 00MOR{%NUM_CRTS} = -4   **Producto sin desempeño suficiente en el periodo de evaluación**END IFEND IFEND IFEND IFEND FOR Cuenta
+CO00MOR035
+RO, IN, VE, HP, CC, OT
+Característica Estándar
+3
+Flag que indica si el producto ha tenido al menos una mora de 30 días o más en los últimos 24 meses.  Esta se calcula a través de la funciónPRODUCTO MORA(1,8,24,055) utilizando como insumo el Maestro de Obligaciones.Formato: Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OTFOR each Cuenta:Set 00MOR{%NUM_CRTS} to zero  Set FLAG to zero     Set DFLAG to zero   Set VFLAG to zero        Set MFLAG to zero    Set NFLAG to zero Set INICIO to 0         Set FIN to 48      Set P to {% MESES}      Set TOLERANCIA = P/3      Set PFLAG to zero    IF Cuenta pertenece al PortafolioSet FLAG to 1IF Fecha Apertura is not null and not equal to zeroSet DFLAG to 1IF (Meses Maduración + 1) > TOLERANCIA  **calculado en meses**Set VFLAG to 1IF Meses Desactualización <= P   **calculado en meses**Set PFLAG to 1Set INICIO = (FIN – P + 1)DO N = INICIO to FINIF mora indicada en la Posición  N del Vector Normalizado de Comportamiento >= {%MORA_INI} and mora indicada en la Posición  N del Vector Normalizado de Comportamiento <= {%MORA_FIN}Set 00MOR{%NUM_CRTS} to 1END IFEND DOEND IFEND IFEND IFEND IFIF FLAG = 0Set 00MOR{%NUM_CRTS} = -1  **No posee productos del portafolio**ELSEIF DFLAG = 0Set 00MOR{%NUM_CRTS} = -2  **Falta la Fecha de Apertura **ELSEIF VFLAG = 0Set 00MOR{%NUM_CRTS} = -3 **Producto abierto muy recientemente**ELSEIF PFLAG = 0Se 00MOR{%NUM_CRTS} = -4   **Producto sin desempeño suficiente en el periodo de evaluación**END IFEND IFEND IFEND IFEND FOR CuentaFlag que indica si el producto ha tenido al menos una mora de 90 días o más en los últimos 24 meses.  Esta se calcula a través de la funciónPRODUCTO MORA(3,8,24,057) utilizando como insumo el Maestro de Obligaciones.
+CO00MOR055
+RO, IN, VE, HP, CC, OT
+Característica Estándar
+4
+Flag que indica si el producto ha tenido al menos una mora de 90 días o más en los últimos 24 meses.  Esta se calcula a través de la funciónPRODUCTO MORA(3,8,24,057) utilizando como insumo el Maestro de Obligaciones.
+CO00MOR057
+NA
+Característica Estándar
+5
+Meses desde la mora de 30 días más reciente del producto. Esta variable se puede obtener aplicando la siguiente función en seudocódigo , y utilizando el Maestro de Obligaciones:Funcion: Meses_Mora(%MORA,%NUM_CRTS)Formato:  Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OT, COFor each Cuenta:  Set 00MOR{%NUM_CRTS} to 999Set FLAG to zeroSet CFLAG  to zeroSet CADUCIDAD to 48IF Cuenta pertenece al PortafolioSet FLAG to 1IF (Meses Desactualización + 1) <= CADUCIDADSet CFLAG to 1DO N = 1 to 49IF [{%MORA} = 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento in (4,6,7)] or [{%MORA} <> 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento = {%MORA}]Set 00MOR{%NUM_CRTS} to N-1Set N to 49Go to next CuentaEND IFEND DOEND IFEND IFIF FLAG=0Set 00MOR{%NUM_CRTS} to –1 ** El producto no pertenece al portafolio **ELSEIF CFLAG = 0Set 00MOR{%NUM_CRTS} to -2 **El producto ha sido sujeto del proceso de condonación **END IFEND IFEnd For CuentaEjecutada de la forma:Meses_Mora(1,075)
+CO00MOR075
+RO, IN, VE, HP, CC, OT, CO
+Característica Estándar
+6
+Meses desde la mora de 60 días más reciente del producto. variable se puede obtener aplicando la siguiente función en seudocódigo , y utilizando el Maestro de Obligaciones:Funcion: Meses_Mora(%MORA,%NUM_CRTS)Formato:  Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OT, COFor each Cuenta:  Set 00MOR{%NUM_CRTS} to 999Set FLAG to zeroSet CFLAG  to zeroSet CADUCIDAD to 48IF Cuenta pertenece al PortafolioSet FLAG to 1IF (Meses Desactualización + 1) <= CADUCIDADSet CFLAG to 1DO N = 1 to 49IF [{%MORA} = 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento in (4,6,7)] or [{%MORA} <> 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento = {%MORA}]Set 00MOR{%NUM_CRTS} to N-1Set N to 49Go to next CuentaEND IFEND DOEND IFEND IFIF FLAG=0Set 00MOR{%NUM_CRTS} to –1 ** El producto no pertenece al portafolio **ELSEIF CFLAG = 0Set 00MOR{%NUM_CRTS} to -2 **El producto ha sido sujeto del proceso de condonación **END IFEND IFEnd For CuentaEjecutada de la forma:Meses_Mora(2,076)
+CO00MOR076
+RO, IN, VE, HP, CC, OT, CO
+Característica Estándar
+7
+Meses desde la mora de 90 días más reciente del producto. variable se puede obtener aplicando la siguiente función en seudocódigo , y utilizando el Maestro de Obligaciones:Funcion: Meses_Mora(%MORA,%NUM_CRTS)Formato:  Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OT, COFor each Cuenta:  Set 00MOR{%NUM_CRTS} to 999Set FLAG to zeroSet CFLAG  to zeroSet CADUCIDAD to 48IF Cuenta pertenece al PortafolioSet FLAG to 1IF (Meses Desactualización + 1) <= CADUCIDADSet CFLAG to 1DO N = 1 to 49IF [{%MORA} = 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento in (4,6,7)] or [{%MORA} <> 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento = {%MORA}]Set 00MOR{%NUM_CRTS} to N-1Set N to 49Go to next CuentaEND IFEND DOEND IFEND IFIF FLAG=0Set 00MOR{%NUM_CRTS} to –1 ** El producto no pertenece al portafolio **ELSEIF CFLAG = 0Set 00MOR{%NUM_CRTS} to -2 **El producto ha sido sujeto del proceso de condonación **END IFEND IFEnd For CuentaEjecutada de la forma:Meses_Mora(3,077)
+CO00MOR077
+RO, IN, VE, HP, CC, OT, CO
+Característica Estándar
+8
+Meses desde la mora de 120+ días más reciente del producto. variable se puede obtener aplicando la siguiente función en seudocódigo , y utilizando el Maestro de Obligaciones:Funcion: Meses_Mora(%MORA,%NUM_CRTS)Formato:  Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OT, COFor each Cuenta:  Set 00MOR{%NUM_CRTS} to 999Set FLAG to zeroSet CFLAG  to zeroSet CADUCIDAD to 48IF Cuenta pertenece al PortafolioSet FLAG to 1IF (Meses Desactualización + 1) <= CADUCIDADSet CFLAG to 1DO N = 1 to 49IF [{%MORA} = 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento in (4,6,7)] or [{%MORA} <> 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento = {%MORA}]Set 00MOR{%NUM_CRTS} to N-1Set N to 49Go to next CuentaEND IFEND DOEND IFEND IFIF FLAG=0Set 00MOR{%NUM_CRTS} to –1 ** El producto no pertenece al portafolio **ELSEIF CFLAG = 0Set 00MOR{%NUM_CRTS} to -2 **El producto ha sido sujeto del proceso de condonación **END IFEND IFEnd For CuentaEjecutada de la forma:Meses_Mora(120,078)
+CO00MOR078
+RO, IN, VE, HP, CC, OT, CO
+Característica Estándar
+9
+Meses desde el reporte más reciente de cartera castigada. variable se puede obtener aplicando la siguiente función en seudocódigo , y utilizando el Maestro de Obligaciones:Funcion: Meses_Mora(%MORA,%NUM_CRTS)Formato:  Numeric Longitud:  3.0Portafolio: Aplica para RO, IN, VE, HP, CC, OT, COFor each Cuenta:  Set 00MOR{%NUM_CRTS} to 999Set FLAG to zeroSet CFLAG  to zeroSet CADUCIDAD to 48IF Cuenta pertenece al PortafolioSet FLAG to 1IF (Meses Desactualización + 1) <= CADUCIDADSet CFLAG to 1DO N = 1 to 49IF [{%MORA} = 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento in (4,6,7)] or [{%MORA} <> 120 and mora indicada en la Posición (49-N+1) del Vector de Comportamiento = {%MORA}]Set 00MOR{%NUM_CRTS} to N-1Set N to 49Go to next CuentaEND IFEND DOEND IFEND IFIF FLAG=0Set 00MOR{%NUM_CRTS} to –1 ** El producto no pertenece al portafolio **ELSEIF CFLAG = 0Set 00MOR{%NUM_CRTS} to -2 **El producto ha sido sujeto del proceso de condonación **END IFEND IFEnd For CuentaEjecutada de la forma:Meses_Mora(7,079)
+CO00MOR079
+RO, IN, VE, HP, CC, OT, CO
+Característica Estándar
+Apéndice D: Características Personalizadas
+Id
+Nombre
+Característica
+Portafolio
+Observaciones
+1
+Flag que indica si el digito inicial de un telefono coincide con el listado de dígitos iniciales por ciudad. ALTER TABLE copia_base_tel ADD COLUMN coincidencia int;UPDATE copia_base_telSET coincidencia =valorFROM  (SELECT tipo_id,          num_id,          telefono,          CASE              WHEN sum(CASE                           WHEN primer_digito LIKE ('%'||substr(telefono,1,1)||'%') THEN 1                           ELSE 0                       END)>0 THEN 1              ELSE 0          END valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id  AND copia_base_tel.telefono=b.telefono;
+Coincidencia
+TO
+Características Teléfono
+2
+Cuenta el total reportes que tiene una persona. Se calcula de la siguiente manera:ALTER TABLE copia_base_tel ADD COLUMN total_reportes int;UPDATE copia_base_telSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+total_reportes
+TO
+Características Teléfono
+3
+Cuenta el total de reportes que tiene una persona en los últimos 3 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_telSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+total_reportes_3
+TO
+Características Teléfono
+4
+Cuenta el total de reportes que tiene una persona en los últimos 6 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_telSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+total_reportes_6
+TO
+Características Teléfono
+5
+Cuenta el total de reportes que tiene una persona en los últimos 12 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_12 numeric(18,2);UPDATE copia_base_telSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+total_reportes_12
+TO
+Características Teléfono
+6
+Cuenta el total reportes que ha tenido un teléfono en particular.Se calcula de la siguiente manera:ALTER TABLE copia_base_tel ADD COLUMN total_reportes_telefono int;UPDATE copia_base_telSET total_reportes_telefono= valorFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id  AND copia_base_tel.telefono=b.telefono;
+total_reportes_telefono
+TO
+Características Teléfono
+7
+Cuenta el total reportes que ha tenido un teléfono en particular agrupados por ciudad.Se calcula de la siguiente manera:ALTER TABLE copia_base_tel ADD COLUMN total_reportes_telefono_ciudad int;UPDATE copia_base_telSET total_reportes_telefono_ciudad= valorFROM  (SELECT tipo_id,          num_id,          telefono,          codigo_dane_ciudad,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono,            codigo_dane_ciudad) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id  AND copia_base_tel.telefono=b.telefono  AND copia_base_tel.codigo_dane_ciudad=b.codigo_dane_ciudad ;
+total_reportes_telefono_ciudad
+TO
+Características Teléfono
+8
+Esta variable calcula el porcentaje de reportes que ha tenido un teléfono sobre el total de reportes que ha tenido una persona. ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL001 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL001 = 100*valorFROM  (SELECT tipo_id,          num_id,          telefono,          cast(sum(1/cast(total_reportes AS decimal)) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL001 
+TO
+Características Teléfono
+9
+Esta variable cuenta los meses desde el reporte más reciente de un teléfono.ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL002 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL002= minimoFROM  (SELECT tipo_id,          num_id,          telefono,          min(meses_reporte) minimo   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL002 
+TO
+Características Teléfono
+10
+Esta variable cuenta los meses desde el reporte más antiguo de un teléfono.ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL003 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL003= maximoFROM  (SELECT tipo_id,          num_id,          telefono,          max(meses_reporte) maximo   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL003
+TO
+Características Teléfono
+11
+La variable expresa el porcentaje de reportes que se han realizado para un teléfono en los últimos 3 meses sobre el total de reportes de una persona.  ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL006 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL006 = 100*numeroFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN meses_reporte<=3 THEN 1/(CASE                                                    WHEN total_reportes_3>0 THEN total_reportes_3                                                    ELSE 1                                                END)                  ELSE 0              END) numero   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL006
+TO
+Características Teléfono
+12
+Esta variable cuenta el número de reportes ha tenido un teléfono en los últimos 12 meses.ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL007 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL007 = numeroFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN meses_reporte<=6 THEN 1                  ELSE 0              END) numero   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL007
+TO
+Características Teléfono
+13
+Esta variable calcula el porcentaje sobre el total de reportes que ha tenido un teléfono en los últimos 12 meses. Se calcula sobre el total de reportes realizados a una persona. ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL010 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL010 = 100*numeroFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN meses_reporte<=12 THEN 1/(CASE                                                     WHEN total_reportes_12>0 THEN total_reportes_12                                                     ELSE 1                                                 END)                  ELSE 0              END) numero   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL010
+TO
+Características Teléfono
+14
+Esta variable obtiene el porcentaje de reportes sobre el total en el que un teléfono ha sido reportado como “Residencial” (RES). ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL017 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL017 = 100*ResFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN trim(tipo_dato_contacto)='RES' THEN 1/cast(total_reportes_telefono AS decimal)                  ELSE 0              END) Res   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL017
+TO
+Características Teléfono
+15
+Esta variable obtiene el porcentaje de reportes sobre el total en el que un teléfono ha sido reportado como “Laboral” (LAB). ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL019 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL019 = 100*ResFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN trim(tipo_dato_contacto)='LAB' THEN 1/cast(total_reportes_telefono AS decimal)                  ELSE 0              END) Res   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL019
+TO
+Características Teléfono
+16
+Esta variable indica si el primer digito de un teléfono coincide con el listado de primeros dígitos para cada ciudad. ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL020 int;UPDATE tabla_resultado_tel_00SET CO01TEL020 =100*valorFROM  (SELECT tipo_id,          num_id,          telefono,          CASE              WHEN sum(coincidencia)>0 THEN 1              ELSE 0          END valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL020
+TO
+Características Teléfono
+17
+Variable que cual es la ciudad más probable para un teléfono. EL resultado es NA si ningún reporte trae ciudad para el teléfono. ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL022 varchar(200);UPDATE tabla_resultado_tel_00SET CO01TEL022 = valorFROM  (SELECT h.tipo_id,          h.num_id,          h.telefono,          min(CASE                  WHEN h.maximo=h.valor                       AND coincidencia=1 THEN codigo_dane_ciudad                  ELSE NULL              END) valor   FROM     (SELECT c.*,             d.coincidencia      FROM        (SELECT a.*,                b.maximo         FROM           (SELECT tipo_id,                   num_id,                   telefono,                   codigo_dane_ciudad,                   count(*) valor            FROM copia_base_tel            GROUP BY tipo_id,                     num_id,                     telefono,                     codigo_dane_ciudad) a         LEFT JOIN           (SELECT tipo_id,                   num_id,                   telefono,                   max(total_reportes_telefono_ciudad) maximo            FROM copia_base_tel            GROUP BY tipo_id,                     num_id,                     telefono) b ON (a.tipo_id=b.tipo_id                                     AND a.num_id=b.num_id                                     AND a.telefono=b.telefono)) c      LEFT JOIN        (SELECT tipo_id,                num_id,                telefono,                codigo_dane_ciudad,                coincidencia         FROM copia_base_tel         GROUP BY tipo_id,                  num_id,                  telefono,                  codigo_dane_ciudad,                  coincidencia) d ON (c.tipo_id=d.tipo_id                                      AND c.num_id=d.num_id                                      AND c.telefono=d.telefono                                      AND c.codigo_dane_ciudad=d.codigo_dane_ciudad)) h   GROUP BY h.tipo_id,            h.num_id,            h.telefono) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL022
+TO
+Características Teléfono
+18
+Variable que indica que porcentaje de suscriptores ha reportado un teléfono en particular. Es calculado con base al número de suscriptores que tiene el teléfono con mayor número de suscriptores.ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL023 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL023=100*valorFROM  (SELECT tipo_id,          num_id,          telefono,          LOCAL/cast(total AS decimal) valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.telefono,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                telefono,                count(*) LOCAL         FROM           (SELECT tipo_id,                   num_id,                   telefono,                   codigo_suscriptor            FROM copia_base_tel            WHERE gestion_dataquality<>'NO VALIDO'            GROUP BY tipo_id,                     num_id,                     telefono,                     codigo_suscriptor) h         GROUP BY tipo_id,                  num_id,                  telefono) a      LEFT JOIN        (SELECT tipo_id,                num_id,                max(LOCAL) total         FROM           (SELECT tipo_id,                   num_id,                   telefono,                   count(*) LOCAL            FROM              (SELECT tipo_id,                      num_id,                      telefono,                      codigo_suscriptor               FROM copia_base_tel               WHERE gestion_dataquality<>'NO VALIDO'               GROUP BY tipo_id,                        num_id,                        telefono,                        codigo_suscriptor) h            GROUP BY tipo_id,                     num_id,                     telefono) h         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL023
+TO
+Características Teléfono
+19
+Esta variable indica en términos porcentuales qué tan actualizado es un teléfono a partir de la primera fecha de reporte. El cálculo se realiza sobre la fecha de reporte más antigua que tiene el cliente.  ALTER TABLE tabla_resultado_tel_00 ADD COLUMN CO01TEL025 numeric(18,2);UPDATE tabla_resultado_tel_00SET CO01TEL025=100*valorFROM  (SELECT tipo_id,          num_id,          telefono,          (total-LOCAL)/total valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.telefono,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                telefono,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) LOCAL         FROM copia_base_tel         GROUP BY tipo_id,                  num_id,                  telefono) a      LEFT JOIN        (SELECT tipo_id,                num_id,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) total         FROM copia_base_tel         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_tel_00.tipo_id=b.tipo_id  AND tabla_resultado_tel_00.num_id=b.num_id  AND tabla_resultado_tel_00.telefono=b.telefono;
+CO01TEL025
+TO
+Características Teléfono
+20
+UPDATE tabla_resultado_tel_00SET CO01TEL001_cat= CASE                        WHEN CO01TEL001<8.33 THEN 1                        WHEN CO01TEL001>=8.33                             AND CO01TEL001<18.18 THEN 2                        WHEN CO01TEL001>=18.18                             AND CO01TEL001<40 THEN 3                        WHEN CO01TEL001>=40 THEN 4                        ELSE 0                    END;
+CO01TEL001_cat
+TO
+Características Teléfono - Modelo
+21
+UPDATE tabla_resultado_tel_00SET CO01TEL002_cat= CASE                        WHEN CO01TEL002<3 THEN 1                        WHEN CO01TEL002>=3                             AND CO01TEL002<6 THEN 2                        WHEN CO01TEL002>=6                             AND CO01TEL002<74 THEN 3                        WHEN CO01TEL002>=74 THEN 4                        ELSE 0                    END;
+CO01TEL002_cat
+TO
+Características Teléfono - Modelo
+22
+UPDATE tabla_resultado_tel_00SET CO01TEL003_cat= CASE                        WHEN CO01TEL003<39 THEN 1                        WHEN CO01TEL003>=39                             AND CO01TEL003<65 THEN 2                        WHEN CO01TEL003>=65                             AND CO01TEL003<119 THEN 3                        WHEN CO01TEL003>=119 THEN 4                        ELSE 0                    END;
+CO01TEL003_cat
+TO
+Características Teléfono - Modelo
+23
+UPDATE tabla_resultado_tel_00SET CO01TEL006_cat= CASE                        WHEN CO01TEL006<25 THEN 1                        WHEN CO01TEL006>=25                             AND CO01TEL006<50 THEN 2                        WHEN CO01TEL006>=50                             AND CO01TEL006<80 THEN 3                        WHEN CO01TEL006>=80 THEN 4                        ELSE 0                    END;
+CO01TEL006_cat
+TO
+Características Teléfono - Modelo
+24
+UPDATE tabla_resultado_tel_00SET CO01TEL007_cat= CASE                        WHEN CO01TEL007<2 THEN 1                        WHEN CO01TEL007>=2                             AND CO01TEL007<3 THEN 2                        WHEN CO01TEL007>=3                             AND CO01TEL007<6 THEN 3                        WHEN CO01TEL007>=6 THEN 4                        ELSE 0                    END;
+CO01TEL007_cat
+TO
+Características Teléfono - Modelo
+25
+UPDATE tabla_resultado_tel_00SET CO01TEL010_cat= CASE                        WHEN CO01TEL010<60 THEN 1                        WHEN CO01TEL010>=60                             AND CO01TEL010<90 THEN 2                        WHEN CO01TEL010>=90                             AND CO01TEL010<95 THEN 3                        WHEN CO01TEL010>=95 THEN 4                        ELSE 0                    END;
+CO01TEL010_cat
+TO
+Características Teléfono - Modelo
+26
+UPDATE tabla_resultado_tel_00SET CO01TEL017_cat= CASE                        WHEN CO01TEL017<5.33 THEN 1                        WHEN CO01TEL017>=5.33                             AND CO01TEL017<83.33 THEN 2                        WHEN CO01TEL017>=83.33                             AND CO01TEL017<75 THEN 3                        WHEN CO01TEL017>=75 THEN 4                        ELSE 0                    END;
+CO01TEL017_cat
+TO
+Características Teléfono - Modelo
+27
+UPDATE tabla_resultado_tel_00SET CO01TEL019_cat= CASE                        WHEN CO01TEL019<16.67 THEN 1                        WHEN CO01TEL019>=16.67                             AND CO01TEL019<75 THEN 2                        WHEN CO01TEL019>=75 THEN 3                        ELSE 0                    END;
+CO01TEL019_cat
+TO
+Características Teléfono - Modelo
+28
+UPDATE tabla_resultado_tel_00SET CO01TEL020_cat= CASE                        WHEN CO01TEL020<=0 THEN 1                        WHEN CO01TEL020>0 THEN 4                        ELSE 0                    END;
+CO01TEL020_cat
+TO
+Características Teléfono - Modelo
+29
+UPDATE tabla_resultado_tel_00SET CO01TEL022_cat= CASE                        WHEN CO01TEL022 IS NOT NULL THEN 1                        ELSE 0                    END;
+CO01TEL022_cat
+TO
+Características Teléfono - Modelo
+30
+UPDATE tabla_resultado_tel_00SET CO01TEL023_cat= CASE                        WHEN CO01TEL023<33.33 THEN 1                        WHEN CO01TEL023>=33.33                             AND CO01TEL023<50 THEN 2                        WHEN CO01TEL023>=50                             AND CO01TEL023<75 THEN 3                        WHEN CO01TEL023>=75 THEN 4                        ELSE 0                    END;
+CO01TEL023_cat
+TO
+Características Teléfono - Modelo
+31
+UPDATE tabla_resultado_tel_00SET CO01TEL025_cat= CASE                        WHEN CO01TEL025<0 THEN 1                        WHEN CO01TEL025>=0                             AND CO01TEL025<33.33 THEN 2                        WHEN CO01TEL025>=33.33                             AND CO01TEL025<66.05 THEN 3                        WHEN CO01TEL025>=66.05 THEN 4                        ELSE 0                    END;
+CO01TEL025_cat
+TO
+Características Teléfono - Modelo
+32
+alter table tabla_resultado_tel_00 add column CO01TEL001_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL001_Peso= (cast(CO01TEL001_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL001') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL001_Peso
+TO
+Variables de Peso - Teléfono
+33
+alter table tabla_resultado_tel_00 add column CO01TEL002_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL002_Peso= (cast(CO01TEL001_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL002') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL002_Peso
+TO
+Variables de Peso - Teléfono
+34
+alter table tabla_resultado_tel_00 add column CO01TEL003_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL003_Peso= (cast(CO01TEL003_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL003') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL003_Peso
+TO
+Variables de Peso - Teléfono
+35
+alter table tabla_resultado_tel_00 add column CO01TEL006_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL006_Peso= (cast(CO01TEL006_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL006') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL006_Peso
+TO
+Variables de Peso - Teléfono
+36
+alter table tabla_resultado_tel_00 add column CO01TEL007_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL007_Peso= (cast(CO01TEL007_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL007') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL007_Peso
+TO
+Variables de Peso - Teléfono
+37
+alter table tabla_resultado_tel_00 add column CO01TEL010_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL010_Peso= (cast(CO01TEL010_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL010') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL010_Peso
+TO
+Variables de Peso - Teléfono
+38
+alter table tabla_resultado_tel_00 add column CO01TEL017_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL017_Peso= (cast(CO01TEL017_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL017') b here tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL017_Peso
+TO
+Variables de Peso - Teléfono
+39
+alter table tabla_resultado_tel_00 add column CO01TEL019_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL019_Peso= (cast(CO01TEL019_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL019') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL019_Peso
+TO
+Variables de Peso - Teléfono
+40
+alter table tabla_resultado_tel_00 add column CO01TEL020_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL020_Peso= (cast(CO01TEL020_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL020') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL020_Peso
+TO
+Variables de Peso - Teléfono
+41
+alter table tabla_resultado_tel_00 add column CO01TEL023_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL023_Peso= (cast(CO01TEL023_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL023') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL023_Peso
+TO
+Variables de Peso - Teléfono
+42
+alter table tabla_resultado_tel_00 add column CO01TEL025_Peso decimal;UPDATE tabla_resultado_tel_00SET CO01TEL025_Peso= (cast(CO01TEL025_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso valor   FROM peso_var_telefono   WHERE nombre='CO01TEL025') bWHERE tabla_resultado_tel_00.num_id<>cast(b.valor AS varchar);
+CO01TEL025_Peso
+TO
+Variables de Peso - Teléfono
+43
+alter table tabla_resultado_tel_00 add column Score decimal;UPDATE tabla_resultado_tel_00SET score=CO01TEL001_Peso+CO01TEL002_Peso +CO01TEL003_Peso+CO01TEL006_Peso+CO01TEL007_Peso +CO01TEL010_Peso+CO01TEL017_Peso+CO01TEL019_Peso +CO01TEL023_Peso+CO01TEL025_Peso;
+score
+TO
+Ordenamiento Telefono
+44
+CREATE TABLE TEL_final distribute BY hash(NUM_ID) ASSELECT tipo_id,       num_id,       telefono,       score Score,       row_number() over(partition BY tipo_id,                                      num_id                         ORDER BY score DESC) AS LugarFROM tabla_resultado_tel_00WHERE CO01TEL022_cat>0;
+score
+TO
+Ordenamiento Telefono
+45
+Variable que cuenta el número de meses que han trascurrido desde que se realizó determinado reporteALTER TABLE copia_base_email ADD COLUMN meses_reporte numeric(18,2); UPDATE copia_base_emailSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr(periodo_reporte,1,4) AS numeric(18,2))*12+cast(substr(periodo_reporte,5,2) AS numeric(18,2)));
+Meses_Reporte
+TO
+Caracteristicas Email
+46
+Cuenta el total reportes que tiene una persona. ALTER TABLE copia_base_email ADD COLUMN total_reportes int; UPDATE copia_base_emailSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes
+TO
+Caracteristicas Email
+47
+Cuenta el total de reportes que tiene una persona en los últimos 3 meses.ALTER TABLE copia_base_email ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_emailSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes_3
+TO
+Caracteristicas Email
+48
+Cuenta el total de reportes que tiene una persona en los últimos 6 meses. ALTER TABLE copia_base_email ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_emailSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes_6
+ 
+Caracteristicas Email
+49
+Cuenta el total de reportes que tiene una persona en los últimos 12 meses.ALTER TABLE copia_base_email ADD COLUMN total_reportes_12 numeric(18,2); UPDATE copia_base_emailSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes_12
+TO
+Caracteristicas Email
+50
+Cuenta el total de reportes que tiene una persona en los últimos 24 meses.ALTER TABLE copia_base_email ADD COLUMN total_reportes_24 numeric(18,2);UPDATE copia_base_emailSET total_reportes_24= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes_24
+TO
+Caracteristicas Email
+51
+Cuenta el total de reportes que tiene una persona hace más de 24 meses.ALTER TABLE copia_base_email ADD COLUMN total_reportes_24m numeric(18,2);UPDATE copia_base_emailSET total_reportes_24m= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte>24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+total_reportes_24m
+TO
+Caracteristicas Email
+52
+Esta variable cuenta los meses desde el reporte más antiguo de un email.ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA003 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA003= maximoFROM  (SELECT tipo_id,          num_id,          email_min,          max(meses_reporte) maximo   FROM copia_base_email   WHERE gestion_dataquality <>'NO VALIDO'   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA003
+TO
+Caracteristicas Email
+53
+Número de reportes que ha tenido un email en los últimos 6 meses.ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA007 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA007 = numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte<=6 THEN 1                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA007
+TO
+Caracteristicas Email
+54
+Esta variable calcula qué porcentaje de reportes del total ha tenido un email en los últimos 12 meses. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA010 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA010 = 100*numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte<=12 THEN 1/(CASE                                                     WHEN total_reportes_12>0 THEN total_reportes_12                                                     ELSE 1                                                 END)                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA010
+TO
+Caracteristicas Email
+55
+Esta variable calcula qué porcentaje de reportes del total ha tenido un email en los últimos 24 mesesALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA014 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA014 = 100*numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte>24 THEN 1/(CASE                                                    WHEN total_reportes_24m>0 THEN total_reportes_24m                                                    ELSE 1                                                END)                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA014
+TO
+Caracteristicas Email
+56
+Esta variable calcula qué porcentaje de reportes del total ha tenido un email en el periodo de los últimos 3 a 6 meses. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA015 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA015 = 100*numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte<=6                       AND meses_reporte>3 THEN 1/(CASE                                                       WHEN (total_reportes_6-total_reportes_3)>0 THEN (total_reportes_6-total_reportes_3)                                                       ELSE 1                                                   END)                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA015
+TO
+Caracteristicas Email
+57
+Esta variable calcula qué porcentaje de reportes del total ha tenido un email en el periodo de los últimos 6 a 12 meses. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA016 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA016 = 100*numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte<=12                       AND meses_reporte>6 THEN 1/(CASE                                                       WHEN (total_reportes_12-total_reportes_6)>0 THEN (total_reportes_12-total_reportes_6)                                                       ELSE 1                                                   END)                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA016
+TO
+Caracteristicas Email
+58
+Esta variable calcula qué porcentaje de reportes del total ha tenido un email en el periodo de los últimos 12 a 24 meses. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA017 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA017 = 100*numeroFROM  (SELECT tipo_id,          num_id,          email_min,          sum(CASE                  WHEN meses_reporte<=24                       AND meses_reporte>12 THEN 1/(CASE                                                        WHEN (total_reportes_24-total_reportes_12)>0 THEN (total_reportes_24-total_reportes_12)                                                        ELSE 1                                                    END)                  ELSE 0              END) numero   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA017
+TO
+Caracteristicas Email
+59
+Esta variable indica si un email utiliza un servidor definido como popular de una lista que contiene más frecuentemente usados. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA018 int;UPDATE tabla_resultado_emailSET CO01EMA018 =100*valorFROM  (SELECT tipo_id,          num_id,          email_min,          CASE              WHEN split_part(split_part(email_min,'@',2),'.',1) IN ('hotmail',                                                                     'gmail',                                                                     'yahoo',                                                                     'live',                                                                     'outlook') THEN 1              ELSE 0          END valor   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA018
+TO
+Caracteristicas Email
+60
+Esta variable asigna un peso a los posibles resultados del campo de Gestion_Contactabilidad, dando un mayor valor cuando  el cliente ha sido contactado con éxito. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA020 int;UPDATE tabla_resultado_emailSET CO01EMA020 = CASE                     WHEN valor IS NOT NULL THEN valor                     ELSE 0                 ENDFROM  (SELECT a.*,          b.peso valor   FROM     (SELECT tipo_id,             num_id,             email_min,             gestion_contactabilidad      FROM copia_base_email      GROUP BY tipo_id,               num_id,               email_min,               gestion_contactabilidad) a   LEFT JOIN Peso_Con b ON (a.gestion_contactabilidad=b.gestion_contactabilidad)) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA020
+TO
+Caracteristicas Email
+61
+Variable que asigna un peso al tipo de cuenta de acuerdo a su relación con un mayor éxito de contacto. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA021 int;UPDATE tabla_resultado_emailSET CO01EMA021 = valorFROM  (SELECT tipo_id,          num_id,          email_min,          (CASE               WHEN sum(CASE                            WHEN tipo_cuenta='1' THEN 1                            ELSE 0                        END)>=1 THEN 50               ELSE 0           END + CASE                     WHEN sum(CASE                                  WHEN tipo_cuenta='2' THEN 1                                  ELSE 0                              END)>=1 THEN 25                     ELSE 0                 END + CASE                           WHEN sum(CASE                                        WHEN tipo_cuenta='6' THEN 1                                        ELSE 0                                    END)>=1 THEN 12                           ELSE 0                       END + CASE                                 WHEN sum(CASE                                              WHEN tipo_cuenta='23' THEN 1                                              ELSE 0                                          END)>=1 THEN 8                                 ELSE 0                             END + CASE                                       WHEN sum(CASE                                                    WHEN tipo_cuenta='5' THEN 1                                                    ELSE 0                                                END)>=1 THEN 5                                       ELSE 0                                   END) valor   FROM     (SELECT tipo_id,             num_id,             email_min,             tipo_cuenta      FROM copia_base_email      GROUP BY tipo_id,               num_id,               email_min,               tipo_cuenta) h   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA021
+TO
+Caracteristicas Email
+62
+Esta variable indica en términos porcentuales qué tan actualizado es un email a partir de la primera fecha de reporte. El cálculo se realiza sobre la fecha de reporte más antigua que tiene el cliente.  ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA023 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA023=100*valorFROM  (SELECT tipo_id,          num_id,          email_min,          (total-LOCAL)/total valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.email_min,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                email_min,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) LOCAL         FROM copia_base_email         GROUP BY tipo_id,                  num_id,                  email_min) a      LEFT JOIN        (SELECT tipo_id,                num_id,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) total         FROM copia_base_email         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA023
+TO
+Caracteristicas Email
+63
+Variable que indica que porcentaje de suscriptores ha reportado un email en particular. Es calculado con base al número de suscriptores que tiene el email con mayor número de suscriptores.ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA024 numeric(18,2);UPDATE tabla_resultado_emailSET CO01EMA024=100*valorFROM  (SELECT tipo_id,          num_id,          email_min,          LOCAL/cast(total AS decimal) valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.email_min,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                email_min,                count(*) LOCAL         FROM           (SELECT tipo_id,                   num_id,                   email_min,                   codigo_suscriptor            FROM copia_base_email            WHERE gestion_dataquality<>'NO VALIDO'            GROUP BY tipo_id,                     num_id,                     email_min,                     codigo_suscriptor) h         GROUP BY tipo_id,                  num_id,                  email_min) a      LEFT JOIN        (SELECT tipo_id,                num_id,                max(LOCAL) total         FROM           (SELECT tipo_id,                   num_id,                   email_min,                   count(*) LOCAL            FROM              (SELECT tipo_id,                      num_id,                      email_min,                      codigo_suscriptor               FROM copia_base_email               WHERE gestion_dataquality<>'NO VALIDO'               GROUP BY tipo_id,                        num_id,                        email_min,                        codigo_suscriptor) h            GROUP BY tipo_id,                     num_id,                     email_min) h         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA024
+TO
+Caracteristicas Email
+64
+Esta variable identifica si el nombre de usuario del email se encuentra dentro de los parámetros de longitud donde se puede alcanzar mayor éxito de contacto. ALTER TABLE tabla_resultado_email ADD COLUMN CO01EMA025 int;UPDATE tabla_resultado_emailSET CO01EMA025 = valorFROM  (SELECT tipo_id,          num_id,          email_min,          CASE              WHEN length(trim(split_part(email_min,'@',1)))<7 THEN 5              WHEN length(trim(split_part(email_min,'@',1)))>=7                   AND length(trim(split_part(email_min,'@',1)))<9 THEN 20              WHEN length(trim(split_part(email_min,'@',1)))>=9                   AND length(trim(split_part(email_min,'@',1)))<12 THEN 34              WHEN length(trim(split_part(email_min,'@',1)))>=12                   AND length(trim(split_part(email_min,'@',1)))<16 THEN 30              WHEN length(trim(split_part(email_min,'@',1)))>=16                   AND length(trim(split_part(email_min,'@',1)))<20 THEN 10              WHEN length(trim(split_part(email_min,'@',1)))>=20 THEN 3              ELSE 0          END valor   FROM copia_base_email   GROUP BY tipo_id,            num_id,            email_min) bWHERE tabla_resultado_email.tipo_id=b.tipo_id  AND tabla_resultado_email.num_id=b.num_id  AND tabla_resultado_email.email_min=b.email_min;
+CO01EMA025
+TO
+Caracteristicas Email
+65
+alter table tabla_resultado_email_val add column co01ema003_cat int;UPDATE tabla_resultado_email_valSET co01ema003_cat= CASE                        WHEN co01ema003<=26 THEN 1                        WHEN co01ema003>26                             AND co01ema003<=39 THEN 2                        WHEN co01ema003>39                             AND co01ema003<=54 THEN 3                        WHEN co01ema003>54 THEN 4                        ELSE 0                    END;
+CO01EMA003_cat
+TO
+Caracteristicas Email - Categoria
+66
+alter table tabla_resultado_email_val add column co01ema007_cat int;UPDATE tabla_resultado_email_valSET co01ema007_cat= CASE                        WHEN co01ema007<=0 THEN 1                        WHEN co01ema007>0                             AND co01ema007<=1 THEN 2                        WHEN co01ema007>1                             AND co01ema007<=2 THEN 3                        WHEN co01ema007>2 THEN 4                        ELSE 0                    END;
+CO01EMA007_cat
+TO
+Caracteristicas Email - Categoria
+67
+alter table tabla_resultado_email_val add column co01ema010_cat int;UPDATE tabla_resultado_email_valSET co01ema010_cat= CASE                        WHEN co01ema010<=14.29 THEN 1                        WHEN co01ema010>14.29                             AND co01ema010<=44.44 THEN 2                        WHEN co01ema010>44.44                             AND co01ema010<=93.33 THEN 3                        WHEN co01ema010>93.33 THEN 4                        ELSE 0                    END;
+CO01EMA010_cat
+TO
+Caracteristicas Email - Categoria
+68
+alter table tabla_resultado_email_val add column co01ema014_cat int;UPDATE tabla_resultado_email_valSET co01ema014_cat= CASE                        WHEN CO01EMA014<=8.33 THEN 1                        WHEN CO01EMA014>8.33                             AND CO01EMA014<=41.18 THEN 2                        WHEN CO01EMA014>41.18                             AND CO01EMA014<=85 THEN 3                        WHEN CO01EMA014>85 THEN 4                        ELSE 0                    END;
+CO01EMA014_cat
+TO
+Caracteristicas Email - Categoria
+69
+alter table tabla_resultado_email_val add column co01ema015_cat int;UPDATE tabla_resultado_email_valSET co01ema015_cat= CASE                        WHEN co01ema015<=0 THEN 1                        ELSE 4                    END;
+CO01EMA015_cat
+TO
+Caracteristicas Email - Categoria
+70
+alter table tabla_resultado_email_val add column co01ema016_cat int;UPDATE tabla_resultado_email_valSET co01ema016_cat= CASE                        WHEN co01ema016<=0 THEN 1                        ELSE 4                    END;
+CO01EMA016_cat
+TO
+Caracteristicas Email - Categoria
+71
+alter table tabla_resultado_email_val add column co01ema017_cat int;UPDATE tabla_resultado_email_valSET co01ema017_cat= CASE                        WHEN co01ema017<=0 THEN 1                        WHEN co01ema017>0                             AND co01ema017<=66.67 THEN 2                        WHEN co01ema017>66.67 THEN 3                        ELSE 0                    END;
+CO01EMA017_cat
+TO
+Caracteristicas Email - Categoria
+72
+alter table tabla_resultado_email_val add column co01ema018_cat int;UPDATE tabla_resultado_email_valSET co01ema018_cat= CASE                        WHEN co01ema018<=0 THEN 1                        ELSE 4                    END;
+CO01EMA018_cat
+TO
+Caracteristicas Email - Categoria
+73
+alter table tabla_resultado_email_val add column co01ema020_cat int;UPDATE tabla_resultado_email_valSET co01ema020_cat= CASE                        WHEN co01ema020<=0 THEN 2                        WHEN CO01EMA020>9                             AND CO01EMA020<=50 THEN -1                        WHEN CO01EMA020>50 THEN 3                        ELSE 0                    END;
+CO01EMA020_cat
+TO
+Caracteristicas Email - Categoria
+74
+alter table tabla_resultado_email_val add column co01ema021_cat int;UPDATE tabla_resultado_email_valSET co01ema021_cat= CASE                        WHEN co01ema021<=5 THEN 1                        WHEN co01ema021>5                             AND co01ema021<=45 THEN 2                        WHEN co01ema021>45                             AND co01ema021<=50 THEN 3                        WHEN co01ema021>50 THEN 4                        ELSE 0                    END;
+CO01EMA021_cat
+TO
+Caracteristicas Email - Categoria
+75
+alter table tabla_resultado_email_val add column co01ema023_cat int;UPDATE tabla_resultado_email_valSET co01ema023_cat= CASE                        WHEN co01ema023<=0 THEN 1                        WHEN co01ema023>0                             AND co01ema023<=44 THEN 2                        WHEN co01ema023>44 THEN 3                        ELSE 0                    END;
+CO01EMA023_cat
+TO
+Caracteristicas Email - Categoria
+76
+alter table tabla_resultado_email_val add column co01ema024_cat int;UPDATE tabla_resultado_email_valSET co01ema024_cat= CASE                        WHEN co01ema024<=50 THEN 1                        ELSE 4                    END;
+CO01EMA024_cat
+TO
+Caracteristicas Email - Categoria
+77
+alter table tabla_resultado_email_val add column co01ema025_cat int;UPDATE tabla_resultado_email_valSET co01ema025_cat= CASE                        WHEN co01ema025<=20 THEN 1                        WHEN co01ema025>20                             AND co01ema025<=30 THEN 2                        WHEN co01ema025>30 THEN 3                        ELSE 0                    END;
+CO01EMA025_cat
+TO
+Caracteristicas Email - Categoria
+78
+alter table tabla_resultado_email_val add column co01ema003_peso decimal;UPDATE tabla_resultado_email_valSET co01ema003_peso= (cast(co01ema003_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA003') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema003_peso
+TO
+Caracteristicas Email - Peso
+79
+alter table tabla_resultado_email_val add column co01ema007_peso decimal;UPDATE tabla_resultado_email_valSET co01ema007_peso= (cast(co01ema007_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA007') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema007_peso
+TO
+Caracteristicas Email - Peso
+80
+alter table tabla_resultado_email_val add column co01ema010_peso decimal;UPDATE tabla_resultado_email_valSET co01ema010_peso= (cast(co01ema010_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA010') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema010_peso
+TO
+Caracteristicas Email - Peso
+81
+alter table tabla_resultado_email_val add column co01ema014_peso decimal;UPDATE tabla_resultado_email_valSET co01ema014_peso= (cast(co01ema014_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA014') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema014_peso
+TO
+Caracteristicas Email - Peso
+82
+alter table tabla_resultado_email_val add column co01ema015_peso decimal;UPDATE tabla_resultado_email_valSET co01ema015_peso= (cast(co01ema015_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA015') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema015_peso
+TO
+Caracteristicas Email - Peso
+83
+alter table tabla_resultado_email_val add column co01ema016_peso decimal;UPDATE tabla_resultado_email_valSET co01ema016_peso= (cast(co01ema016_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA016') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema016_peso
+TO
+Caracteristicas Email - Peso
+84
+alter table tabla_resultado_email_val add column co01ema017_peso decimal;UPDATE tabla_resultado_email_valSET co01ema017_peso= (cast(co01ema017_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA017') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema017_peso
+TO
+Caracteristicas Email - Peso
+85
+alter table tabla_resultado_email_val add column co01ema018_peso decimal;UPDATE tabla_resultado_email_valSET co01ema018_peso= (cast(co01ema018_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA018') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema018_peso
+TO
+Caracteristicas Email - Peso
+86
+alter table tabla_resultado_email_val add column co01ema020_peso decimal;UPDATE tabla_resultado_email_valSET co01ema020_peso= (cast(co01ema020_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA020') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema020_peso
+TO
+Caracteristicas Email - Peso
+87
+alter table tabla_resultado_email_val add column co01ema021_peso decimal;UPDATE tabla_resultado_email_valSET co01ema021_peso= (cast(co01ema021_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA021') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema021_peso
+TO
+Caracteristicas Email - Peso
+88
+alter table tabla_resultado_email_val add column co01ema023_peso decimal;UPDATE tabla_resultado_email_valSET co01ema023_peso= (cast(co01ema023_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA023') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema023_peso
+TO
+Caracteristicas Email - Peso
+89
+alter table tabla_resultado_email_val add column co01ema025_peso decimal;UPDATE tabla_resultado_email_valSET co01ema025_peso= (cast(co01ema025_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA025') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema025_peso
+TO
+Caracteristicas Email - Peso
+90
+alter table tabla_resultado_email_val add column co01ema024_peso decimal;UPDATE tabla_resultado_email_valSET co01ema024_peso= (cast(co01ema024_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT Peso_Real valor   FROM Pesos_Email   WHERE nombre='CO01EMA024') bWHERE tabla_resultado_email_val.num_id<>cast(b.valor AS varchar);
+ co01ema024_peso
+TO
+Caracteristicas Email - Peso
+91
+alter table tabla_resultado_email_val add column Score decimal;UPDATE tabla_resultado_email_valSET score=co01ema010_peso + co01ema014_peso + co01ema015_peso + co01ema016_peso + co01ema017_peso + co01ema018_peso + co01ema020_peso + co01ema021_peso + co01ema023_peso + co01ema025_peso + co01ema024_peso;
+score
+TO
+Score Email
+92
+CREATE TABLE EMAIL_final_val distribute BY hash(NUM_ID) ASSELECT tipo_id,       num_id,       Email_min,       score Score,       row_number() over(partition BY tipo_id,                                      num_id                         ORDER BY score DESC) AS LugarFROM tabla_resultado_email_val;
+Orden Email
+TO
+Orden Email
+93
+ALTER TABLE copia_base_cel ADD COLUMN meses_reporte numeric(18,2); UPDATE copia_base_celSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr(periodo_reporte,1,4) AS numeric(18,2))*12+cast(substr(periodo_reporte,5,2) AS numeric(18,2)));
+Meses_reporte
+TO
+Características Celular
+94
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes int;UPDATE copia_base_celSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes
+TO
+Características Celular
+95
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_celSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes_3
+TO
+Características Celular
+96
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_celSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_celGROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes_6
+TO
+Características Celular
+97
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_12 numeric(18,2); UPDATE copia_base_celSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes_12
+TO
+Características Celular
+98
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_24 numeric(18,2);UPDATE copia_base_celSET total_reportes_24= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes_24
+TO
+Características Celular
+99
+ ALTER TABLE copia_base_cel ADD COLUMN total_reportes_24m numeric(18,2);UPDATE copia_base_celSET total_reportes_24m= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte>24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+total_reportes_24m
+TO
+Características Celular
+100
+Esta variable calcula el número de meses desde el reporte más antiguo. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL003 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL003= maximoFROM  (SELECT tipo_id,          num_id,          celular,          max(meses_reporte) maximo   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL003 
+TO
+Características Celular
+101
+Esta variable calcula qué porcentaje de reportes del total ha tenido un celular en los últimos 3 meses.ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL006 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL006 = 100*numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte<=3 THEN 1/(CASE                                                    WHEN total_reportes_3>0 THEN total_reportes_3                                                    ELSE 1                                                END)                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL006 
+TO
+Características Celular
+102
+Esta variable calcula qué porcentaje de reportes del total ha tenido un celular en los últimos 6 meses. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL007 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL007 = numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte<=6 THEN 1                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL007
+TO
+Características Celular
+103
+Esta variable calcula el número de reportes del total ha tenido un celular hace más de 24 meses. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL013 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL013 = numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte>24 THEN 1                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular; 
+CO01CEL013
+TO
+Características Celular
+104
+Esta variable calcula qué porcentaje de reportes del total ha tenido un celular hace más de 24 meses.ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL014 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL014 = 100*numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte>24 THEN 1/(CASE                                                    WHEN total_reportes_24m>0 THEN total_reportes_24m                                                    ELSE 1                                                END)                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular; 
+CO01CEL014
+TO
+Características Celular
+105
+Esta variable calcula qué porcentaje de reportes del total ha tenido un celular en el periodo de entre 3 y 6 meses. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL015 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL015 = 100*numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte<=6                       AND meses_reporte>3 THEN 1/(CASE                                                       WHEN (total_reportes_6-total_reportes_3)>0 THEN (total_reportes_6-total_reportes_3)                                                       ELSE 1                                                   END)                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL015
+TO
+Características Celular
+106
+Esta variable calcula qué porcentaje de reportes del total ha tenido un celular en el periodo de entre 12 y 24 meses.ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL017 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL017 = 100*numeroFROM  (SELECT tipo_id,          num_id,          celular,          sum(CASE                  WHEN meses_reporte<=24                       AND meses_reporte>12 THEN 1/(CASE                                                        WHEN (total_reportes_24-total_reportes_12)>0 THEN (total_reportes_24-total_reportes_12)                                                        ELSE 1                                                    END)                  ELSE 0              END) numero   FROM copia_base_cel   GROUP BY tipo_id,            num_id,            celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL017
+TO
+Características Celular
+107
+Variable que asigna un peso a los celulares de acuerdo con el operador que esté asociado a este. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL018 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL018 = 100* (CASE                           WHEN numero IS NULL THEN 0                           ELSE numero                       END)FROM  (SELECT a.tipo_id,          a.num_id,          a.celular,          b.Valor numero   FROM copia_base_cel a   LEFT JOIN operadores b ON substr(a.celular,1,3)=b.Operador) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL018
+TO
+Características Celular
+108
+Variable que asigna un peso a los celulares de acuerdo al tipo de cuenta que esté asociado a este. ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL019 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL019=numeroFROM  (SELECT a.tipo_id,          a.num_id,          a.celular,          max(b.valor) numero   FROM copia_base_cel a   LEFT JOIN tipo_cuenta b ON cast(a.tipo_cuenta AS int)=cast(b.tipo_cuenta AS int)   GROUP BY a.tipo_id,            a.num_id,            a.celular) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL019
+TO
+Características Celular
+109
+Variable que indica que porcentaje de suscriptores ha reportado un celular en particular. Es calculado con base al número de suscriptores que tiene una persona.ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL020 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL020=100*valorFROM  (SELECT tipo_id,          num_id,          celular,          LOCAL/cast(total AS decimal) valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.celular,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                celular,                count(*) LOCAL         FROM           (SELECT tipo_id,                   num_id,                   celular,                   codigo_suscriptor            FROM copia_base_cel            GROUP BY tipo_id,                     num_id,                     celular,                     codigo_suscriptor) h         GROUP BY tipo_id,                  num_id,                  celular) a      LEFT JOIN        (SELECT tipo_id,                num_id,                count(*) total         FROM           (SELECT tipo_id,                   num_id,                   codigo_suscriptor            FROM copia_base_cel            GROUP BY tipo_id,                     num_id,                     codigo_suscriptor) h         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL020
+TO
+Características Celular
+110
+Esta variable indica en términos porcentuales que tan actualizado es un celular (que tan reciente es su primera fecha de aparición) en comparación con el resto de celulares del usuario.  ALTER TABLE tabla_resultado_cel_00 ADD COLUMN CO01CEL023 numeric(18,2);UPDATE tabla_resultado_cel_00SET CO01CEL023=100*valorFROM  (SELECT tipo_id,          num_id,          celular,          (total-LOCAL)/total valor   FROM     (SELECT a.tipo_id,             a.num_id,             a.celular,             a.local,             b.total      FROM        (SELECT tipo_id,                num_id,                celular,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) LOCAL         FROM copia_base_cel         GROUP BY tipo_id,                  num_id,                  celular) a      LEFT JOIN        (SELECT tipo_id,                num_id,                max(CASE                        WHEN gestion_dataquality<>'NO VALIDO' THEN meses_reporte                        ELSE NULL                    END) total         FROM copia_base_cel         GROUP BY tipo_id,                  num_id) b ON (a.tipo_id=b.tipo_id                                AND a.num_id=b.num_id)) h) bWHERE tabla_resultado_cel_00.tipo_id=b.tipo_id  AND tabla_resultado_cel_00.num_id=b.num_id  AND tabla_resultado_cel_00.celular=b.celular;
+CO01CEL023
+TO
+Características Celular
+111
+alter table tabla_resultado_cel_00 add column CO01CEL003_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL003_cat= CASE                        WHEN CO01CEL003<21 THEN 1                        WHEN CO01CEL003>=21                             AND CO01CEL003<33 THEN 2                        WHEN CO01CEL003>=33                             AND CO01CEL003<54 THEN 3                        WHEN CO01CEL003>=54 THEN 4                        ELSE 0                    END;
+CO01CEL003_cat
+TO
+Caracteristicas Cel - Categoria
+112
+alter table tabla_resultado_cel_00 add column CO01CEL006_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL006_cat= CASE                        WHEN CO01CEL006<5 THEN 1                        WHEN CO01CEL006>=5                             AND CO01CEL006<90 THEN 2                        WHEN CO01CEL006>=90 THEN 3                        ELSE 0                    END;
+CO01CEL006_cat
+TO
+Caracteristicas Cel - Categoria
+113
+alter table tabla_resultado_cel_00 add column CO01CEL007_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL007_cat= CASE                        WHEN CO01CEL007<1 THEN 1                        WHEN CO01CEL007>=1                             AND CO01CEL007<2 THEN 2                        WHEN CO01CEL007>=2                             AND CO01CEL007<3 THEN 3                        WHEN CO01CEL007>=3 THEN 4                        ELSE 0                    END;
+CO01CEL007_cat
+TO
+Caracteristicas Cel - Categoria
+114
+alter table tabla_resultado_cel_00 add column CO01CEL013_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL013_cat= CASE                        WHEN CO01CEL013<1 THEN 1                        WHEN CO01CEL013>=1                             AND CO01CEL013<2 THEN 2                        WHEN CO01CEL013>=2                             AND CO01CEL013<3 THEN 3                        WHEN CO01CEL013>=3 THEN 4                        ELSE 0                    END;
+CO01CEL013_cat
+TO
+Caracteristicas Cel - Categoria
+115
+alter table tabla_resultado_cel_00 add column CO01CEL014_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL014_cat= CASE                        WHEN CO01CEL014<5 THEN 1                        WHEN CO01CEL014>=5                             AND CO01CEL014<50 THEN 2                        WHEN CO01CEL014>=50                             AND CO01CEL014<100 THEN 3                        WHEN CO01CEL014>=100 THEN 4                        ELSE 0                    END;
+CO01CEL014_cat
+TO
+Caracteristicas Cel - Categoria
+116
+alter table tabla_resultado_cel_00 add column CO01CEL015_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL015_cat= CASE                        WHEN CO01CEL015<=0 THEN 1                        WHEN CO01CEL015>0 THEN 4                        ELSE 0                    END;
+CO01CEL015_cat
+TO
+Caracteristicas Cel - Categoria
+117
+alter table tabla_resultado_cel_00 add column CO01CEL017_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL017_cat= CASE                        WHEN CO01CEL017<=0 THEN 1                        WHEN CO01CEL017>0 THEN 4                        ELSE 0                    END;
+CO01CEL017_cat
+TO
+Caracteristicas Cel - Categoria
+118
+alter table tabla_resultado_cel_00 add column CO01CEL018_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL018_cat= CASE                        WHEN CO01CEL018<51.11 THEN 1                        WHEN CO01CEL018>=51.11                             AND CO01CEL018<61.48 THEN 2                        WHEN CO01CEL018>=61.48                             AND CO01CEL018<73.33 THEN 3                        WHEN CO01CEL018>=73.33 THEN 4                        ELSE 0                    END;
+CO01CEL018_cat
+TO
+Caracteristicas Cel - Categoria
+119
+alter table tabla_resultado_cel_00 add column CO01CEL019_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL019_cat= CASE                        WHEN CO01CEL019<35 THEN 1                        WHEN CO01CEL019>=35                             AND CO01CEL019<80 THEN 2                        WHEN CO01CEL019>=80 THEN 3                        ELSE 0                    END;
+CO01CEL019_cat
+TO
+Caracteristicas Cel - Categoria
+120
+alter table tabla_resultado_cel_00 add column CO01CEL020_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL020_cat= CASE                        WHEN CO01CEL020<33.33 THEN 1                        WHEN CO01CEL020>=33.33                             AND CO01CEL020<45.67 THEN 2                        WHEN CO01CEL020>=45.67                             AND CO01CEL020<100 THEN 3                        WHEN CO01CEL020>=100 THEN 4                        ELSE 0                    END;
+CO01CEL020_cat
+TO
+Caracteristicas Cel - Categoria
+121
+alter table tabla_resultado_cel_00 add column CO01CEL023_cat int;UPDATE tabla_resultado_cel_00SET CO01CEL023_cat= CASE                        WHEN CO01CEL023<=0 THEN 1                        WHEN CO01CEL023>0 THEN 4                        ELSE 0                    END;
+CO01CEL023_cat
+TO
+Caracteristicas Cel - Categoria
+122
+alter table tabla_resultado_cel_00 add column CO01CEL003_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL003_peso= (cast(CO01CEL003_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL003') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL003_peso
+ 
+Características Cel - Peso
+123
+alter table tabla_resultado_cel_00 add column CO01CEL006_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL006_peso= (cast(CO01CEL006_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL006') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL006_peso
+ 
+Características Cel - Peso
+124
+alter table tabla_resultado_cel_00 add column CO01CEL007_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL007_peso= (cast(CO01CEL007_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL007') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL007_peso
+ 
+Características Cel - Peso
+125
+alter table tabla_resultado_cel_00 add column CO01CEL013_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL013_peso= (cast(CO01CEL013_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL013') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL013_peso
+ 
+Características Cel - Peso
+126
+alter table tabla_resultado_cel_00 add column CO01CEL014_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL014_peso= (cast(CO01CEL014_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL014') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL014_peso
+ 
+Características Cel - Peso
+127
+alter table tabla_resultado_cel_00 add column CO01CEL015_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL015_peso= (cast(CO01CEL015_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL015') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL015_peso
+ 
+Características Cel - Peso
+128
+alter table tabla_resultado_cel_00 add column CO01CEL017_peso decimal;xUPDATE tabla_resultado_cel_00SET CO01CEL017_peso= (cast(CO01CEL017_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL017') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL017_peso
+ 
+Características Cel - Peso
+129
+alter table tabla_resultado_cel_00 add column CO01CEL018_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL018_peso= (cast(CO01CEL018_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL018') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL018_peso
+ 
+Características Cel - Peso
+130
+alter table tabla_resultado_cel_00 add column CO01CEL019_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL019_peso= (cast(CO01CEL019_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL019') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL019_peso
+ 
+Características Cel - Peso
+131
+alter table tabla_resultado_cel_00 add column CO01CEL020_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL020_peso= (cast(CO01CEL020_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL020') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL020_peso
+ 
+Características Cel - Peso
+132
+alter table tabla_resultado_cel_00 add column CO01CEL023_peso decimal;UPDATE tabla_resultado_cel_00SET CO01CEL023_peso= (cast(CO01CEL023_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_cel   WHERE nombre='CO01CEL023') bWHERE tabla_resultado_cel_00.num_id<>cast(b.valor AS varchar);
+CO01CEL023_peso
+ 
+Características Cel - Peso
+133
+alter table tabla_resultado_cel_00 add column Score decimal;UPDATE tabla_resultado_cel_00SET score=CO01CEL003_peso+CO01CEL006_peso +CO01CEL007_peso+CO01CEL013_peso+CO01CEL014_peso +CO01CEL015_peso+CO01CEL017_peso+CO01CEL018_peso +CO01CEL019_peso+CO01CEL020_peso+CO01CEL023_peso ;
+Score_TF
+ 
+Score Telefono Fijo
+134
+CREATE TABLE CEL_final distribute BY hash(NUM_ID) AS         SELECT tipo_id,         num_id,         celular,         score Score,         row_number() over(partition BY tipo_id,         num_id         ORDER BY score DESC) AS Lugar         FROM tabla_resultado_cel_00 where CO01CEL018<>0;
+Orden_TF
+ 
+Ordenamiento Telefono Fijo
+135
+UPDATE copia_base_dirSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr((CASE                                                                                                                                          WHEN periodo_reporte ='' THEN NULL                                                                                                                                          ELSE periodo_reporte                                                                                                                                      END),1,4) AS numeric(18,2))*12+cast(substr((CASE                                                                                                                                                                                      WHEN periodo_reporte ='' THEN NULL                                                                                                                                                                                      ELSE periodo_reporteDonde el periodo de reporte es la "Fecha Hasta" de la dirección a evaluar
+Meses_reporte
+TO
+Características Dirección
+136
+UPDATE tabla_resultado_dir_00SET total_direcciones= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN direccion_ge<>'' THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_dir   GROUP BY tipo_id,            num_id) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id;
+total_reportes
+TO
+Características Dirección
+137
+Esta variable calcula el número de meses desde el reporte más reciente en el portafolio de instalamentos para la dirección. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR001IN numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR001IN= minimoFROM  (SELECT tipo_id,          num_id,          direccion_ge,          portafolio_nuevo,          CASE              WHEN direccion_ge<>'' THEN min(meses_reporte)              ELSE NULL          END minimo   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge,            portafolio_nuevo) bWHERE b.portafolio_nuevo='IN'  AND tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR001IN
+IN
+Características Dirección
+138
+Esta variable cuenta los meses desde el reporte más antiguo para una dirección en todos los portafolios.ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR002TO numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR002TO= minimoFROM  (SELECT tipo_id,          num_id,          direccion_ge,          portafolio_nuevo,          CASE              WHEN direccion_ge<>'' THEN max(meses_reporte)              ELSE NULL          END minimo   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge,            portafolio_nuevo) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR002TO
+TO
+Características Dirección
+139
+Esta variable cuenta el número de reportes que una dirección ha presentado en los últimos 3 meses desde cuentas en el portafolio de rotativos. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR004RO numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR004RO = numeroFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN direccion_ge<>''                       AND portafolio_nuevo='RO' THEN CASE                                                          WHEN meses_reporte<=3 THEN 1                                                          ELSE 0                                                      END                  ELSE NULL              END) numero   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR004RO
+RO
+Características Dirección
+140
+Esta variable calcula el número de reportes en los últimos 24 para la direcciones cuyos reportes provienen de todos los portafolios. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR007TO numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR007TO = numeroFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN direccion_ge<>'' THEN CASE                                                 WHEN meses_reporte<=24 THEN 1                                                 ELSE 0                                             END                  ELSE NULL              END) numero   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR007TO
+TO
+Características Dirección
+141
+Esta variable cuenta el número de reportes ha tenido un teléfono en los últimos 6 meses para las direcciones provenientes de productos financieros. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR010FI numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR010FI = 100*contar/(CASE                                   WHEN total_direcciones>0 THEN total_direcciones                                   ELSE NULL                               END)FROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN sector='FI'                       AND direccion_ge<>'' THEN (CASE                                                      WHEN meses_reporte<=6 THEN 1                                                      ELSE 0                                                  END)                  ELSE NULL              END) contar   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR010FI
+FI
+Características Dirección
+142
+Esta variable calcula el porcentaje sobre el total de reportes que ha tenido un teléfono en los últimos 24 meses que representan los reportes provenientes de productos en portafolio “Otros”. Se calcula sobre el total de reportes realizados a una persona. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR013OT numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR013OT = 100*contar/(CASE                                   WHEN total_direcciones>0 THEN total_direcciones                                   ELSE NULL                               END)FROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN sector='OT'                       AND direccion_ge<>'' THEN (CASE                                                      WHEN meses_reporte>24 THEN 1                                                      ELSE 0                                                  END)                  ELSE NULL              END) contar   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR013OT 
+OT
+Características Dirección
+143
+Esta variable obtiene el número de reportes sobre el total en el que una dirección ha sido reportada como “Residencial” (RES). ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR015 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR015 = ResFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN trim(tipo_dato_contacto)='RES'                       AND direccion_ge<>'' THEN 1                  ELSE NULL              END) Res   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR015
+TO
+Características Dirección
+144
+Esta variable obtiene el número de reportes sobre el total en el que un teléfono ha sido reportado como “Correspondencia” (CRR). ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR016 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR016 = CRRFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN trim(tipo_dato_contacto)='COR'                       AND direccion_ge<>'' THEN 1                  ELSE NULL              END) CRR   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR016
+TO
+Características Dirección
+145
+Esta variable obtiene el número de reportes sobre el total en el que un teléfono ha sido reportado como “Laboral” (LAB). ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR017 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR017 = LABFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN trim(tipo_dato_contacto)='LAB'                       AND direccion_ge<>'' THEN 1                  ELSE NULL              END) LAB   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR017
+TO
+Características Dirección
+146
+Esta variable indica si una dirección ha sido reportada tanto residencial como laboral. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR019 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR019 = RescrrFROM  (SELECT tipo_id,          num_id,          direccion_ge,          CASE              WHEN (sum(CASE                            WHEN trim(tipo_dato_contacto)='RES'                                 AND direccion_ge<>'' THEN 1                            ELSE NULL                        END))>0                   AND (sum(CASE                                WHEN trim(tipo_dato_contacto)='COR'                                     AND direccion_ge<>'' THEN 1                                ELSE NULL                            END))>0 THEN 1              ELSE 0          END Rescrr   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR019
+TO
+Características Dirección
+147
+Variable que calcula la suma del saldo  de las cuentas abiertas o cerradas del sector financiero que están asociadas a los reportes de determinada dirección. ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR034FI numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR034FI= SALDOFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN sector='FI'                       AND direccion_ge<>''                       AND co00end005 NOT IN ('-1','-2','-3','-4','-88','-99') THEN cast(co00end005 AS numeric(18,2))                  ELSE NULL              END) Saldo   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR034FI
+FI
+Características Dirección
+148
+Esta variable indica cuantos productos asociados a determinada dirección han tenido una mora igual o superior a 120 días los últimos 6 meses.   ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR050TO numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR050TO= moraFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN direccion_ge<>'' THEN (CASE                                                  WHEN CAST(CO00MOR037 AS INT)> 0                                                       OR cast(CO00MOR038 AS int)>0 THEN 1                                                  ELSE 0                                              END)                  ELSE NULL              END) mora   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR050TO
+TO
+Características Dirección
+149
+Esta variable muestra el código de ciudad más repetido para la dirección.   ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR053 bigint;UPDATE tabla_resultado_dir_00SET CO00DIR053 = ciudad_repetidaFROM  (SELECT tipo_id,          num_id,          direccion_ge,          MIN(CASE                  WHEN NUMERO=MAXIMO THEN (CASE                                               WHEN Codigo_Dane_Mun<>' '                                                    AND Codigo_Dane_Mun<>'' THEN cast(Codigo_Dane_Mun AS decimal)                                               ELSE NULL                                           END)                  ELSE NULL              END) ciudad_repetida   FROM     (SELECT a.tipo_id,             a.num_id,             a.direccion_ge,             a.Codigo_Dane_Mun,             a.numero,             b.maximo from        (SELECT tipo_id,num_id,direccion_ge,Codigo_Dane_Mun, count(*) numero         FROM copia_base_dir         WHERE direccion_ge<>''         GROUP BY tipo_id,num_id, direccion_ge,Codigo_Dane_Mun) a      LEFT JOIN        (SELECT tipo_id,                num_id,                direccion_ge,                max(numero) maximo         FROM           (SELECT tipo_id,                   num_id,                   direccion_ge,                   Codigo_Dane_Mun,                   count(*) numero            FROM copia_base_dir            WHERE direccion_ge<>''            GROUP BY tipo_id,                     num_id,                     direccion_ge,                     Codigo_Dane_Mun) c         GROUP BY tipo_id,                  num_id,                  direccion_ge) b ON (a.tipo_id=b.tipo_id                                      AND a.num_id=b.num_id                                      AND a.direccion_ge=b.direccion_ge)) d   GROUP BY tipo_id,            num_id,            direccion_ge) eWHERE tabla_resultado_dir_00.tipo_id=e.tipo_id  AND tabla_resultado_dir_00.num_id=e.num_id  AND tabla_resultado_dir_00.direccion_ge=e.direccion_ge;
+CO00DIR053
+TO
+Características Dirección
+150
+Esta variable muestra el código de ciudad más repetido para la dirección.    ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR054 varchar(200);UPDATE tabla_resultado_dir_00SET CO00DIR054=complemento_3FROM  (SELECT tipo_id,          num_id,          direccion_ge,          CASE              WHEN direccion_ge<>'' THEN complemento              ELSE NULL          END complemento_3   FROM     (SELECT *,             ROW_NUMBER() OVER (PARTITION BY tipo_id,num_id,direccion_ge                                ORDER BY suma DESC) AS row_number      FROM        (SELECT a.*,                b.maximo         FROM Complemento_dir a         LEFT JOIN           (SELECT tipo_id,                   num_id,                   direccion_ge,                   max(suma) maximo            FROM Complemento_dir            GROUP BY tipo_id,                     num_id,                     direccion_ge) b ON (a.tipo_id=b.tipo_id                                         AND a.num_id=b.num_id                                         AND a.direccion_ge=b.direccion_ge)) j) x   WHERE x.row_number = 1     AND suma=maximo     AND Complemento<>'') bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR054
+TO
+Características Dirección
+151
+Esta variable muestra el código de ciudad más repetido para la dirección.    ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR057 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR057 = numeroFROM  (SELECT tipo_id,          num_id,          direccion_ge,          sum(CASE                  WHEN direccion_ge<>'' THEN 1                  ELSE NULL              END) numero   FROM copia_base_dir   GROUP BY tipo_id,            num_id,            direccion_ge) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id  AND tabla_resultado_dir_00.direccion_ge=b.direccion_ge;
+CO00DIR057
+TO
+Características Dirección
+152
+Esta característica crea un porcentaje que indica que tan reciente es la fecha de creación de una dirección (la primera vez que aparece). ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO00DIR059 numeric(18,2);UPDATE tabla_resultado_dir_00SET CO00DIR059= 100*(CASE                         WHEN valor1=valor2                              AND suma<>0 THEN 1                         WHEN suma=0 THEN NULL                         ELSE cast((valor1-(CASE                                                WHEN tabla_resultado_dir_00.CO00DIR002TO IS NOT NULL THEN tabla_resultado_dir_00.CO00DIR002TO                                                ELSE NULL                                            END)) AS numeric(18,2))/(valor1-valor2)                     END)FROM  (SELECT tipo_id,          num_id,          max(meses_reporte) valor1,          min(meses_reporte) valor2,          sum(CASE                  WHEN data_quality='ESTANDARIZADO' THEN 1                  ELSE 0              END) suma   FROM copia_base_dir   GROUP BY tipo_id,            num_id) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id;
+CO00DIR059
+TO
+Características Dirección
+153
+Esta característica cuenta el número de direcciones a nivel correspondencia que tiene un cliente.  ALTER TABLE tabla_resultado_dir_00 ADD COLUMN CO01DIR009 int;UPDATE tabla_resultado_dir_00SET CO01DIR009= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN direccion_ge<>''                       AND CO00DIR016>0 THEN 1                  ELSE 0              END) VALOR   FROM tabla_resultado_dir_00   GROUP BY tipo_id,            num_id) bWHERE tabla_resultado_dir_00.tipo_id=b.tipo_id  AND tabla_resultado_dir_00.num_id=b.num_id;
+CO01DIR009
+TO
+Características Dirección
+154
+alter table tabla_resultado_dir_00 add column co00dir004ro_cat int;UPDATE tabla_resultado_dir_00SET co00dir004ro_cat= CASE                          WHEN co00dir004ro IS NULL THEN 1                          WHEN co00dir004ro<=2 THEN 2                          ELSE 3                      END;
+co00dir004ro_cat
+TO
+Características Cat Dirección
+155
+alter table tabla_resultado_dir_00 add column co01dir009_cat int;UPDATE tabla_resultado_dir_00SET co01dir009_cat= CASE                        WHEN co01dir009 IS NULL THEN 1                        WHEN co01dir009<=1 THEN 2                        ELSE 3                    END;
+co01dir009_cat
+TO
+Características Cat Dirección
+156
+alter table tabla_resultado_dir_00 add column co00dir001in_cat int;UPDATE tabla_resultado_dir_00SET co00dir001in_cat= CASE                          WHEN co00dir001in IS NULL THEN 1                          WHEN co00dir001in<=24 THEN 2                          ELSE 3                      END;
+co00dir001in_cat
+TO
+Características Cat Dirección
+157
+alter table tabla_resultado_dir_00 add column co00dir057_cat int;UPDATE tabla_resultado_dir_00SET co00dir057_cat= CASE                        WHEN co00dir057 IS NULL THEN 1                        WHEN co00dir057<=1 THEN 2                        WHEN co00dir057<=5 THEN 3                        WHEN co00dir057<=7 THEN 4                        WHEN co00dir057<=16 THEN 5                        ELSE 6                    END;
+co00dir057_cat
+TO
+Características Cat Dirección
+158
+alter table tabla_resultado_dir_00 add column co00dir050to_cat int;UPDATE tabla_resultado_dir_00SET co00dir050to_cat= CASE                          WHEN co00dir050to IS NULL THEN 1                          WHEN co00dir050to<=0 THEN 2                          WHEN co00dir050to<=2 THEN 3                          ELSE 4                      END;
+co00dir050to_cat
+TO
+Características Cat Dirección
+159
+alter table tabla_resultado_dir_00 add column co00dir010fi_cat int;UPDATE tabla_resultado_dir_00SET co00dir010fi_cat= CASE                          WHEN co00dir010fi IS NULL THEN 1                          WHEN co00dir010fi<=2 THEN 2                          ELSE 3                      END;
+co00dir010fi_cat
+TO
+Características Cat Dirección
+160
+alter table tabla_resultado_dir_00 add column co00dir007to_cat int;UPDATE tabla_resultado_dir_00SET co00dir007to_cat= CASE                          WHEN co00dir007to IS NULL THEN 1                          WHEN co00dir007to<=0 THEN 2                          WHEN co00dir007to<=2 THEN 3                          WHEN co00dir007to<=3 THEN 4                          WHEN co00dir007to<=6 THEN 5                          ELSE 6                      END;
+co00dir007to_cat
+TO
+Características Cat Dirección
+161
+alter table tabla_resultado_dir_00 add column co00dir017_cat int;UPDATE tabla_resultado_dir_00SET co00dir017_cat= CASE                        WHEN co00dir017 IS NULL THEN 1                        WHEN co00dir017<=1 THEN 2                        ELSE 3                    END;
+co00dir017_cat
+TO
+Características Cat Dirección
+162
+alter table tabla_resultado_dir_00 add column co00dir013ot_cat int;UPDATE tabla_resultado_dir_00SET co00dir013ot_cat= CASE                          WHEN co00dir013ot IS NULL THEN 1                          WHEN co00dir013ot<=4.35 THEN 2                          WHEN co00dir013ot<=6.9 THEN 3                          WHEN co00dir013ot<=14.29 THEN 4                          ELSE 5                      END;
+co00dir013ot_cat
+TO
+Características Cat Dirección
+163
+alter table tabla_resultado_dir_00 add column co00dir034fi_cat int;UPDATE tabla_resultado_dir_00SET co00dir034fi_cat= CASE                          WHEN co00dir034fi IS NULL THEN 1                          WHEN co00dir034fi<=3.54 THEN 2                          ELSE 3                      END;
+co00dir034fi_cat
+TO
+Características Cat Dirección
+164
+alter table tabla_resultado_dir_00 add column co00dir059_cat int;UPDATE tabla_resultado_dir_00SET co00dir059_cat= CASE                        WHEN co00dir059 IS NULL                             OR co00dir059<=22.83 THEN 1                        WHEN co00dir059<=39.87 THEN 2                        WHEN co00dir059<=52.87 THEN 3                        WHEN co00dir059<=58.52 THEN 4                        ELSE 5                    END;
+co00dir059_cat
+TO
+Características Cat Dirección
+165
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir004ro_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir004ro_peso= (cast(co00dir004ro_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR004RO') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir004ro_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+166
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co01dir009_peso decimal;UPDATE tabla_resultado_dir_00SET co01dir009_peso= (cast(co01dir009_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO01DIR009') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co01dir009_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+167
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir001in_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir001in_peso= (cast(co00dir001in_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR001IN') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir001in_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+168
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir057_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir057_peso= (cast(co00dir057_cat AS decimal)/6)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR057') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir057_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+169
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir050to_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir050to_peso= (cast(co00dir050to_cat AS decimal)/4)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR050TO') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir050to_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+170
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir010fi_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir010fi_peso= (cast(co00dir010fi_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR010FI') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir010fi_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+171
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir007to_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir007to_peso= (cast(co00dir007to_cat AS decimal)/6)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR007TO') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir007to_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+172
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir017_peso decimal;UPDATE tabla_resultado_dir_00SET CO00DIR017_peso= (cast(co00dir017_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR017') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir017_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+173
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir013ot_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir013ot_peso= (cast(co00dir013ot_cat AS decimal)/5)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR013OT') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir013ot_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+174
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir019_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir019_peso= (cast(co00dir019 AS decimal)/2)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR019') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir019_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+175
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir034fi_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir034fi_peso= (cast(co00dir034fi_cat AS decimal)/3)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR034FI') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir034fi_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+176
+ALTER TABLE tabla_resultado_dir_00 ADD COLUMN co00dir059_peso decimal;UPDATE tabla_resultado_dir_00SET co00dir059_peso= (cast(co00dir059_cat AS decimal)/5)*cast(valor AS decimal)FROM  (SELECT peso_real valor   FROM pesos_direccion   WHERE nombre='CO00DIR059') bWHERE tabla_resultado_dir_00.num_id<>cast(b.valor AS varchar);
+co00dir059_peso
+TO
+Características Pesos Dirección (Los pesos están en REC_VISTA.V_Beta_Ordenamiento_Dir)
+177
+alter table tabla_resultado_dir_00 add column Score decimal;update tabla_resultado_dir_00 set score=co00dir004ro_peso+co01dir009_peso+co00dir001in_peso+co00dir057_peso+co00dir050to_peso+co00dir010fi_peso+co00dir007to_peso+CO00DIR017_peso+co00dir013ot_peso+co00dir019_peso+co00dir034fi_peso++co00dir059_peso;
+Score
+TO
+Score Dirección
+178
+CREATE TABLE Direccion_Final distribute BY hash(NUM_ID) AS         SELECT tipo_id,         num_id,         direccion_ge as direccion,         co00dir054 as complemento,         co00dir053 as Codigo_Ciudad,         case when co00dir015>0 then 'RES' else null end as Residencial,         case when co00dir016>0 then 'LAB' else null end as Laboral,         case when co00dir017>0 then 'COR' else null end as Correspondecia,         score Score,         row_number() over(partition BY tipo_id,         num_id         ORDER BY score DESC) AS Lugar         FROM CRTS_FINAL where co00dir053 is not null;
+Orden
+TO
+Ordenamiento Dirección
+Apéndice E. Conceptos de Negocio:
+ID
+Concepto
+Descripción
+Tipo Dato
+Formula
+Concepto Padre
+1
+Cuenta Abierta
+Si Tipo de Cuenta in ( ‘01’, ‘51’)1. Aquella cuyo Estado posee alguno de los siguientes códigos ‘01’, ‘06’, ‘07’, ‘09’.Si Tipo de Cuenta not in ( ‘01’, ‘51’)1. Aquella cuyo Estado posee alguno de los siguientes códigos ‘01’, ‘13’ al ‘41’, ‘45’, ‘47’.
+Texto
+1. Tipo de Cuenta in ('01','51')2. Tipo de Cuenta not in ( ‘01’, ‘51’)
+Cuenta
+2
+Cálculo de numero de meses desde el reporte
+Número de meses entre el reporte y la fecha actual
+Entero
+alter table copia_base_rec add column meses_reporte numeric(18,2);UPDATE baseSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr(fecha_reporte,1,4) AS numeric(18,2))*12+cast(substr(fecha_reporte,5,2) AS numeric(18,2)));
+Direcciones
+3
+Cuenta Cerrada
+Si Tipo de Cuenta in ( ‘01’, ‘51’)1. Aquella cuya Estado posee alguno de los siguientes códigos ‘02’, ‘05’Si Tipo de Cuenta not in ( ‘01’, ‘51’)1. Aquella cuya Estado posee alguno de los siguientes códigos ‘02’ al ‘12’, ‘46’, ‘49’.
+Texto
+1. Tipo de Cuenta in ( ‘01’, ‘51’)2. Tipo de Cuenta not in ( ‘01’, ‘51’)
+Cuenta
+4
+Codsuscriptor_nuevo
+El código de suscriptor se debe obtener utilizando la base insumo “sabana de datos” que contiene la información de las direcciones. 
+Texto
+ALTER TABLE copia_base_rec ADD COLUMN codsuscriptor_nuevo varchar(200);UPDATE copia_base_recSET codsuscriptor_nuevo= datoFROM  (SELECT (codigo_suscriptor||fecha_reporte||tipo_id||num_id||direccion_ge||num_cuenta) llave,          substr('000000',1,6-length(a.codigo_suscriptor))||a.codigo_suscriptor dato   FROM copia_base_rec a) bWHERE (copia_base_rec.codigo_suscriptor||copia_base_rec.fecha_reporte||copia_base_rec.tipo_id ||copia_base_rec.num_id||copia_base
+Suscriptor
+5
+Codeudor
+Una obligación está asociada a un codeudor
+Texto
+1. Tipo de Cuenta not in ( ‘02’)2. Tipo de Cuenta in ( ‘02’)
+Cuenta
+6
+CodSuscriptor
+Hace referencia al código de suscriptor que proviene de la base insumo Características sin Ley de END00 y MOR00. 
+Texto
+ 
+Suscriptor
+7
+codigo_suscriptor
+Hace referencia al código de suscriptor que proviene de la base insumo de direcciones. 
+Texto
+ 
+Suscriptor
+8
+Cuenta
+Entrada o registro en el Hábito de Pago que define la historia de la deuda que una persona posee con una entidad crediticia siempre y cuando ésta no se encuentre Bloqueada.  También Set Conoce como Obligación.
+Texto
+ 
+Cuenta
+9
+Complemento
+Hace referencia a la información adicional de la dirección, como numero de apartamento, bloque, nombre del conjunto, numero de casa, entre otros.  Su concatenación con la variable “Direccion_ge”  forma la variable “Dirección física”. Esta variable proviene del insumo de Sabana de Direcciones.
+Texto
+ 
+Direcciones
+10
+Direccion_ge
+Hace referencia a la dirección geográfica que proviene del insumo de direcciones. En la base_copia_base es creado como direccion_ge
+Texto
+ 
+Direcciones
+11
+DireccionyContactabilidad
+Nombre asignado a la base insumo de Direcciones que trae la información de los reportes. Esa información es cargada tal y como es enviada en formato “varchar” para todas las columnas. 
+Texto
+ 
+Direcciones
+12
+Fecha_reporte
+La fecha de reporte se obtiene de la sabana de datos como insumo.
+Fecha
+ 
+Direcciones
+13
+Fecha_actual
+Se introduce durante la declaración de la variable y corresponde a la fecha actual de la forma “AAAAMM” en varchar. alter table copia_base_rec add column fecha_actual varcharupdate copia_base_rec set fecha_actual= “Ingresar Fecha Actual”;
+Fecha
+Función DATE()
+NA
+14
+Fecha de Cierre
+Campo del Hábito de Pago que indica el año y el mes de la última actualización de valores (o del último movimiento de valores) de la información que reporta el suscriptor frente a la obligación. Esta fecha solamente aplica para obligaciones Cerradas
+Fecha
+ 
+EndeudamientoMorosidad
+15
+Individiuo
+Persona (Cliente) cuyo expediente de crédito es sujeto de estudio
+ 
+ 
+Persona
+16
+Meses_mora
+Variable que calcula los meses desde la mora más reciente para cada producto de una dirección
+Numero
+Se calcula de la siguiente forma:alter table copia_base_rec add column meses_mora numeric(18,2);UPDATE copia_base_recSET meses_mora= CASE                    WHEN LEAST(CASE                                   WHEN CO00MOR075 NOT IN ('-1','-2','-99','999')                                        AND CO00MOR075 IS NOT NULL THEN CAST (CO00MOR075 AS int)                                   ELSE 999                               END, CASE                                        WHEN CO00MOR076 NOT IN ('-1','-2')                                             AND CO00MOR076 IS NOT NULL THEN cast(CO00MOR076 AS int)                                        ELSE 999                                    END,CASE                                            WHEN CO00MOR077 NOT IN ('-1','-2')                                                 AND CO00MOR077 IS NOT NULL THEN cast(CO00MOR077 AS int)                                            ELSE 999                                        END, CASE                                                 WHEN CO00MOR078 NOT IN ('-1','-2')                                                      AND CO00MOR078 IS NOT NULL THEN cast(CO00MOR078 AS int)                                                 ELSE 999                                             END,CASE                                                     WHEN CO00MOR079 NOT IN ('-1','-2')                                                          AND CO00MOR079 IS NOT NULL THEN cast(CO00MOR079 AS int)                                                     ELSE 999                                                 END)<>999 THEN LEAST(CASE                                                                          WHEN CO00MOR075 NOT IN ('-1','-2','-99','999')                                                                               AND CO00MOR075 IS NOT NULL THEN CAST (CO00MOR075 AS int)                                                                          ELSE 999                                                                      END, CASE                                                                               WHEN CO00MOR076 NOT IN ('-1','-2')                                                                                    AND CO00MOR076 IS NOT NULL THEN cast(CO00MOR076 AS int)                                                                               ELSE 999                                                                           END,CASE                                                                                   WHEN CO00MOR077 NOT IN ('-1','-2')                                                                                        AND CO00MOR077 IS NOT NULL THEN cast(CO00MOR077 AS int)                                                                                   ELSE 999                                                                               END, CASE                                                                                        WHEN CO00MOR078 NOT IN ('-1','-2')                                                                                             AND CO00MOR078 IS NOT NULL THEN cast(CO00MOR078 AS int)                                                                                        ELSE 999                                                                                    END,CASE                                                                                            WHEN CO00MOR079 NOT IN ('-1','-2')                                                                                                 AND CO00MOR079 IS NOT NULL THEN cast(CO00MOR079 AS int)                                                                                            ELSE 999                                                                                        END)                    ELSE NULL                END
+Morosidad
+17
+num_cta_abd07
+Número de la cuenta (Producto u obligación) proveniente del insumo Características Estándar sin Ley END00 y MOR00. 
+ 
+ 
+Cuenta
+18
+Obligación
+Entrada o registro en el Hábito de Pago que define la historia de la deuda que una persona posee con una entidad crediticia.  También Set Conoce como Cuenta
+ 
+ 
+Cuenta
+19
+Portafolio
+La variable Portafolio proviene del insumo de Características Estándar sin Ley MOR_00 y END_00. 
+ 
+ 
+Cuenta
+20
+Portafolio_Nuevo
+La variable portafolio_nuevo se crea a partir de la variable codsuscriptor_nuevo, agrupando todos los portafolios definidos en las características estándar Datacrédito Colombia. A continuación presentamos las definiciones de las mismas:- Portafolio HP: Portafolio compuesto por obligaciones de crédito con destinación hipotecaria.- Portafolio IN: incluye los demás créditos que no son clasificados en ninguna de los anteriores portafolios.- Portafolio RO: Incluye todas aquellas cuentas pertenecientes a Tarjetas de Crédito y rotativos. - Portafolio CP: Cuentas pertenecientes a Microcrédito. - Portafolio VE: Portafolio que incluye los demás créditos que no son clasificados en ninguna de los anteriores portafolios.- Portafolio CC: Portafolio que incorpora la información de obligaciones asociadas a telecomunicaciones y servicios de valor agregado. - Portafolio FR: Incluye todas las demás obligaciones financieras que no agrupan los otros portafolios.- Portafolio RC Y RS: Incluye un gran número de obligaciones del sector real y cooperativas.- Portafolio CT:  incluye las cuentas corrientes reportadas por los suscriptores  - Portafolio OT: incluye todas las demás obligaciones no agrupadas en la clasificación. 
+Texto
+La construcción de esta variable se realiza a través de: alter table copia_base_rec add column  portafolio_nuevo varchar(200);update copia_base_rec set portafolio_nuevo= datos from (select (codigo_suscriptor||fecha_reporte||tipo_id||num_id||direccion_ge||num_cuenta) llave,         (case when portafolio = 'CO' then 'CO'         when substr(codsuscriptor_nuevo,1,2) in ('02','03') then 'RO'         when substr(codsuscriptor_nuevo,1,2) = '05' then 'IN'            when (substr(codsuscriptor_nuevo,1,2) = '04' and codsuscriptor_nuevo in ('040003', '040076', '040909', '040301', '040131', '040657', '040803', '040129', '040039', '042627', '041336', '040125', '040099', '040980', '040895','040390', '040195', '040022', '042027', '041901', '040249', '040368', '041409', '040142', '040218', '040127', '040290', '040468','040190','041153', '040507', '043410', '040199',  '040189', '040188') or (substr(codsuscriptor_nuevo,1,2)='05' and codsuscriptor_nuevo = '050058') or (substr(codsuscriptor_nuevo,1,2)='18' and codsuscriptor_nuevo in ('180110', '180015', '180007', '180185', '189905', '180151', '180114')) or (substr(codsuscriptor_nuevo,1,2)='20' and codsuscriptor_nuevo='200059') or (substr(codsuscriptor_nuevo,1,2)='45' and codsuscriptor_nuevo in ('450043', '450030', '450053', '450050', '450035', '450036', '450034',   '450051', '450028', '450045', '450048', '450074', '450032', '450052',  '450031', '450042', '450033', '450039', '450049', '450041', '450044',  '450112'))) then 'VE'         when substr(codsuscriptor_nuevo,1,2)='13' then 'HP'         when substr(codsuscriptor_nuevo,1,2) in ('07', '14', '17', '18', '20', '48', '49') then 'FR'         when substr(codsuscriptor_nuevo,1,2) in ('23','24') then 'CC'         when substr(codsuscriptor_nuevo,1,2) in ('06', '27') then 'CP'         when substr(codsuscriptor_nuevo,1,2) in ('04', '09', '10', '11', '19', '22', '28', '32', '34', '35', '37', '39', '45', '47') then 'RC'         when substr(codsuscriptor_nuevo,1,2) in ('08', '12', '15', '16', '21', '25', '26', '29', '30', '31', '33', '36', '38', '40', '41', '42', '43', '44', '46') then 'RS'         when substr(codsuscriptor_nuevo,1,2) in ('51','01') then 'CT'         else 'OT' end) datos from copia_base_rec) b         where (copia_base_rec.codigo_suscriptor||copia_base_rec.fecha_reporte||copia_base_rec.tipo_id||copia_base_rec.num_id||copia_base_rec.direccion_ge||copia_base_rec.num_cuenta)=b.llave;
+Cuenta
+21
+Portafolio_TO(Total)
+Esta definición de se refiere a todas las cuentas del individuo.
+Numero
+ 
+Cuenta
+22
+Sector
+La variable sector está diseñada para agrupar diversos portafolios que tienen características similares en el mercado. - Sector CO: Hace referencia a codeudores. - Sector CC: Se define el Sector de Telecomunicaciones.- Sector RE: Sector Real. - Sector FI: Sector Financiero- Sector OT: Agrupa los demás portafolios que no se encuentran en los sector mencionados. 
+Texto
+alter table copia_base_rec add column  Sector varchar(200);update copia_base_rec set Sector= datos from (select (codigo_suscriptor||fecha_reporte||tipo_id||num_id||direccion_ge||num_cuenta) llave,         (case when Portafolio_nuevo ='CO' then 'CO'         when Portafolio_nuevo ='CC' then 'CC'         when Portafolio_nuevo in ('RC','RS') then 'RE'         when Portafolio_nuevo in ('IN','RO','HP','VE','CP','FR') then 'FI'         else 'OT'         end) datos from copia_base_rec) b         where (copia_base_rec.codigo_suscriptor||copia_base_rec.fecha_reporte||copia_base_rec.tipo_id         ||copia_base_rec.num_id||copia_base_rec.direccion_ge||copia_base_rec.num_cuenta)=b.llave; 
+Cuenta
+23
+Tipo_dato_contacto
+Variable proveniente del insumo sabana de direcciones. Registra el tipo de dirección del suscriptor de acuerdo a si es Residencial, Laboral o de Correspondencia (RES, LAB, CRR) respectivamente. 
+Texto
+ 
+Direcciones
+24
+Tipo de Cuenta
+Campo del Hábito de Pago que indica el tipo de cartera a la cual pertenece la Obligación
+Texto
+ 
+Cuenta
+25
+Titular
+Valor del campo Titularidad conformado por el código ‘00’ para Cualquier Tipo de Cuenta. 
+Texto
+ 
+Cuenta
+26
+total_direcciones
+Cuenta el total de direcciones que han sido reportadas. No toma en cuenta si están o no repetidas. 
+Numero
+alter table tabla_resultado_rec_00 add column total_direcciones numeric(18,2);UPDATE tabla_resultado_rec_00SET total_direcciones= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN direccion_ge <> ' ' THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_rec   GROUP BY tipo_id,            num_id) bWHERE tabla_resultado_rec_00.tipo_id=b.tipo_id  AND tabla_resultado_rec_00.num_id=b.num_id;
+Direcciones
+27
+Llave_registro
+La variable “llave_registro” se crea como llave para realizar las consultas y construir las tablas a nivel persona-dirección.Se da por la concatenación de diferentes variables asociadoas al tipo id, numero id y dirección completa de la persona
+Texto
+/*Llenado de Variable llave_registro*/update tabla_resultado_rec_00 set llave_registro=valor from (select tipo_id,num_id,direccion_ge,(tipo_id||(substr('00000000000',1,11-length(num_id))||num_id)||direccion_ge) valor from tabla_resultado_rec_00)b         where tabla_resultado_rec_00.tipo_id=b.tipo_id and tabla_resultado_rec_00.num_id=b.num_id and tabla_resultado_rec_00.direccion_ge=b.direccion_ge;Se asume que el código o "Llave Registro" para el nuevo algoritmo de ordenamiento sería el Campo Cod_DW_Persona_Ubic
+Direcciones
+28
+Segmento
+El segmento indica la calidad de los datos asociados a la persona - ubicación, mostrando desde las peores direcciones a las mejores. 
+Numero
+/*Poblamiento de variable Segmento*/update tabla_resultado_rec_00 set segmento= valor from (select llave_registro,case when ((co00DIR014<0.5 or co00DIR014 is null) and (co01DIR011<0.5 or co01DIR011 is null)) then 1                                                                                  when ((co00DIR014<0.5 or co00DIR014 is null) and (co01DIR011>=0.5)) then 2                                                                                    when ((co00DIR014>=0.5) and (co00DIR015<4.5 or co00DIR015 is null)) then 3                                                                                 when ((co00DIR014>=0.5) and (co00DIR015>=4.5)) then 4 else null end valor from tabla_resultado_rec_00) b                                                                                 where tabla_resultado_rec_00.llave_registro=b.llave_registro;
+Direcciones
+29
+Salario Minimo
+Define anualmente el valor de 1 salario minimo mensual, y que es insumo para el cálculo de las características de morosidad
+Numero
+ 
+Buró
+30
+Segmento
+Indica en cual segmento se encuentra la dirección específica para cualquier relación Persona - Ubicación
+Numero
+/*Poblamiento de variable Segmento*/update tabla_resultado_rec_00 set segmento= valor from (select llave_registro,case when ((co00DIR014<0.5 or co00DIR014 is null) and (co01DIR011<0.5 or co01DIR011 is null)) then 1                                                                                  when ((co00DIR014<0.5 or co00DIR014 is null) and (co01DIR011>=0.5)) then 2                                                                                    when ((co00DIR014>=0.5) and (co00DIR015<4.5 or co00DIR015 is null)) then 3                                                                                 when ((co00DIR014>=0.5) and (co00DIR015>=4.5)) then 4 else null end valor from tabla_resultado_rec_00) b                                                                                 where tabla_resultado_rec_00.llave_registro=b.llave_registro;
+Direcciones
+31
+Coincidencia
+ 
+Numero
+Flag que indica si el digito inicial de un telefono coincide con el listado de dígitos iniciales por ciudad. ALTER TABLE copia_base_tel ADD COLUMN coincidencia int;UPDATE copia_base_telSET coincidencia =valorFROM  (SELECT tipo_id,          num_id,          telefono,          CASE              WHEN sum(CASE                           WHEN primer_digito LIKE ('%'||substr(telefono,1,1)||'%') THEN 1                           ELSE 0                       END)>0 THEN 1              ELSE 0          END valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id  AND copia_base_tel.telefono=b.telefono;
+Telefonos
+32
+Primer_digito
+Char que contiene los primeros dígitos de los teléfonos agrupados por ciudades. Se encuentra en el insumo base “primer_digito”.
+Numero
+ 
+Telefonos
+33
+Digito_Inicial
+Esta base contiene agrupado por ciudad los posibles dígitos iniciales de los teléfonos. Viene de la siguiente forma.
+Numero
+La solución planteada fue la de cargar a la tabla de ATRIBUTOS los valores asociados a los dígitos iniciales y luego generar una vista Semántica llamada V_Digitio_Inicial con la cual se va realizar la validación de coincidencia en ordenamiento de teléfonos
+Coincidencia
+34
+Insumos
+Se define como insumos los elementos utilizados durante la construcción del set de Características Personalizadas: - Base de Reportes Telefono: La fuente de datos que contiene todos los reportes de los teléfonos así como la información de las cuentas asociadas a estas. Esta base resulta de un proceso de estandarización y data_quality de la información proveniente del Maestro de Direcciones.- Primer_digito: Fuente de información externa diseñada para contener los primeros dígitos de todos  los posibles teléfonos agrupados por ciudad (Código Dane).  
+ 
+ 
+Ordenamiento
+35
+total_reportes
+Cuenta el total reportes que tiene una persona. Se calcula de la siguiente manera:ALTER TABLE copia_base_tel ADD COLUMN total_reportes int;UPDATE copia_base_telSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+Numero
+ 
+Ordenamiento
+36
+total_reportes_3
+Cuenta el total de reportes que tiene una persona en los últimos 3 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_telSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+Numero
+ 
+Ordenamiento
+37
+total_reportes_6
+Cuenta el total de reportes que tiene una persona en los últimos 6 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_telSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+Numero
+ 
+Ordenamiento
+38
+total_reportes_12
+Cuenta el total de reportes que tiene una persona en los últimos 12 meses. Se calcula de la forma. ALTER TABLE copia_base_tel ADD COLUMN total_reportes_12 numeric(18,2);UPDATE copia_base_telSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id;
+Numero
+ 
+Ordenamiento
+39
+total_reportes_telefono
+Cuenta el total reportes que ha tenido un teléfono en particular.Se calcula de la siguiente manera:ALTER TABLE copia_base_tel ADD COLUMN total_reportes_telefono int;UPDATE copia_base_telSET total_reportes_telefono= valorFROM  (SELECT tipo_id,          num_id,          telefono,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_tel   GROUP BY tipo_id,            num_id,            telefono) bWHERE copia_base_tel.tipo_id=b.tipo_id  AND copia_base_tel.num_id=b.num_id  AND copia_base_tel.telefono=b.telefono;
+Numero
+ 
+Ordenamiento
+40
+PESO_VAR_TELEFONO
+A diferencia de los modelos estadísticos supervisados, un modelo experto no necesariamente obtiene los coeficientes de cada variable tras la ejecución de una regresión lineal (entre otras técnicas). Por tanto, la asignación de los pesos de cada variable se realiza a través de una tabla externa que permite su modificación si se requiere posteriormente (Calibración, actualización, redesarrollo). Esta tabla se adjunta en el presente documento. 
+Numero
+Solución 1: Se carga el Archivo a la tabla ATRIBUTO y se genera vista semática para el uso de esta información en el modelo de ordenamiento de teléfonos.Solución 2: Se debe generar una nueva tabla para la carga de los betas al modelo reconocer y ser usado en el calculo de las variables de peso en el modelo de télefonos.
+Ordenamiento Telefono
+41
+Contactabilidad_Email
+Insumo que contiene la información de contactabilidad de los clientes. Debe venir estructurada de la siguiente manera. 
+ 
+create dimension table Contactabilidad_Email (COD_SUSCRIPTOR varchar(7),TIPO_ID varchar(1),NUM_ID Varchar(11),Periodo_Gestion varchar(7),IND_EFECTIVIDAD varchar(60),EMAIL varchar(90));
+Email
+42
+Email
+Campo que contiene el email para cada reporte de un cliente. Proviene de la base “Email”.
+Texto
+ 
+Email
+43
+Email_min
+Este parámetro se construye con el fin de unificar todos los Emails en un formato de texto en minúscula.
+Texto
+ALTER TABLE copia_base_email ADD COLUMN email_min varchar(200);UPDATE copia_base_email SET email_min= lower(email);
+Email
+44
+Insumos
+Se define como insumos los elementos utilizados durante la construcción del set de Características Personalizadas: - Base de Reportes EMAIL: La fuente de datos que contiene todos los reportes de los emails así como la información de las cuentas asociadas a estas. Esta base resulta de un proceso de estandarización y data_quality de la información proveniente del Maestro de Direcciones.- Pesos: Fuente de información externa diseñada para contener los pesos de los posibles valores que pueda tomar la variable Ind_Efectividad. - Email_Contactabilidad: Contiene la información de contactabilidad de los clientes reportados. 
+ 
+Para el Ind_Efectividad se asignan unos pesos específicos que se dan para cada uno de los valores en ese atributo.
+Ordenamiento Email
+45
+Ind_Efectividad
+Dentro del insumo de Contactabilidad_Email, se encuentra el campo de Ind_Efectividad que contiene la información acerca del tipo de contactabilidad lograda con el cliente (si tiene). Dentro de la tabla Copia_base_email toma el valor de “gestion_contactabilidad”. 
+ 
+ 
+Contactabilidad
+46
+Meses_Reporte
+Variable que cuenta el número de meses que han trascurrido desde que se realizó determinado reporte
+Numero
+ALTER TABLE copia_base_email ADD COLUMN meses_reporte numeric(18,2); UPDATE copia_base_emailSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr(periodo_reporte,1,4) AS numeric(18,2))*12+cast(substr(periodo_reporte,5,2) AS numeric(18,2)));
+Ordenamiento
+47
+total_reportes
+Cuenta el total reportes que tiene una persona. 
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes int; UPDATE copia_base_emailSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+48
+total_reportes_3
+Cuenta el total de reportes que tiene una persona en los últimos 3 meses.
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_emailSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+49
+total_reportes_6
+Cuenta el total de reportes que tiene una persona en los últimos 6 meses. 
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_emailSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+50
+total_reportes_12
+Cuenta el total de reportes que tiene una persona en los últimos 12 meses.
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes_12 numeric(18,2); UPDATE copia_base_emailSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+51
+total_reportes_24
+Cuenta el total de reportes que tiene una persona en los últimos 24 meses.
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes_24 numeric(18,2);UPDATE copia_base_emailSET total_reportes_24= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+52
+total_reportes_24m
+Cuenta el total de reportes que tiene una persona hace más de 24 meses.
+Numero
+ALTER TABLE copia_base_email ADD COLUMN total_reportes_24m numeric(18,2);UPDATE copia_base_emailSET total_reportes_24m= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte>24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_email   GROUP BY tipo_id,            num_id) bWHERE copia_base_email.tipo_id=b.tipo_id  AND copia_base_email.num_id=b.num_id;
+Ordenamiento
+53
+Pesos_Email
+A diferencia de los modelos estadísticos supervisados, un modelo experto no necesariamente obtiene los coeficientes de cada variable tras la ejecución de una regresión lineal (entre otras técnicas). Por tanto, la asignación de los pesos de cada variable se realiza a través de una tabla externa que permite su modificación si se requiere posteriormente (Calibración, actualización, redesarrollo). 
+ 
+Ordenamiento Email
+54
+Celular
+Celular Campo que contiene el celular para cada reporte de un cliente. Proviene de la base “Celular”. 
+Texto
+ 
+TELEFONO
+55
+Insumos Celular OPERADORES
+Se define como insumos los elementos utilizados durante la construcción del set de Características Personalizadas: - Base de Reportes Celular: La fuente de datos que contiene todos los reportes de los celulares así como la información de las cuentas asociadas a estas. Esta base resulta de un proceso de estandarización y data_quality de la información proveniente del Maestro de Direcciones.- Operadores: Contiene la información de la distribución de pesos de los operadores. Esta tabla deberá ser actualizada periódicamente añadiendo los nuevos indicativos de operador que vayan entrando al mercado del país. Si esta actividad no se realiza, se corre el riesgo de tener resultados incompletos.
+ 
+OPERADORES
+56
+Meses_reporte
+Variable que cuenta el número de meses que han trascurrido desde que se realizó determinado reporte. 
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN meses_reporte numeric(18,2); UPDATE copia_base_celSET meses_reporte= (cast(substr(fecha_actual,1,4) AS numeric(18,2))*12+cast(substr(fecha_actual,5,2) AS numeric(18,2)))-(cast(substr(periodo_reporte,1,4) AS numeric(18,2))*12+cast(substr(periodo_reporte,5,2) AS numeric(18,2)));
+Celular
+57
+total_reportes
+Cuenta el total reportes que tiene una persona. 
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes int;UPDATE copia_base_celSET total_reportes= valorFROM  (SELECT tipo_id,          num_id,          sum(CASE                  WHEN gestion_dataquality <>'NO VALIDO' THEN 1                  ELSE 0              END) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+58
+total_reportes_3
+Cuenta el total de reportes que tiene una persona en los últimos 3 meses.
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_3 numeric(18,2);UPDATE copia_base_celSET total_reportes_3= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=3 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+59
+total_reportes_6
+Cuenta el total de reportes que tiene una persona en los últimos 6 meses. Se calcula de la forma. 
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_6 numeric(18,2);UPDATE copia_base_celSET total_reportes_6= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=6 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_celGROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+60
+total_reportes_12
+Cuenta el total de reportes que tiene una persona en los últimos 12 meses.
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_12 numeric(18,2); UPDATE copia_base_celSET total_reportes_12= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=12 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+61
+total_reportes_24
+Cuenta el total de reportes que tiene una persona en los últimos 24 meses.
+Entero
+ALTER TABLE copia_base_cel ADD COLUMN total_reportes_24 numeric(18,2);UPDATE copia_base_celSET total_reportes_24= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte<=24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+62
+total_reportes_24m
+Cuenta el total de reportes que tiene una persona hace más de 24 meses. Se calcula de la forma.
+Entero
+ ALTER TABLE copia_base_cel ADD COLUMN total_reportes_24m numeric(18,2);UPDATE copia_base_celSET total_reportes_24m= valorFROM  (SELECT tipo_id,          num_id,          cast(sum(CASE                       WHEN gestion_dataquality <>'NO VALIDO'                            AND meses_reporte>24 THEN 1                       ELSE 0                   END) AS decimal) valor   FROM copia_base_cel   GROUP BY tipo_id,            num_id) bWHERE copia_base_cel.tipo_id=b.tipo_id  AND copia_base_cel.num_id=b.num_id;
+Celular
+63
+Pesos_Celular
+A diferencia de los modelos estadísticos supervisados, un modelo experto no necesariamente obtiene los coeficientes de cada variable tras la ejecución de una regresión lineal (entre otras técnicas). Por tanto, la asignación de los pesos de cada variable se realiza a través de una tabla externa que permite su modificación si se requiere posteriormente (Calibración, actualización, redesarrollo). Esta tabla se adjunta en el presente documento. 
+ 
+Pesos
+64
+nit
+860002964
+ 
+ 
+Id_Buro_Persona
+65
+codigo_suscriptor
+50020
+ 
+ 
+Cod_Suscriptor
+66
+fuente
+DIRECCIONES
+ 
+ 
+Descripcion_Fuente
+67
+fecha_reporte
+31/01/2017
+ 
+ 
+Fecha_Reporte Id_Flag_Hasta=0
+68
+periodo_reporte
+201701
+ 
+ 
+Fecha_Reporte
+69
+tipo_persona
+NATURAL
+ 
+ 
+Desc_Tipo_Persona
+70
+tipo_id
+1
+ 
+ 
+Cod_Pin_Persona
+71
+num_id
+52584077
+ 
+ 
+Cod_Pin_Persona
+72
+tipo_cuenta
+5
+ 
+ 
+Desc_Tipo_Cta
+73
+celular
+3057214893
+ 
+ 
+Texto_Ubicacion
+74
+gestion_dataquality
+VALIDO
+ 
+ 
+VALIDO
+75
+meses_reporte
+3
+ 
+ 
+Formula
+76
+fecha_actual
+201704
+ 
+ 
+Fecha_Reporte Id_Flag_Desde=1
+77
+Pesos_Direcciones
+A diferencia de los modelos estadísticos supervisados, un modelo experto no necesariamente obtiene los coeficientes de cada variable tras la ejecución de una regresión lineal (entre otras técnicas). Por tanto, la asignación de los pesos de cada variable se realiza a través de una tabla externa que permite su modificación si se requiere posteriormente (Calibración, actualización, redesarrollo). Esta tabla se adjunta en el presente documento. 
+ 
+Pesos
+78
+Complemento_Dir
+Tabla que contiene un listado de todos los complementos asociados a las direcciones de los clientes. 
+ 
+CREATE TABLE Complemento_dir AS  (SELECT c.tipo_id,          c.num_id,          c.direccion_ge,          c.complemento,          d.maximo_longitud+maximo+numero+longitud AS suma   FROM     (SELECT a.*,             b.maximo      FROM        (SELECT tipo_id,                num_id,                direccion_ge,                complemento,                CASE                    WHEN complemento<>'' THEN length(complemento)                    ELSE 0                END longitud,                CASE                    WHEN direccion_ge<>''                         AND complemento<>'' THEN count(*)                    ELSE 0                END numero         FROM copia_base_dir         GROUP BY tipo_id,                  num_id,                  direccion_ge,                  complemento) a      LEFT JOIN        (SELECT tipo_id,                num_id,                direccion_ge,                max(numero) maximo         FROM           (SELECT tipo_id,                   num_id,                   direccion_ge,                   CASE                       WHEN direccion_ge<>''                            AND complemento<>'' THEN count(*)                       ELSE 0                   END numero            FROM copia_base_dir            GROUP BY tipo_id,                     num_id,                     direccion_ge,                     complemento) a         GROUP BY tipo_id,                  num_id,                  direccion_ge) b ON (a.tipo_id=b.tipo_id                                      AND a.num_id=b.num_id                                      AND a.direccion_ge=b.direccion_ge)) c   LEFT JOIN     (SELECT tipo_id,             num_id,             direccion_ge,             max(length(complemento)) maximo_longitud      FROM copia_base_dir      GROUP BY tipo_id,               num_id,               direccion_ge) d ON (c.tipo_id=d.tipo_id                                   AND c.num_id=d.num_id                                   AND c.direccion_ge=d.direccion_ge));
+Dirección Física

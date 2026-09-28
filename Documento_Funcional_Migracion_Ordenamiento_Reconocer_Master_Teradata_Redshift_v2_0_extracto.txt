@@ -1,0 +1,712 @@
+Documento Funcional de MigraciónProceso de Ordenamiento Reconocer MásterTeradata a Amazon Redshift
+Versión funcional: 2.0Fecha: 12 de agosto de 2026Uso previsto: especificación funcional para construcción, migración y certificación en Redshift
+Enfoque del documentoEsta versión consolida el baseline funcional de Reconocer Máster con las decisiones aprobadas para construcción en Redshift, separando la paridad de migración de los cambios funcionales explícitamente autorizados y de los asuntos técnicos que deben validarse durante certificación.
+Campo
+Contenido
+Nombre del proceso
+Ordenamiento / Scoring de Contactabilidad
+Producto
+Reconocer Máster
+Plataforma origen
+Teradata
+Plataforma destino
+Amazon Redshift
+Naturaleza del documento
+Documento funcional para migración y paridad
+Criterio rector
+Paridad funcional controlada entre origen y destino
+Control de versión
+Versión
+Fecha
+Descripción
+Estado
+1.0
+12/08/2026
+Consolidación funcional para migración Teradata a Redshift.
+Histórica
+2.0
+12/08/2026
+Cierre de definiciones funcionales de scoring, tratamiento de operador no mapeado y alineación de variables para construcción en Redshift.
+Vigente
+1. Propósito
+Definir el comportamiento funcional esperado del proceso de Ordenamiento de datos de contacto de Reconocer Máster durante la migración desde Teradata hacia Amazon Redshift. El documento debe servir como contrato funcional para construcción, análisis de brechas, pruebas de paridad y validación de negocio.
+Principio de migración funcionalLa migración debe preservar el resultado de negocio del algoritmo. Si el requerimiento resumido, la documentación histórica y el comportamiento ejecutable de Teradata no coinciden, la diferencia no debe resolverse de forma implícita: debe clasificarse, decidirse y aprobarse antes de certificar Redshift.
+2. Contexto funcional
+Una persona puede tener múltiples direcciones físicas, teléfonos fijos, celulares y correos electrónicos reportados por diferentes suscriptores y fuentes. El propósito del Ordenamiento es priorizar, dentro de cada tipo de dato de contacto, cuál debería intentarse primero para maximizar la probabilidad relativa de contacto.
+El algoritmo no compara canales entre sí. Dirección, teléfono fijo, celular y email se procesan y rankean de forma independiente. El resultado funcional es un orden ascendente por persona y canal, donde el valor 1 representa el dato con mayor prioridad relativa.
+Necesidad de negocio
+Resultado funcional esperado
+Priorizar múltiples datos de contacto por persona.
+Cada dato elegible recibe un score y un orden dentro de su canal.
+Evitar reprocesar todo el universo.
+Solo se recalculan personas con cambios relevantes desde la última ejecución.
+Consumir únicamente datos vigentes.
+Bloqueos, registros no válidos y direcciones hijas de unificación no deben competir como vigentes.
+Mantener continuidad post-migración.
+Para el mismo corte funcional, Redshift debe reproducir el resultado Teradata o explicar una diferencia aprobada.
+Permitir calibración sin reescribir lógica.
+Los coeficientes Beta/pesos deben ser parametrizables y no quedar embebidos en código de negocio.
+3. Alcance funcional de la migración
+Incluido en alcance
+Fuera de alcance de este documento
+Fases funcionales de Materialización, Atributos de Cuenta, Ubicaciones y Scoring.
+DDL, SQL, procedimientos almacenados, notebooks o código específico de implementación.
+Reglas de elegibilidad para datos que pueden participar del Ordenamiento.
+Diseño físico de Redshift: sort keys, distribution style, compresión, tuning o costos.
+Definición de características, categorización, Betas, score y ranking por canal.
+Herramienta específica de orquestación, despliegue o monitoreo técnico.
+Persistencia de orden_prioridad y controles de idempotencia.
+Rediseño del modelo para aumentar precisión o contactabilidad, salvo cambio funcional aprobado.
+Controles de paridad funcional Teradata vs Redshift.
+Incorporación de nuevas fuentes o características que no hagan parte del baseline aprobado.
+4. Conceptos funcionales
+Concepto
+Definición funcional
+Persona a recalcular
+Persona identificada con cambios en información de ubicaciones, cuentas, comportamiento, bloqueos, estandarización o unificación desde el último Ordenamiento.
+Dato de contacto vigente
+Ubicación o dato de contacto que puede participar porque está activo para el proceso, no está bloqueado, no es hijo de unificación y cumple reglas de validez aplicables.
+Característica
+Variable funcional calculada a partir de historia de reportes, cuentas, recencia, fuente, operador, contactabilidad u otra evidencia usada por el modelo.
+Categoría
+Transformación discreta del valor de una característica según rangos/umbrales del modelo.
+Beta / peso
+Coeficiente parametrizado que define la contribución relativa de una característica al score.
+Peso de característica
+Contribución calculada normalmente como (categoría / categoría_máxima) x Beta.
+Score
+Suma de las contribuciones de las características aplicables a un dato de contacto. Se usa para ordenar; no debe asumirse como probabilidad calibrada sin definición adicional.
+Lugar / Orden Prioridad
+Posición del dato dentro de la persona y el canal, ordenada de mayor score a menor score. 1 es la mayor prioridad.
+Hash funcional
+Huella determinística utilizada para detectar cambios y evitar reprocesar registros sin modificación.
+Idempotencia
+Propiedad por la cual dos ejecuciones consecutivas con los mismos datos producen el mismo estado funcional sin duplicados.
+Aclaración funcional sobre el término “probabilidad”El requerimiento denomina al proceso “Scoring de Contactabilidad” y habla de probabilidad. Sin embargo, el baseline documentado calcula una suma ponderada de características categorizadas. Mientras no exista una transformación explícita a probabilidad calibrada, el resultado debe tratarse funcionalmente como score de priorización, no como porcentaje de probabilidad.
+5. Enfoque funcional para migración Teradata a Redshift
+Redshift debe reproducir el comportamiento de negocio del proceso, no copiar necesariamente la implementación física de Teradata.
+Las cuatro fases deben conservar su dependencia funcional: Fase 1 -> Fase 2 -> Fase 3 -> Fase 4.
+Los Betas deben permanecer parametrizados y versionables; no deben quedar hardcodeados en la lógica de scoring.
+La migración debe separar claramente paridad funcional de evolución funcional.
+Las diferencias entre el requerimiento resumido y el baseline histórico deben resolverse antes de la certificación.
+La validación principal debe comparar resultados funcionales para un mismo corte de datos y mismos parámetros.
+Lo que no debe ocurrir en una migraciónNo se debe aprovechar el cambio de plataforma para modificar umbrales, redefinir características, alterar Betas, introducir nuevas señales, cambiar exclusiones o corregir comportamientos históricos sin una decisión funcional explícita. Si se cambia el algoritmo, la iniciativa deja de ser solo migración y pasa a ser migración más evolución funcional.
+6. Flujo funcional objetivo
+Cambios y lotes
+Personas a recalcular
+Cuentas y ubicaciones
+Características
+Score y ranking
+Persistencia
+Fase 1  ->  Fase 2  ->  Fase 3  ->  Fase 4  ->  Ranking  ->  Persistencia
+Identificar las personas que tuvieron cambios en BTT y/o Reconocer desde la última ejecución válida.
+Construir el universo único de personas a recalcular; si no existe novedad, no se ejecuta reproceso.
+Extraer y clasificar las cuentas de esas personas dentro de la ventana funcional definida.
+Construir el vector de ubicaciones/datos de contacto vigentes y excluir registros no elegibles.
+Calcular características estándar y personalizadas requeridas por cada canal.
+Categorizar cada característica según los umbrales vigentes del modelo.
+Aplicar Betas parametrizados para obtener la contribución de cada característica y el score total.
+Rankear cada dato dentro de la persona y el canal por score descendente.
+Actualizar el orden_prioridad y la trazabilidad de la ejecución, conservando idempotencia.
+Etapa
+Pregunta funcional que responde
+Resultado esperado
+Fase 1 - Materialización
+¿Quién necesita ser recalculado?
+Universo único de personas con cambios.
+Fase 2 - Atributos de Cuenta
+¿Qué comportamiento de cuentas debe alimentar el modelo?
+Vector de cuentas clasificado y controlado por hash.
+Fase 3 - Ubicaciones
+¿Qué datos de contacto vigentes participarán?
+Vector de ubicaciones por persona con estado y atributos funcionales.
+Fase 4 - Scoring
+¿Cómo se prioriza cada dato?
+Características, categorías, pesos, score y ranking por canal.
+Persistencia
+¿Cómo queda disponible el resultado?
+orden_prioridad actualizado y ejecución trazable.
+7. Reglas generales que deben preservarse
+Regla general
+Definición funcional para migración
+Procesamiento incremental
+Solo deben recalcularse personas con cambios relevantes desde la fecha/ejecución de control.
+Procesamiento por persona y canal
+Nunca se comparan datos de personas diferentes ni se mezclan tipos de contacto en un mismo ranking.
+Validez previa
+Los datos marcados como no válidos por estandarización no deben competir como datos vigentes.
+Unificación previa
+Las direcciones físicas hijas de unificación no deben recibir score ni orden como vigentes.
+Bloqueos
+Los registros bloqueados se excluyen del universo funcional de cálculo según la regla aplicable.
+Betas externos
+La contribución del modelo se parametriza mediante catálogo de Betas/pesos vigente.
+Orden descendente por score
+El dato con mayor score obtiene la posición de mayor prioridad.
+Score no nulo
+Todo dato que llegue al ranking debe tener tratamiento definido para valores faltantes y producir score funcional válido.
+Idempotencia
+Mismos insumos y parámetros deben producir el mismo resultado funcional.
+Trazabilidad
+Cada ejecución debe registrar inicio, fin y corte funcional suficiente para auditoría y paridad.
+8. Equivalencias funcionales de datos para migración
+La siguiente tabla no define diseño físico. Describe las capacidades de datos que el proceso necesita y que deben tener una equivalencia funcional en Redshift.
+Capacidad funcional
+Uso en el proceso
+Equivalente esperado en Redshift
+Control de última ejecución / lotes
+Determina el corte incremental y las personas a recalcular.
+Mecanismo equivalente para identificar cambios desde el último Ordenamiento certificado.
+Universo persona
+Llave funcional para consolidar personas afectadas.
+Llave equivalente que preserve unicidad persona-buró.
+Cuentas y comportamiento
+Alimenta portafolios y características estándar/personalizadas.
+Información equivalente, con misma ventana temporal y semántica.
+Ubicaciones estandarizadas
+Base para DIR, TEL, CEL y EMA.
+Dato normalizado con la misma semántica de validez y tipo de ubicación.
+Estado de bloqueo
+Excluye registros no elegibles.
+Marca o relación equivalente de exclusión.
+Estado de unificación
+Evita que direcciones hijas compitan.
+Indicador equivalente; padres vigentes deben quedar consumibles.
+Catálogo de características
+Define reglas/variables a calcular.
+Estructura funcional equivalente y versionable.
+Catálogo de Betas
+Define pesos por característica y canal.
+Tabla/vista equivalente, parametrizada y auditable.
+Hash de cambios
+Distingue registros nuevos/modificados de los sin cambios.
+Hash determinístico con mismo propósito funcional.
+Relación persona-ubicación
+Recibe el orden_prioridad final.
+Estructura destino que conserve la relación y el estado final.
+Control de Ordenamiento
+Registra fecha de última ejecución.
+Control equivalente que permita incrementalidad y auditoría.
+9. Elegibilidad funcional de datos de contacto
+Condición
+Tratamiento funcional
+Registro bloqueado
+Se excluye antes de scoring.
+Dirección física con ind_unificacion = 1 / hija
+No recibe score ni ranking como dirección vigente.
+Dato marcado NO VALIDO por Data Quality
+No debe participar como dato vigente del canal.
+Dato vigente y válido
+Puede continuar a cálculo de características.
+Fuente ICBDIR / suscriptor
+El baseline histórico documenta asociación con cuentas activas para el Ordenamiento.
+Otras fuentes sin asociación de cuenta
+Pueden aportar ubicación/contactabilidad sin asociar cuenta, según semántica vigente.
+Dato sin insumo mínimo para una característica
+La característica debe tener tratamiento definido; el score final no debe quedar NULL.
+Celular sin operador mapeado
+Permanece elegible. Se asigna valor default de operador 0.22 y continúa al cálculo de CO01CEL018, categorización, Beta, score y ranking.
+10. Fase 1 - Materialización / identificación de personas con cambios
+Objetivo funcional: identificar únicamente las personas que necesitan ser recalculadas, evitando procesar el universo completo en cada ejecución.
+Criterio funcional
+Resultado esperado
+Cambios en BTT
+Detectar personas con lotes nuevos o cambios de cuentas/comportamiento desde el último corte.
+Cambios en REC
+Detectar personas con novedades de ubicaciones, bloqueos, estandarización o unificación.
+Consolidación BTT + REC
+Cada combinación persona-buró debe quedar una sola vez en el universo de trabajo.
+Sin novedades
+La tabla/universo de trabajo queda vacío y no se ejecutan fases posteriores para reproceso.
+Temporales de paso
+Las estructuras intermedias se limpian al finalizar de acuerdo con la estrategia equivalente de Redshift.
+Trazabilidad
+Registrar inicio, fin y corte de la fase.
+11. Fase 2 - Atributos de Cuenta / clasificación y control de cambios
+Objetivo funcional: construir los atributos de cuenta requeridos por el modelo para las personas afectadas, con una ventana temporal de 12 meses y un mecanismo determinístico de detección de cambios.
+Regla
+Comportamiento esperado
+Universo
+Solo se extraen cuentas de las personas identificadas en Fase 1.
+Ventana temporal
+Se evalúa una ventana de 12 meses hacia atrás desde la fecha funcional de novedad/corte.
+Comportamiento
+Se consideran componentes activos y pasivos requeridos por el modelo.
+Portafolio
+Cada cuenta debe quedar clasificada en un valor válido del catálogo funcional aprobado.
+No nulos
+Portafolio y cadena funcional usada para hash no deben quedar vacíos o NULL.
+Hash
+Se genera una huella MD5 de 32 caracteres por registro para detectar cambios.
+Persistencia incremental
+Registros sin cambios no deben provocar reproceso funcional innecesario.
+Trazabilidad
+Registrar inicio y fin de la fase.
+Punto de alineación - catálogo de portafoliosEl requerimiento resumido define 9 portafolios: CO, RO, VE, HP, IN, OT, CC, AH y CT. Estos portafolios tienen la siguiente lógica y precedencia. Premisa una obligación o cuenta únicamente tiene un portafolio:
+CO: TCUENTA <> 2 AND GARANTE > 0
+RO: ( TCUENTA IN[2,3] ) OR (TCUENTA IN [5,6,27,49] AND TOBLIGACION == 2 AND CUOTAS == 0 AND TGARANTIA <> 1) OR (TCUENTA == 18 AND TOBLIGACION == 2 AND (CUOTAS == 0 OR TGARANTIA <> 1))
+VE: (( TCUENTA IN [5,6,7,8,18,27,49] AND TOBLIGACION == 2) OR ( TCUENTA == 18 AND TOBLIGACION == 1 )) AND CUOTAS > 0 AND CUOTAS <=60 AND TGARANTIA == 1
+HP: TCUENTA == 13 OR ( TCUENTA IN [5,6,7,8,27,49] AND (TOBLIGACION == 3 OR ( CUOTAS > 60  AND TGARANTIA == 1) ))
+IN: TCUENTA IN [5,6,7,8,14,18,27,33,46,49]
+CC: TCUENTA IN [23,24]
+AH: TCUENTA IN [1,51] AND SUSCRIPTOR START 51
+CT: TCUENTA == 1 AND SUSCRIPTOR NSTART 51
+OT: Todo lo que no ingrese en los anteriores portafolios.
+12. Fase 3 - Ubicaciones / vector funcional y persistencia por hash
+Objetivo funcional: preparar los datos de ubicación de cada persona, enriquecerlos con atributos requeridos por el modelo, excluir registros no vigentes y persistir únicamente cambios nuevos o modificados.
+Regla
+Comportamiento esperado
+Exclusión de bloqueos
+Los registros bloqueados no continúan al vector elegible.
+Exclusión de hijos
+Las direcciones físicas hijas de unificación no se consideran vigentes.
+Tipo de persona
+Debe quedar clasificado; no se acepta tipo_persona NULL en el vector final.
+Hash de ubicación
+Se genera hash MD5 de 32 caracteres con los atributos funcionales definidos.
+Llave de cambio
+La detección se realiza por la llave funcional persona + persona buró + persona-ubicación definida para el modelo.
+Nuevos
+Se insertan en la persistencia funcional de atributos/ubicaciones.
+Modificados
+Se actualizan cuando el hash difiere.
+Sin cambios
+No se modifican.
+Trazabilidad
+Registrar inicio y fin de la fase.
+13. Fase 4 - Características, score y ranking
+Objetivo funcional: calcular, por cada dato de contacto vigente, las características requeridas por el canal, transformarlas a categorías, aplicar los Betas vigentes y obtener un score que permita ordenar los datos de la persona dentro del mismo canal.
+Paso
+Definición funcional
+1. Característica
+Calcular el valor de la variable usando los insumos de ubicaciones, cuentas y comportamiento.
+2. Categoría
+Ubicar el valor dentro del rango/umbral aprobado para la característica.
+3. Beta
+Leer el coeficiente desde el catálogo vigente del canal.
+4. Peso
+Calcular la contribución como (categoría / categoría_máxima) x Beta, salvo regla funcional específica.
+5. Score
+Sumar las contribuciones que participan del score del canal.
+6. Ranking
+Aplicar ROW_NUMBER funcional por persona, ordenado por score descendente.
+7. Persistencia
+Escribir el orden resultante en la relación persona-ubicación y conservar trazabilidad de ejecución.
+Regla crítica de parametrizaciónLos Betas deben leerse desde una estructura de datos vigente y versionada. Redshift puede cambiar la forma física de almacenamiento, pero no debe cambiar silenciosamente el valor funcional de los coeficientes utilizados para un corte certificado.
+14. Canal DIR - Dirección física
+El canal DIR ordena únicamente direcciones físicas vigentes después de estandarización, bloqueos y unificación. El baseline histórico y el requerimiento resumido coinciden en un conjunto de 12 características que aportan al score.
+Característica
+Significado funcional
+Tratamiento para migración
+CO00DIR001IN
+Meses desde el reporte más reciente asociado al portafolio de instalamentos (IN).
+Participa en score.
+CO00DIR004RO
+Número de reportes recientes asociados al portafolio rotativo (RO).
+Participa en score.
+CO00DIR007TO
+Número de reportes en la ventana definida para todos los portafolios.
+Participa en score.
+CO00DIR010FI
+Participación de reportes recientes provenientes del sector financiero.
+Participa en score.
+CO00DIR013OT
+Participación de reportes antiguos provenientes de portafolio Otros.
+Participa en score.
+CO00DIR017
+Indicador/conteo de uso laboral de la dirección.
+Participa en score.
+CO00DIR019
+Indicador de coexistencia de usos de dirección según la lógica vigente.
+Participa en score.
+CO00DIR034FI
+Saldo agregado de cuentas financieras asociadas a la dirección, sujeto a reglas de validez.
+Participa en score.
+CO00DIR050TO
+Conteo de productos asociados con mora alta dentro de la ventana funcional.
+Participa en score.
+CO00DIR057
+Número total de reportes de la dirección.
+Participa en score.
+CO00DIR059
+Índice de recencia/actualidad relativa de la dirección.
+Participa en score.
+CO01DIR009
+Cantidad de direcciones de correspondencia de la persona, según baseline.
+Participa en score.
+Salida funcional DIREl ranking se calcula por persona sobre direcciones vigentes. Las direcciones hijas de unificación no deben competir. El resultado debe conservar la misma prioridad relativa que Teradata para el mismo corte y Betas.
+15. Canal TEL - Teléfono fijo
+El canal TEL utiliza características de frecuencia, recencia, tipo de uso, consistencia geográfica y diversidad de suscriptores. El baseline histórico calcula 11 características de modelo y usa una característica adicional de ciudad probable como condición de elegibilidad.
+Característica
+Significado funcional
+Tratamiento para migración
+CO01TEL001
+Porcentaje de reportes del teléfono frente al total de reportes de la persona.
+Participa en score.
+CO01TEL002
+Meses desde el reporte más reciente del teléfono.
+Participa en score.
+CO01TEL003
+Meses desde el reporte más antiguo del teléfono.
+Participa en score.
+CO01TEL006
+Participación del teléfono en reportes de los últimos 3 meses.
+Participa en score.
+CO01TEL007
+Conteo de reportes del teléfono en los últimos 6 meses.
+Participa en score.
+CO01TEL010
+Porcentaje de reportes del teléfono en los últimos 12 meses, calculado sobre el total de reportes de la persona.
+Participa en score.
+CO01TEL017
+Porcentaje de reportes donde el teléfono fue informado como residencial.
+Participa en score.
+CO01TEL019
+Porcentaje de reportes donde el teléfono fue informado como laboral.
+Participa en score.
+CO01TEL020
+Indicador binario que establece si el primer dígito del teléfono coincide con el listado de primeros dígitos definido para la ciudad.
+Se calcula según el baseline, pero no participa en la suma final del score.
+CO01TEL023
+Porcentaje relativo de suscriptores que reportan el teléfono.
+Participa en score.
+CO01TEL025
+Índice de actualidad relativa del teléfono.
+Participa en score.
+CO01TEL022
+Ciudad más probable del teléfono según frecuencia y coincidencia.
+No es peso del score; el baseline la usa como filtro de salida (cat > 0).
+Definición funcional aprobada TELTEL010 corresponde al porcentaje de reportes del teléfono en los últimos 12 meses sobre el total de reportes de la persona. TEL020 corresponde a la coincidencia del primer dígito del teléfono con el catálogo por ciudad. TEL020 se conserva como característica calculada, pero no se incorpora a la suma final del score, en concordancia con el Documento Funcional Ordenamiento Final V1.0.
+16. Canal CEL - Celular
+El canal CEL combina señales de antigüedad, recencia, frecuencia, distribución temporal, operador, tipo de cuenta y diversidad de suscriptores. El catálogo de operador tiene impacto funcional directo sobre la elegibilidad del celular en el baseline histórico.
+Característica
+Significado funcional
+Tratamiento para migración
+CO01CEL003
+Meses desde el reporte más antiguo del celular.
+Participa en score.
+CO01CEL006
+Participación del celular en reportes de los últimos 3 meses.
+Participa en score.
+CO01CEL007
+Número de reportes del celular en los últimos 6 meses.
+Participa en score.
+CO01CEL013
+Número de reportes del celular con antigüedad mayor a 24 meses.
+Participa en score.
+CO01CEL014
+Porcentaje de reportes del celular con antigüedad mayor a 24 meses.
+Participa en score.
+CO01CEL015
+Porcentaje de reportes del celular entre 3 y 6 meses.
+Participa en score.
+CO01CEL017
+Porcentaje de reportes del celular entre 12 y 24 meses.
+Participa en score.
+CO01CEL018
+Valor funcional asociado al operador identificado por el prefijo del celular. Cuando el prefijo no tiene correspondencia en el catálogo, se utiliza el valor default aprobado de 0.22.
+Participa en score. Para operador no mapeado se aplica el valor default 0.22 y se conserva el resto de la transformación, categorización y ponderación vigente.
+CO01CEL019
+Valor funcional asociado al tipo de cuenta relacionado con el celular.
+Participa en score.
+CO01CEL020
+Porcentaje relativo de suscriptores que han reportado el celular.
+Participa en score.
+CO01CEL023
+Índice de actualidad relativa de la primera aparición del celular.
+Participa en score.
+Definición funcional aprobada CEL - operador no encontradoEn Redshift, un celular vigente y válido no debe quedar excluido únicamente porque su prefijo no tenga correspondencia en el catálogo de operadores. En estos casos se asignará como valor de operador el default 0.22. A partir de ese valor se aplicará la misma fórmula vigente de CO01CEL018, su categorización, Beta y participación en el score. El fallback constituye la regla funcional objetivo para la plataforma destino.
+Gobernanza del catálogo de operadoresEl valor default 0.22 evita pérdida de cobertura por prefijos no mapeados, pero no sustituye la actualización del catálogo. La operación debe mantener control de vigencia, trazabilidad de cambios, responsable funcional y alerta sobre nuevos prefijos observados sin correspondencia.
+17. Canal EMA - Email
+El canal EMA utiliza señales de antigüedad, recencia, distribución temporal de reportes, dominio, contactabilidad, tipo de cuenta, diversidad de suscriptores y características del usuario del correo.
+Característica
+Significado funcional
+Tratamiento para migración
+CO01EMA003
+Meses transcurridos desde el reporte más antiguo del email.
+Se calcula, categoriza y pondera según el baseline, pero no participa en la suma final del score.
+CO01EMA007
+Número de reportes que ha tenido el email en los últimos 6 meses.
+Se calcula, categoriza y pondera según el baseline, pero no participa en la suma final del score.
+CO01EMA010
+Porcentaje de reportes del email en los últimos 12 meses.
+Participa en score.
+CO01EMA014
+Porcentaje de reportes del email con antigüedad mayor a 24 meses (meses_reporte > 24), calculado dentro del universo de reportes de la persona con esa antigüedad.
+Participa en score.
+CO01EMA015
+Porcentaje de reportes del email entre 3 y 6 meses.
+Participa en score.
+CO01EMA016
+Porcentaje de reportes del email entre 6 y 12 meses.
+Participa en score.
+CO01EMA017
+Porcentaje de reportes del email entre 12 y 24 meses.
+Participa en score.
+CO01EMA018
+Indicador que establece si el email utiliza un servidor/dominio definido como popular dentro del catálogo vigente del modelo.
+Participa en score.
+CO01EMA020
+Peso derivado del resultado de contactabilidad/efectividad reportado.
+Participa en score.
+CO01EMA021
+Valor asociado a tipos de cuenta relacionados con mayor efectividad de contacto.
+Participa en score.
+CO01EMA023
+Índice porcentual de actualidad relativa del email a partir de la primera fecha de reporte, comparado con la fecha de reporte más antigua de la persona.
+Participa en score.
+CO01EMA024
+Porcentaje relativo de suscriptores que han reportado el email.
+Participa en score.
+CO01EMA025
+Indicador basado en la longitud del nombre de usuario del email, de acuerdo con los rangos definidos por el modelo para mayor éxito de contacto.
+Participa en score.
+Definición funcional aprobada EMASe adopta el mapeo del Documento Funcional Ordenamiento Final V1.0: EMA014 representa reportes con antigüedad mayor a 24 meses; EMA018 identifica servidor/dominio popular; EMA023 mide actualidad relativa; EMA025 evalúa la longitud del nombre de usuario. EMA003 y EMA007 se conservan como características calculadas, categorizadas y ponderadas, pero no participan en la suma final del score.
+18. Persistencia de resultados y actualización del orden
+El resultado del scoring debe convertirse en una prioridad consumible por Reconocer Máster y procesos posteriores, conservando trazabilidad del valor anterior y del corte de ejecución.
+Salida funcional
+Contenido mínimo esperado
+Uso
+Score por dato
+Persona, canal, dato de contacto, score y versión/corte de Betas.
+Auditoría y comparación de paridad.
+Ranking / Lugar
+Posición dentro de la persona y canal, 1..N.
+Priorizar el dato a intentar primero.
+orden_prioridad
+Valor vigente escrito en la relación persona-ubicación.
+Consumo por productos y procesos downstream.
+orden_prioridad_anterior
+Valor previo cuando la implementación vigente lo conserve.
+Trazabilidad de cambios de ranking.
+fecha_ultimo_ordenamiento
+Fecha/hora del último cálculo válido.
+Control incremental y auditoría.
+Control de ejecución
+Inicio, fin, estado, corte y métricas mínimas de la corrida.
+Operación, certificación y soporte.
+Definición funcional obligatoriaEl mecanismo físico de persistencia puede cambiar en Redshift, pero el significado no: un dato no elegible no debe reaparecer como prioridad vigente; un dato elegible debe tener un tratamiento determinístico de score y ranking.
+19. Controles de paridad funcional Teradata vs Redshift
+La certificación debe comparar resultados sobre el mismo corte de datos, mismos parámetros y mismos Betas aprobados. La comparación no debe limitarse a que el job termine correctamente.
+Control
+Validación esperada
+Severidad si falla
+Universo Fase 1
+Mismas personas identificadas para recalcular.
+Alta
+Cuentas Fase 2
+Mismo universo de cuentas y misma clasificación funcional aprobada.
+Alta
+Hash de cuentas
+Misma detección de nuevo/modificado/sin cambio para el mismo insumo.
+Alta
+Ubicaciones Fase 3
+Mismos datos elegibles por persona y canal.
+Crítica
+Exclusiones
+Mismos bloqueos, NO VALIDOS e hijos de unificación excluidos.
+Crítica
+Características
+Mismos valores por dato para una muestra controlada y agregados.
+Crítica
+Categorías
+Misma categoría por característica y dato.
+Crítica
+Betas
+Mismos coeficientes efectivos por canal y versión.
+Crítica
+Score
+Mismo score dentro de tolerancia numérica definida.
+Crítica
+Ranking
+Mismo orden 1..N por persona y canal, salvo decisiones aprobadas.
+Crítica
+Persistencia
+Mismo orden_prioridad vigente y mismo universo actualizado.
+Crítica
+Idempotencia
+Dos ejecuciones consecutivas con mismos insumos no generan diferencias ni duplicados.
+Alta
+Trazabilidad
+Cada diferencia puede explicarse por dato, característica, Beta o regla.
+Media-alta
+20. Matriz mínima de pruebas funcionales
+ID
+Caso funcional
+Resultado esperado
+F1-01
+Sin lotes/cambios nuevos en BTT ni REC.
+No debe existir universo de reproceso ni ejecución funcional de scoring.
+F1-02
+Persona con cambio solo en BTT.
+Debe entrar una sola vez al universo.
+F1-03
+Persona con cambio solo en REC.
+Debe entrar una sola vez al universo.
+F1-04
+Persona con cambios en ambos modelos.
+Debe consolidarse sin duplicado.
+F2-01
+Cuenta dentro de ventana de 12 meses.
+Debe participar de atributos según reglas.
+F2-02
+Cuenta con portafolio no clasificable.
+Debe fallar control o quedar tratada según catálogo aprobado; no puede quedar NULL.
+F2-03
+Mismos datos de cuenta en dos ejecuciones.
+Hash consistente; no debe marcar cambio.
+F3-01
+Dato bloqueado.
+Debe excluirse antes de scoring.
+F3-02
+Dirección hija de unificación.
+No debe recibir score ni ranking vigente.
+F3-03
+Dato NO VALIDO por Data Quality.
+No debe competir en el canal.
+DIR-01
+Persona con dos direcciones vigentes y scores diferentes.
+La de mayor score obtiene orden 1.
+TEL-01
+Teléfono con ciudad probable válida.
+Debe continuar a ranking según baseline aprobado.
+TEL-02
+Caso que cambia solo TEL020.
+TEL020 debe calcularse conforme al baseline, pero una variación aislada de TEL020 no debe modificar el score final.
+CEL-01
+Celular con operador mapeado.
+Debe aplicar valor de operador y rankear.
+CEL-02
+Celular válido sin operador mapeado.
+Debe asignarse el valor default de operador 0.22, conservar la elegibilidad del celular y continuar con categorización, Beta, score y ranking.
+EMA-01
+Email con dominio popular.
+La señal de servidor/dominio popular debe aplicarse en EMA018 conforme al baseline aprobado.
+EMA-02
+Email con cambio solo en recencia.
+La actualidad relativa debe reflejarse en EMA023 conforme al baseline aprobado.
+EMA-03
+Caso donde EMA003/EMA007 varían.
+EMA003 y EMA007 deben calcularse, categorizarse y ponderarse, pero no deben modificar la suma final del score.
+RANK-01
+Dos datos con score distinto.
+Ranking descendente correcto.
+RANK-02
+Dos datos con score exactamente igual.
+No se introduce un criterio funcional adicional de desempate en la migración. Se preserva el comportamiento del baseline; cualquier diferencia observable en paridad se registra como hallazgo de certificación.
+MIG-01
+Mismo corte Teradata y Redshift.
+Resultados funcionales equivalentes o diferencias aprobadas y trazadas.
+IDEM-01
+Dos ejecuciones consecutivas sin cambios.
+Mismo resultado sin duplicados ni cambios de prioridad.
+NULL-01
+Dato elegible con una o más características en NULL.
+La fábrica debe identificar el origen y el impacto del NULL y proponer tratamiento. No se puede introducir una regla funcional nueva sin aprobación; el score final de un dato elegible no debe quedar NULL.
+21. Alineación del requerimiento resumido vs baseline funcional - decisiones adoptadas
+Esta sección consolida las diferencias identificadas entre el requerimiento resumido y el Documento Funcional Ordenamiento Final V1.0, junto con la definición funcional adoptada para la construcción en Redshift. Las decisiones aquí registradas constituyen el comportamiento objetivo de la versión 2.0.
+Tema
+Requerimiento resumido
+Baseline funcional documentado
+Decisión funcional adoptada
+Semántica del score
+PDF: score de probabilidad / regresión logística.
+Baseline: suma ponderada de categorías x Beta; no se documenta transformación logística a probabilidad.
+Redshift replicará un score relativo ponderado. No se implementará transformación logística a probabilidad calibrada.
+Portafolios Fase 2
+PDF: 9 códigos CO, RO, VE, HP, IN, OT, CC, AH, CT.
+Baseline histórico: clasificación más amplia y con códigos distintos en varios casos.
+El catálogo de 9 portafolios definido en la Fase 2 se adopta como estándar de desarrollo y debe aplicarse con la precedencia documentada.
+TEL010
+PDF: porcentaje de reportes con coincidencia geográfica.
+Baseline: porcentaje de reportes del teléfono en los últimos 12 meses.
+Se adopta la definición del baseline: porcentaje de reportes del teléfono en los últimos 12 meses sobre el total de reportes de la persona.
+TEL020
+PDF: indicador binario de coincidencia geográfica.
+Baseline coincide en significado, pero la fórmula histórica de score no lo suma.
+Se conserva como indicador de coincidencia del primer dígito con el catálogo por ciudad. Se calcula, pero no participa en la suma final del score.
+CEL013 / CEL014
+PDF: operador principal / indicador POSPAGO.
+Baseline: reportes >24 meses / porcentaje >24 meses. Operador está en CEL018 y tipo de cuenta en CEL019.
+Se conserva la semántica del baseline: CEL013 = número de reportes con antigüedad >24 meses; CEL014 = porcentaje de reportes con antigüedad >24 meses.
+CEL sin operador
+PDF: todo dato vigente debe tener score.
+Baseline: salida final filtra CO01CEL018 <> 0.
+Un celular vigente sin operador mapeado recibe valor default 0.22 y continúa al cálculo de score y ranking.
+EMA014 / EMA025
+PDF: dominio conocido / ratio de recencia.
+Baseline: EMA014 = antigüedad >24 meses; EMA018 = dominio; EMA023 = recencia; EMA025 = longitud de usuario.
+Se adopta el mapeo del baseline: EMA014 = porcentaje de reportes con antigüedad >24 meses; EMA018 = servidor popular; EMA023 = actualidad relativa; EMA025 = longitud del usuario.
+EMA003 / EMA007
+PDF: 13 características del canal bajo fórmula general.
+Baseline calcula categorías y pesos de EMA003/007, pero la suma final documentada omite ambas.
+Ambas características se calculan, categorizan y ponderan, pero no participan en la suma final del score.
+Empates de score
+PDF y baseline: ROW_NUMBER por score DESC.
+No se documenta criterio secundario estable.
+No se incorpora una regla funcional adicional de desempate. Se preserva el baseline y cualquier diferencia por empate se evaluará durante la paridad.
+Criterio de resoluciónLa versión 2.0 toma como referencia principal el comportamiento funcional del Documento Funcional Ordenamiento Final V1.0, complementado por las decisiones de negocio aprobadas para Redshift. Cuando una variable se calcula en el baseline pero no participa en la fórmula final del score, Redshift debe conservar ese mismo tratamiento. Los cambios aprobados respecto del baseline, como el fallback 0.22 para operador no mapeado, deben implementarse de forma explícita y trazable.
+22. Decisiones funcionales aprobadas para construcción y asuntos de análisis técnico
+Decisión
+Definición aprobada / estado
+Instrucción para fábrica
+Naturaleza del score
+CERRADA - Score relativo ponderado.
+Replicar la suma ponderada de características/categorías y Betas. No implementar probabilidad logística.
+Catálogo de portafolios
+CERRADA - Se adopta el catálogo de 9 portafolios definido en la Fase 2.
+Usar el catálogo y la precedencia documentada como estándar de desarrollo.
+TEL010
+CERRADA - Porcentaje de reportes del teléfono en los últimos 12 meses sobre el total de reportes de la persona.
+Implementar la definición del baseline y mantener su participación en el score.
+TEL020
+CERRADA - Coincidencia del primer dígito del teléfono con el listado por ciudad.
+Calcular la característica, pero no sumarla al score final.
+CEL013 / CEL014
+CERRADA - CEL013: número de reportes >24 meses. CEL014: porcentaje de reportes >24 meses.
+Conservar ambas semánticas y su participación en el score.
+Fallback de operador CEL
+CERRADA - Valor default 0.22 cuando el prefijo no tenga operador mapeado.
+Aplicar 0.22 como valor de operador faltante y conservar fórmula, categorización, Beta, score y ranking. No excluir el celular por ausencia de catálogo.
+EMA014 / EMA018 / EMA023 / EMA025
+CERRADA - EMA014: >24 meses; EMA018: servidor popular; EMA023: actualidad relativa; EMA025: longitud del usuario.
+Implementar el mapeo definitivo del baseline sin reasignar códigos.
+EMA003 / EMA007
+CERRADA - Se calculan, categorizan y ponderan; no se suman al score final.
+Conservar su cálculo para paridad/trazabilidad sin modificar el score.
+Empates de score
+CERRADA PARA MIGRACIÓN - No se define criterio adicional al baseline.
+No introducir desempate funcional nuevo. Si la paridad evidencia diferencias por score idéntico, registrar hallazgo y elevarlo para decisión.
+Tratamiento de NULL
+ABIERTO A ANÁLISIS TÉCNICO - El documento no impone un coalesce genérico.
+La fábrica debe identificar escenarios, afectación y propuesta por característica. Cualquier cambio funcional requiere aprobación; el score final de un dato elegible no debe quedar NULL.
+Gobernanza de Betas y catálogos
+REQUISITO OPERATIVO - Parametrización, versionado, vigencia y trazabilidad.
+Formalizar responsable y mecanismo de control antes de go-live; no hardcodear Betas.
+Catálogo de operadores
+REQUISITO OPERATIVO - Mantener catálogo vigente; fallback funcional 0.22 ya definido.
+Definir cadencia/responsable y alertar prefijos sin mapeo. El fallback evita exclusión pero no reemplaza la actualización del catálogo.
+23. Entregables esperados para construcción y certificación
+Entregable
+Contenido esperado
+Documento funcional aprobado
+Fases, reglas de elegibilidad, características, fórmulas, decisiones funcionales aprobadas, asuntos técnicos identificados y salidas objetivo.
+Inventario de datos funcionales
+Atributos requeridos por F1-F4, llaves, ventanas temporales y reglas de calidad.
+Catálogo de características
+Código, canal, definición, fórmula funcional, categorización, máximo de categoría y participación en score.
+Catálogo de Betas versionado
+Beta efectivo por característica/canal, vigencia y trazabilidad de cambios.
+Diseño de equivalencia Teradata-Redshift
+Cómo cada capacidad funcional será cubierta en Redshift sin alterar el resultado de negocio.
+Set de pruebas patrón
+Casos positivos, negativos, exclusiones, operador no mapeado, comportamiento de variables fuera del score, NULL, empates e idempotencia.
+Reporte de paridad
+Comparativo por universo, característica, categoría, score, ranking y persistencia.
+Bitácora de diferencias
+Diferencia detectada, causa, clasificación, tratamiento, responsable y aprobación.
+Aprobación de salida
+Confirmación de que Redshift produce el universo y prioridades funcionales esperadas para Reconocer Máster.
+24. Cierre funcional
+Este documento, constituye la base funcional para construcción del proceso de Ordenamiento de Reconocer Máster en Amazon Redshift. El equipo de fábrica puede definir la implementación técnica más adecuada siempre que preserve las reglas de elegibilidad, la semántica aprobada de las características, los coeficientes vigentes, la composición del score, el ranking y las salidas funcionales descritas.
+La certificación debe demostrar continuidad funcional para el mismo corte de datos y parámetros: mismas personas a recalcular, mismos datos vigentes, mismas características, mismas categorías, mismos Betas, mismos scores y mismo orden por canal, considerando como cambios funcionales aprobados únicamente los descritos de forma explícita en esta versión.

@@ -1,0 +1,1429 @@
+WEBVTT
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/20-0
+00:00:05.076 --> 00:00:09.996
+<v Garrido, Fernando>A como ustedes lo tienen,
+ahora ya les comparto, vale entonces.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/83-0
+00:00:11.836 --> 00:00:16.164
+<v Garrido, Fernando>Entendiendo los procesos,
+esto viene igual como un pipeline,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/83-1
+00:00:16.164 --> 00:00:20.775
+<v Garrido, Fernando>pero estamos parados en el proceso que
+hace el ordenamiento. Sí,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/83-2
+00:00:20.775 --> 00:00:26.167
+<v Garrido, Fernando>este es un pipeline y estamos parados
+aquí. ¿El ordenamiento cómo funciona?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/83-3
+00:00:26.167 --> 00:00:31.276
+<v Garrido, Fernando>Pues él tiene varios procesos.
+El ordenamiento tiene un primer proceso.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/111-0
+00:00:31.676 --> 00:00:38.763
+<v Garrido, Fernando>Que se encarga de calcular todos las los
+cambios y eso se llama el ordenamiento</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/111-1
+00:00:38.763 --> 00:00:42.396
+<v Garrido, Fernando>242. Es este el primer proceso que entra.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/124-0
+00:00:43.596 --> 00:00:49.148
+<v Garrido, Fernando>Una vez termina este proceso,
+hay otro proceso, esto así secuencial,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/124-1
+00:00:49.148 --> 00:00:50.436
+<v Garrido, Fernando>que se llama el.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/186-0
+00:00:52.156 --> 00:00:56.076
+<v Garrido, Fernando>Características estándar.
+Esto básicamente es calcular</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/186-1
+00:00:56.076 --> 00:01:00.993
+<v Garrido, Fernando>características desde el buró. Sí,
+es un cálculo de características.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/186-2
+00:01:00.993 --> 00:01:06.695
+<v Garrido, Fernando>Se miran a partir de todos estos insumos
+que se seleccionaron para las personas</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/186-3
+00:01:06.695 --> 00:01:11.756
+<v Garrido, Fernando>que cambiaron y demás se sacan las
+características. Son unos cálculos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/203-0
+00:01:11.836 --> 00:01:15.087
+<v Garrido, Fernando>Sí,
+luego de las características viene el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/203-1
+00:01:15.087 --> 00:01:20.196
+<v Garrido, Fernando>proceso del scoring. ¿Quién lo hace?
+Este proceso, el viticursor.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/253-0
+00:01:21.196 --> 00:01:27.622
+<v Garrido, Fernando>Sí y cuando termina el vitic cursor
+arranca otro proceso que es el UVI</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/253-1
+00:01:27.622 --> 00:01:34.321
+<v Garrido, Fernando>ordenamiento y este ordenamiento
+básicamente lo que hace es actualizar ya</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/253-2
+00:01:34.321 --> 00:01:40.476
+<v Garrido, Fernando>la tabla del modelo Sí aquí en este de
+acá después del cursor viene</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/255-0
+00:01:40.876 --> 00:01:42.196
+<v Garrido, Fernando>El proceso que.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/263-0
+00:01:43.356 --> 00:01:45.556
+<v Garrido, Fernando>Que es el UVI ordenamiento, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/273-0
+00:01:46.876 --> 00:01:49.836
+<v Garrido, Fernando>Y esto básicamente lo que hace es
+actualizar el modelo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/289-0
+00:01:51.356 --> 00:01:55.636
+<v Garrido, Fernando>Correcto, esto es ordenamiento,
+todos estos pasos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/314-0
+00:01:55.956 --> 00:01:59.583
+<v Pena.ext, Manuel>Listo,
+y que es la cajita del PT concursor,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/295-0
+00:01:56.476 --> 00:01:57.236
+<v Garrido, Fernando>Por eso.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/314-1
+00:01:59.583 --> 00:02:02.716
+<v Pena.ext, Manuel>el curso se llama PT de cursor 130. y.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/336-0
+00:02:04.476 --> 00:02:08.476
+<v Garrido, Fernando>El proceso sí se llama viticursor 131,
+creo que es.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/346-0
+00:02:07.796 --> 00:02:11.276
+<v Pena.ext, Manuel>Exacto, ese es ajá, exacto, muy bien ese.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/396-0
+00:02:09.436 --> 00:02:15.668
+<v Garrido, Fernando>pero pero este es el comando como se
+lanza así solo que sí tiene un componente</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/353-0
+00:02:12.636 --> 00:02:12.996
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/396-1
+00:02:15.668 --> 00:02:21.664
+<v Garrido, Fernando>que es el vitit cursor 131 Sí este
+componente cuando uno lo abre cuando uno</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/371-0
+00:02:18.796 --> 00:02:19.156
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/396-2
+00:02:21.664 --> 00:02:26.556
+<v Garrido, Fernando>hace zoom sobre este componente como
+funciona este componente</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/398-0
+00:02:29.916 --> 00:02:31.396
+<v Garrido, Fernando>Este componente.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/405-0
+00:02:34.716 --> 00:02:36.316
+<v Garrido, Fernando>Funciona de la siguiente manera.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/416-0
+00:02:37.756 --> 00:02:41.196
+<v Garrido, Fernando>Este proceso lanza cuatro procedimientos,
+sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/447-0
+00:02:42.076 --> 00:02:46.547
+<v Garrido, Fernando>¿Por qué son cuatro procedimientos?
+Porque son cuatro canales.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/429-0
+00:02:44.036 --> 00:02:45.356
+<v Pena.ext, Manuel>Los cuatro canales.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/447-1
+00:02:46.547 --> 00:02:50.876
+<v Garrido, Fernando>¿Y cómo los lanza?
+Pues los lanza en paralelo, sí, de hecho.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/436-0
+00:02:46.676 --> 00:02:46.956
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/514-0
+00:02:51.996 --> 00:02:55.567
+<v Garrido, Fernando>Yo no sé,
+yo creo que yo fui el que desarrollé esta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/514-1
+00:02:55.567 --> 00:02:59.962
+<v Garrido, Fernando>cosa hace mucho tiempo. Entonces,
+esta proceso, ¿cómo funciona?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/514-2
+00:02:59.962 --> 00:03:04.632
+<v Garrido, Fernando>Porque así fue como nos los este proceso
+nos los implementó. O sea,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/514-3
+00:03:04.632 --> 00:03:10.332
+<v Garrido, Fernando>The A nos dijo que debería funcionar así.
+Yo básicamente lo que hice fue tratar de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/514-4
+00:03:10.332 --> 00:03:11.156
+<v Garrido, Fernando>paralizarlo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/560-0
+00:03:11.596 --> 00:03:19.250
+<v Garrido, Fernando>pero del proceso cómo funciona todos
+todos los procesos todos los sps van y</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/560-1
+00:03:19.250 --> 00:03:27.207
+<v Garrido, Fernando>consumen una tabla sí que esto es una
+realmente es una vista y esta vista esta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/537-0
+00:03:21.276 --> 00:03:21.476
+<v Pena.ext, Manuel>Really?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/543-0
+00:03:22.996 --> 00:03:23.076
+<v Pena.ext, Manuel>K.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/550-0
+00:03:24.596 --> 00:03:25.476
+<v Pena.ext, Manuel>Una vista así.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/560-2
+00:03:27.207 --> 00:03:31.236
+<v Garrido, Fernando>vista que tiene comandos cierto comandos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/629-0
+00:03:32.476 --> 00:03:38.540
+<v Garrido, Fernando>Entonces por qué se llama cursor porque
+es un cursor van a leer esta esta estos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/629-1
+00:03:38.540 --> 00:03:44.832
+<v Garrido, Fernando>comandos y van a filtrar Ah este es el de
+email entonces tráete todos los comandos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/629-2
+00:03:44.832 --> 00:03:50.441
+<v Garrido, Fernando>de email Ah este es del de teléfono
+entonces tráete todos los comandos de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/629-3
+00:03:50.441 --> 00:03:54.156
+<v Garrido, Fernando>teléfono Este es el de El de direcciones
+físicas</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/639-0
+00:03:54.316 --> 00:03:57.474
+<v Garrido, Fernando>Sí,
+direcciones trate todos los direcciones y</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/639-1
+00:03:57.474 --> 00:03:59.396
+<v Garrido, Fernando>este es el de celulares, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/681-0
+00:04:01.796 --> 00:04:06.690
+<v Garrido, Fernando>Entonces en esta vista,
+pues con el filtro email, seléfono, tal,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/681-1
+00:04:06.690 --> 00:04:12.487
+<v Garrido, Fernando>tú te traes todos los comandos y él
+empieza es a ejecutar esos comandos 1:1.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/681-2
+00:04:12.487 --> 00:04:14.596
+<v Garrido, Fernando>Sí, por eso se llama cursor.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/706-0
+00:04:15.996 --> 00:04:22.780
+<v Garrido, Fernando>Solo que lo hacen para sí,
+cada proceso tiene un flujo y básicamente</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/706-1
+00:04:22.780 --> 00:04:26.516
+<v Garrido, Fernando>lo que va haciendo eso es ir a, o sea.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/777-0
+00:04:27.756 --> 00:04:32.867
+<v Garrido, Fernando>empieza a ser mire mira que nosotros
+hicimos acá lo siguiente Sí o sea el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/777-1
+00:04:32.867 --> 00:04:38.185
+<v Garrido, Fernando>primero calculó la persona calculó la
+población de los cambios lo que cambió</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/777-2
+00:04:38.185 --> 00:04:43.848
+<v Garrido, Fernando>las direcciones que cambió el segundo le
+sacó las características a esas personas</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/777-3
+00:04:43.848 --> 00:04:47.716
+<v Garrido, Fernando>y las dejó una tabla Sí y todas esas
+características de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/813-0
+00:04:47.796 --> 00:04:54.178
+<v Garrido, Fernando>pues la empieza a usar como con el cursor
+y el man empieza a hacer sumatorias y tal</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/813-1
+00:04:54.178 --> 00:04:59.952
+<v Garrido, Fernando>tal tal Y va actualizando el cursor va
+actualizando va llenando básicamente</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/813-2
+00:04:59.952 --> 00:05:00.636
+<v Garrido, Fernando>variables</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/839-0
+00:05:01.796 --> 00:05:06.759
+<v Garrido, Fernando>De esas características,
+entonces imagínate que esto tiene una</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/839-1
+00:05:06.759 --> 00:05:12.116
+<v Garrido, Fernando>característica que el email tiene una
+característica que dice Card.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/857-0
+00:05:13.356 --> 00:05:20.128
+<v Garrido, Fernando>Email, estoy inventando, sí, 001,
+sí tiene para esa persona el valor de 10,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/857-1
+00:05:20.128 --> 00:05:20.396
+<v Garrido, Fernando>sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/859-0
+00:05:21.836 --> 00:05:22.796
+<v Garrido, Fernando>El proceso.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/921-0
+00:05:23.756 --> 00:05:30.293
+<v Garrido, Fernando>a manera de cursor empieza a calcular
+características y el último paso del SP</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/921-1
+00:05:30.293 --> 00:05:37.165
+<v Garrido, Fernando>es en la misma vista es tomar todas estas
+características y sumarlas sí puede que</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/921-2
+00:05:37.165 --> 00:05:43.116
+<v Garrido, Fernando>dependiendo de una lógica la
+característica incluso diga Ah parece mal</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/973-0
+00:05:43.916 --> 00:05:49.983
+<v Garrido, Fernando>en cambio la característica es menos
+menos 10000 qué va a pasar con esa</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/973-1
+00:05:49.983 --> 00:05:56.471
+<v Garrido, Fernando>dirección que la va a ir penalizando
+porque si yo busco que al final a mí lo</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/973-2
+00:05:56.471 --> 00:06:02.876
+<v Garrido, Fernando>que tenga mayor peso para mí es el orden
+uno y si le meto un valor negativo</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1000-0
+00:06:03.516 --> 00:06:08.190
+<v Garrido, Fernando>La sumatoria me va a bajar y me va a
+penalizar ese score. Sí,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1000-1
+00:06:08.190 --> 00:06:13.316
+<v Garrido, Fernando>así es como funcionan los score,
+generalmente en Experian entonces.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1047-0
+00:06:14.716 --> 00:06:18.643
+<v Garrido, Fernando>Es TCP,
+la última tabla que crea es el score de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1047-1
+00:06:18.643 --> 00:06:25.107
+<v Garrido, Fernando>los emails con el valor que tiene cada
+score. ¿Ahora, dónde está en esa tabla?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1047-2
+00:06:25.107 --> 00:06:29.116
+<v Garrido, Fernando>¿O sea,
+dónde está cargada eso en una tabla? Sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1067-0
+00:06:30.316 --> 00:06:36.166
+<v Garrido, Fernando>¿Que cómo puede llegar a ella con el show
+de la vista? Sí, al final es una tabla.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1067-1
+00:06:36.166 --> 00:06:38.236
+<v Garrido, Fernando>¿Quién tiene esa información?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1077-0
+00:06:41.036 --> 00:06:43.676
+<v Garrido, Fernando>Manuel,
+no toca sacarlo de la base de datos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1089-0
+00:06:47.876 --> 00:06:49.876
+<v Pena.ext, Manuel>¿Te la base de apunta y te la data, dices?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1090-0
+00:06:49.596 --> 00:06:51.396
+<v Garrido, Fernando>Sí, señor, sí, señor.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1170-0
+00:06:51.956 --> 00:06:54.939
+<v Pena.ext, Manuel>Bueno,
+entonces creo que las respuestas esas nos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1170-1
+00:06:54.939 --> 00:06:59.688
+<v Pena.ext, Manuel>toca hablar entonces con John Imperio en
+favor que nos haga un export de esas</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1170-2
+00:06:59.688 --> 00:07:03.159
+<v Pena.ext, Manuel>cuatro tablas,
+porque como en efecto estabas mencionando</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1170-3
+00:07:03.159 --> 00:07:06.630
+<v Pena.ext, Manuel>en tu explicación,
+cada tabla evalúa un coeficiente para</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1170-4
+00:07:06.630 --> 00:07:09.796
+<v Pena.ext, Manuel>cada característica que es el esfuercito
+que estás.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1156-0
+00:07:07.676 --> 00:07:08.396
+<v Garrido, Fernando>Yeah, yeah.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1171-0
+00:07:09.876 --> 00:07:10.276
+<v Pena.ext, Manuel>Salud.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1194-0
+00:07:10.716 --> 00:07:16.985
+<v Garrido, Fernando>míralo acá Mira De hecho aquí está el
+cursor pero acá esto no sé que sea sí es</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1194-1
+00:07:16.985 --> 00:07:20.556
+<v Garrido, Fernando>archivo sql entonces miremos acá qué es
+esto</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1218-0
+00:07:22.156 --> 00:07:25.887
+<v Garrido, Fernando>Sí, estos son los SQL,
+mira que aquí está el cursor</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1218-1
+00:07:25.887 --> 00:07:29.116
+<v Garrido, Fernando>característica, que es un procedimiento,
+sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1216-0
+00:07:29.156 --> 00:07:29.516
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1229-0
+00:07:30.796 --> 00:07:34.636
+<v Garrido, Fernando>Y sí, el curso es característica.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1240-0
+00:07:37.516 --> 00:07:43.676
+<v Garrido, Fernando>Y aquí empiezan los cursor email y por
+ejemplo, mira si ven.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1250-0
+00:07:45.116 --> 00:07:48.436
+<v Garrido, Fernando>Esto es un cursor, esto es un dónde está,
+miren acá.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1256-0
+00:07:49.236 --> 00:07:50.516
+<v Garrido, Fernando>La tabla es esta.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1269-0
+00:07:54.996 --> 00:07:58.716
+<v Garrido, Fernando>Tú te traes todas las características
+desde esta tabla, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1277-0
+00:08:00.476 --> 00:08:03.796
+<v Garrido, Fernando>Y está, según eso, en red datos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1283-0
+00:08:04.836 --> 00:08:06.756
+<v Garrido, Fernando>Punto características, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1292-0
+00:08:08.076 --> 00:08:10.716
+<v Garrido, Fernando>Ahí se cargaron todas las características,
+listo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1290-0
+00:08:08.436 --> 00:08:09.076
+<v Pena.ext, Manuel>Me.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1318-0
+00:08:11.596 --> 00:08:16.116
+<v Garrido, Fernando>Y con eso que hace el proceso,
+pues va actualizando la característica.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1318-1
+00:08:16.116 --> 00:08:19.236
+<v Garrido, Fernando>Si ves que el de hecho,
+el SP es súper sencillo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1363-0
+00:08:20.196 --> 00:08:24.651
+<v Garrido, Fernando>O sea,
+lo que hace es leer una tabla y con eso</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1363-1
+00:08:24.651 --> 00:08:31.665
+<v Garrido, Fernando>empieza a hacer eso. ¿Qué hace eso?
+Uno replace, mira la cadena tal, tal,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1363-2
+00:08:31.665 --> 00:08:38.396
+<v Garrido, Fernando>tal y ejecuta este proceso. Sí,
+o replace o replace tal, tal, tal, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1387-0
+00:08:40.196 --> 00:08:45.818
+<v Pena.ext, Manuel>Puedes darle ahí un control F y puedes
+buscar beta si en alguna parte usa esa</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1387-1
+00:08:45.818 --> 00:08:47.476
+<v Pena.ext, Manuel>vista que yo envié ahí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1389-0
+00:08:48.436 --> 00:08:49.076
+<v Pena.ext, Manuel>El chat.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1409-0
+00:08:50.036 --> 00:08:53.716
+<v Pena.ext, Manuel>O un buen control buscar,
+no sé cómo sea en este editor de.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1411-0
+00:08:53.676 --> 00:08:55.276
+<v Garrido, Fernando>¿Neta, cómo así cuál?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1428-0
+00:08:55.716 --> 00:08:59.583
+<v Pena.ext, Manuel>El que envía arribita y ese es el nombre
+de las vistas donde están los betas que</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1428-1
+00:08:59.583 --> 00:09:00.156
+<v Pena.ext, Manuel>necesitamos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1430-0
+00:09:03.556 --> 00:09:04.836
+<v Pena.ext, Manuel>Por ejemplo, ese sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1448-0
+00:09:08.756 --> 00:09:13.796
+<v Pena.ext, Manuel>Entonces me parece que va que o está ahí
+cerquita o está en otro.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1460-0
+00:09:15.316 --> 00:09:16.876
+<v Pena.ext, Manuel>En otro SQL.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1479-0
+00:09:15.836 --> 00:09:21.809
+<v Garrido, Fernando>¿No, y eso y eso dónde lo viste?
+Porque eso debería estar interno en esta.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1479-1
+00:09:21.809 --> 00:09:24.756
+<v Garrido, Fernando>Sí, John, tú estás en la llamada, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1487-0
+00:09:27.716 --> 00:09:29.236
+<v Garrido, Fernando>No, yo no está en la llamada.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1488-0
+00:09:28.516 --> 00:09:29.876
+<v Pena.ext, Manuel>No, John no está.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1504-0
+00:09:32.516 --> 00:09:35.756
+<v Garrido, Fernando>¿Tú tienes acceso a Teradata,
+Manuel o Andrés?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1496-0
+00:09:33.716 --> 00:09:33.836
+<v Pena.ext, Manuel>What?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1511-0
+00:09:36.276 --> 00:09:38.436
+<v Pena.ext, Manuel>No, es que no tenemos acceso a carata.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1509-0
+00:09:36.516 --> 00:09:37.236
+<v Andres Bonilla>Yo no.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1518-0
+00:09:40.196 --> 00:09:41.716
+<v Andres Bonilla>So there nothing works this wise.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1529-0
+00:09:43.636 --> 00:09:45.556
+<v Pena.ext, Manuel>No, no, no, no.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1539-0
+00:09:46.396 --> 00:09:49.436
+<v Garrido, Fernando>mira, te voy a mostrar acá, mira,
+yo creo que.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1556-0
+00:09:50.556 --> 00:09:53.856
+<v Garrido, Fernando>Mira,
+yo creo que John hizo un export de las</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1556-1
+00:09:53.856 --> 00:09:55.836
+<v Garrido, Fernando>características esas, mira.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1594-0
+00:09:57.196 --> 00:10:02.355
+<v Garrido, Fernando>Mira los queries, si los ves,
+entonces la primera es esta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1569-0
+00:09:59.236 --> 00:09:59.836
+<v Pena.ext, Manuel>Y sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1575-0
+00:10:02.036 --> 00:10:02.116
+<v Pena.ext, Manuel>Y.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1594-1
+00:10:02.355 --> 00:10:08.404
+<v Garrido, Fernando>característica. La segunda,
+mira que aquí es una vista de dirección</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1594-2
+00:10:08.404 --> 00:10:09.116
+<v Garrido, Fernando>TMP, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1643-0
+00:10:10.676 --> 00:10:16.129
+<v Garrido, Fernando>La otra es B, ordenamiento, teléfono, sí,
+pero al final esto es una vista,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1621-0
+00:10:13.876 --> 00:10:16.676
+<v Pena.ext, Manuel>Amigos, esa es la que estaba, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1643-1
+00:10:16.129 --> 00:10:20.127
+<v Garrido, Fernando>pero esto es una vista, sí, de dónde,
+de dónde, o sea,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1643-2
+00:10:20.127 --> 00:10:23.036
+<v Garrido, Fernando>tú necesitas el show view de esta vista.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1644-0
+00:10:23.836 --> 00:10:25.276
+<v Pena.ext, Manuel>Claro, para saber.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1702-0
+00:10:26.236 --> 00:10:31.100
+<v Pena.ext, Manuel>¿Cómo la crean y poder sacar los valores?
+Necesitamos solo valores específicos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1659-0
+00:10:28.876 --> 00:10:29.556
+<v Garrido, Fernando>Okay.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1702-1
+00:10:31.100 --> 00:10:35.356
+<v Pena.ext, Manuel>Esos valores, entendemos, son betas,
+son coeficientes. Eso sí cambia,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1667-0
+00:10:31.116 --> 00:10:31.796
+<v Garrido, Fernando>Okay.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1702-2
+00:10:35.356 --> 00:10:39.916
+<v Pena.ext, Manuel>cambiará pocas veces en el tiempo.
+No creo que cambie de manera constante.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1734-0
+00:10:39.276 --> 00:10:42.965
+<v Garrido, Fernando>No,
+esta vista realmente lo que te está</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1734-1
+00:10:42.965 --> 00:10:49.791
+<v Garrido, Fernando>diciendo es que es la última tabla del
+procesamiento del procesamiento de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1734-2
+00:10:49.791 --> 00:10:51.636
+<v Garrido, Fernando>características, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1751-0
+00:10:53.356 --> 00:10:58.438
+<v Garrido, Fernando>Ella, cuando tú la miras,
+esta tabla se crea en el proceso,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1751-1
+00:10:58.438 --> 00:11:00.556
+<v Garrido, Fernando>de hecho, yo miremos acá.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1766-0
+00:11:09.436 --> 00:11:12.356
+<v Garrido, Fernando>Pero sí creo que nos toca que se lo
+pasemos porque.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1790-0
+00:11:17.756 --> 00:11:21.649
+<v Andres Bonilla>¿Una pregunta, Fernando, entonces,
+cuál sería el proceso para dejar esas</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1790-1
+00:11:21.649 --> 00:11:22.876
+<v Andres Bonilla>tablas en el reconocer?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1802-0
+00:11:27.916 --> 00:11:30.876
+<v Garrido, Fernando>¿Cómo así? No entendí esa pregunta.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1815-0
+00:11:30.876 --> 00:11:34.476
+<v Andres Bonilla>Para poder hacer uso de los escorts que
+están dentro de esas pistas.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1875-0
+00:11:37.596 --> 00:11:44.172
+<v Garrido, Fernando>no chicos o sea esta vista lo que les
+digo es Es que se llena o sea esa vista o</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1875-1
+00:11:44.172 --> 00:11:50.913
+<v Garrido, Fernando>sea como cuando ustedes vienen haciendo
+el proceso acá esto de acá cierto esto de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1875-2
+00:11:50.913 --> 00:11:56.996
+<v Garrido, Fernando>acá estas tablas este proceso este
+proceso de acá ordenamiento 242 y este</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1888-0
+00:11:57.116 --> 00:12:04.746
+<v Garrido, Fernando>Generan unas tablas y estas vistas,
+estas vistas son un espejo de esas tablas,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1888-1
+00:12:04.746 --> 00:12:05.036
+<v Garrido, Fernando>sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1895-0
+00:12:08.796 --> 00:12:09.596
+<v Pena.ext, Manuel>Carolina.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1926-0
+00:12:08.796 --> 00:12:17.219
+<v Garrido, Fernando>Imagínense que el proceso 242, o sea,
+el ordenamiento 242 deja una tabla que se</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1926-1
+00:12:17.219 --> 00:12:23.116
+<v Garrido, Fernando>llama TMP direcciones, sí, dirección, sí,
+o esta no sé.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1951-0
+00:12:26.596 --> 00:12:33.444
+<v Garrido, Fernando>Entonces deja una tabla que se llama así
+TMP direcciones, cierto,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1951-1
+00:12:33.444 --> 00:12:37.076
+<v Garrido, Fernando>entonces esta vista, esta vista es.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1958-0
+00:12:38.036 --> 00:12:42.476
+<v Garrido, Fernando>Cuando tú le haces el show va a ser así,
+va a ser.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/1970-0
+00:12:43.356 --> 00:12:48.556
+<v Garrido, Fernando>From esta tabla en la red stage, sí,
+red stage.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2009-0
+00:12:51.516 --> 00:12:58.387
+<v Garrido, Fernando>Tú vas a encontrar que esta vista es
+create view, cierto,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2009-1
+00:12:58.387 --> 00:13:07.036
+<v Garrido, Fernando>esto haz el select asterisco from de esto
+donde la el tipo de ubicación.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2012-0
+00:13:08.316 --> 00:13:10.476
+<v Garrido, Fernando>O sea, igual a un teléfono, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2017-0
+00:13:11.876 --> 00:13:13.156
+<v Garrido, Fernando>Puedo decir cualquier cosa.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2067-0
+00:13:14.116 --> 00:13:22.241
+<v Garrido, Fernando>pero esta tabla la creó el proceso 242
+Entonces esta vista es el insumo para que</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2067-1
+00:13:22.241 --> 00:13:30.668
+<v Garrido, Fernando>empiece a calcularlo y así entonces viene
+email cierto teléfono fijo teléfono móvil</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2067-2
+00:13:30.668 --> 00:13:33.276
+<v Garrido, Fernando>email Sí y todos los demás</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2076-0
+00:13:34.156 --> 00:13:38.556
+<v Garrido, Fernando>Mira, beta, teléfono,
+ordenamiento y así está pistas, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2094-0
+00:13:40.156 --> 00:13:44.132
+<v Garrido, Fernando>Me estoy haciendo entender, o sea,
+no es que tenga un cálculo,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2094-1
+00:13:44.132 --> 00:13:45.836
+<v Garrido, Fernando>es que tiene los datos, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2103-0
+00:13:48.356 --> 00:13:49.396
+<v Garrido, Fernando>Tiene los datos, mira.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2113-0
+00:13:48.516 --> 00:13:52.996
+<v Pena.ext, Manuel>Dije la forma como yo lo entiendo es que
+eso es un catálogo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2134-0
+00:13:57.116 --> 00:14:02.416
+<v Pena.ext, Manuel>Que dice para email,
+están estas 11 características y el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2134-1
+00:14:02.416 --> 00:14:04.276
+<v Pena.ext, Manuel>coeficiente es este.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2155-0
+00:14:06.556 --> 00:14:11.196
+<v Garrido, Fernando>Pero que aquí lo que te dice es, mira,
+stay cold cat a.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2166-0
+00:14:13.196 --> 00:14:16.476
+<v Garrido, Fernando>Esta tabla se creó en la en las
+características.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2200-0
+00:14:18.316 --> 00:14:22.617
+<v Garrido, Fernando>Y sí, tienes razón,
+porque mira que acá están filtrando este</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2200-1
+00:14:22.617 --> 00:14:27.836
+<v Garrido, Fernando>catálogo con este bet. John, juemadre,
+es que John no está en la llamada.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2189-0
+00:14:23.036 --> 00:14:24.676
+<v Pena.ext, Manuel>Mhm, except.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2201-0
+00:14:29.236 --> 00:14:29.756
+<v Pena.ext, Manuel>Este.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2226-0
+00:14:30.636 --> 00:14:36.062
+<v Garrido, Fernando>¿Porque la única es que les pasemos esas
+vistas y el detalle de esas cuáles cuáles</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2209-0
+00:14:31.036 --> 00:14:31.276
+<v Pena.ext, Manuel>What?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2226-1
+00:14:36.062 --> 00:14:36.716
+<v Garrido, Fernando>necesitan?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2235-0
+00:14:37.916 --> 00:14:41.196
+<v Garrido, Fernando>¿O sea, necesitan el show view de estas,
+cierto?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2251-0
+00:14:43.596 --> 00:14:47.102
+<v Pena.ext, Manuel>Sí, exacto,
+necesitaríamos el show view de esas muy</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2251-1
+00:14:47.102 --> 00:14:48.316
+<v Pena.ext, Manuel>bien, ajá, así es.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2290-0
+00:14:49.316 --> 00:14:53.664
+<v Pena.ext, Manuel>Es que yo recuerdo ir que también ahora
+acá echando memoria en alguna</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2290-1
+00:14:53.664 --> 00:14:57.702
+<v Pena.ext, Manuel>conversación con Wilmar,
+hace varios meses me estaba hablando de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2290-2
+00:14:57.702 --> 00:14:59.876
+<v Pena.ext, Manuel>que había como una iniciativa para.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2365-0
+00:15:01.356 --> 00:15:05.580
+<v Pena.ext, Manuel>A facilitar el recálculo de sus betas. Sí,
+y me que él me explicaba,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2365-1
+00:15:05.580 --> 00:15:09.254
+<v Pena.ext, Manuel>esos betas somos de los que usa para el
+proyecto reconocer.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2312-0
+00:15:06.996 --> 00:15:07.276
+<v Garrido, Fernando>Oh.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2365-2
+00:15:09.254 --> 00:15:13.295
+<v Pena.ext, Manuel>Yo le mencionaba que sí,
+que en efecto eran unos coeficientes que</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2365-3
+00:15:13.295 --> 00:15:17.826
+<v Pena.ext, Manuel>usábamos para ordenamiento. Sí,
+entonces es por eso que yo tengo como muy</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2400-0
+00:15:16.556 --> 00:15:20.936
+<v Garrido, Fernando>Sí, pero la definición,
+la definición de producto fue que el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2365-4
+00:15:17.826 --> 00:15:18.316
+<v Pena.ext, Manuel>mapeado.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2400-1
+00:15:20.936 --> 00:15:24.383
+<v Garrido, Fernando>ordenamiento no nos daba tiempo de
+modificarlo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2400-2
+00:15:24.383 --> 00:15:28.476
+<v Garrido, Fernando>Entonces por eso nos íbamos con este esa
+definición, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2461-0
+00:15:28.076 --> 00:15:32.689
+<v Pena.ext, Manuel>No, de acuerdo, de acuerdo. O sea,
+te te te estoy echando como todo el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2461-1
+00:15:32.689 --> 00:15:37.238
+<v Pena.ext, Manuel>cuento para dar de entender que la
+definición que yo tengo es que eso</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2461-2
+00:15:37.238 --> 00:15:41.462
+<v Pena.ext, Manuel>funciona como un catálogo.
+Algún equipo hizo un análisis y dijo,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2461-3
+00:15:41.462 --> 00:15:45.686
+<v Pena.ext, Manuel>estos son los pesos, o sea,
+el peso en cuanto no peso de moneda,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2461-4
+00:15:45.686 --> 00:15:47.116
+<v Pena.ext, Manuel>sino peso en cuanto a.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2481-0
+00:15:47.436 --> 00:15:54.156
+<v Pena.ext, Manuel>¿A qué vale más que? Y se ajá, exacto.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2474-0
+00:15:49.516 --> 00:15:52.236
+<v Garrido, Fernando>no, sí, eso lo hizo el equipo de Di ahí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2509-0
+00:15:53.116 --> 00:15:56.528
+<v Garrido, Fernando>O sea, sí, lo que pasa es que no tenemos.
+O sea,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2509-1
+00:15:56.528 --> 00:16:00.916
+<v Garrido, Fernando>eso está cargado en la base de datos.
+Toca sacarlo de ahí, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2591-0
+00:16:00.956 --> 00:16:03.871
+<v Pena.ext, Manuel>Sí,
+entonces lo que estoy entendiendo es que</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2591-1
+00:16:03.871 --> 00:16:08.277
+<v Pena.ext, Manuel>con hablando con John podemos hacer el
+show view de estas tablitas.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2591-2
+00:16:08.277 --> 00:16:13.461
+<v Pena.ext, Manuel>Sacamos esos valores y esas tablas las
+cargamos nosotros en nuestro esquema del</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2591-3
+00:16:13.461 --> 00:16:17.413
+<v Pena.ext, Manuel>BDM datos, perdón,
+de del cómo es que llaman 3 el BDM datos,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2591-4
+00:16:17.413 --> 00:16:19.876
+<v Pena.ext, Manuel>sí, el BM datos dentro del consumidor.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2601-0
+00:16:20.156 --> 00:16:23.762
+<v Pena.ext, Manuel>Y de ahí vamos a consumir esas tablas
+para cuando lleguemos a esa parte del</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2601-1
+00:16:23.762 --> 00:16:24.996
+<v Pena.ext, Manuel>proceso en cada ejecución.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2650-0
+00:16:26.636 --> 00:16:30.262
+<v Garrido, Fernando>Y mira que eso se vuelve una catalogación,
+o sea,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2614-0
+00:16:29.596 --> 00:16:30.156
+<v Pena.ext, Manuel>Baby.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2650-1
+00:16:30.262 --> 00:16:34.830
+<v Garrido, Fernando>eso tienes que llevarlo así a todos los
+ambientes, ¿no? O sea,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-0
+00:16:34.636 --> 00:16:37.601
+<v Pena.ext, Manuel>Exacto,
+hay que llevarlo a todos los ambientes.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2650-2
+00:16:34.830 --> 00:16:36.716
+<v Garrido, Fernando>debería ser un objeto que.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-1
+00:16:37.601 --> 00:16:40.629
+<v Pena.ext, Manuel>Sí, ajá.
+Entonces eso va a ir en el como estamos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-2
+00:16:40.629 --> 00:16:44.707
+<v Pena.ext, Manuel>ya mentados en el piler,
+eso va en el primer repo que se llama el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-3
+00:16:44.707 --> 00:16:48.353
+<v Pena.ext, Manuel>strut, el strut.
+Ese es el nombre que le colocaron ellos y</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-4
+00:16:48.353 --> 00:16:51.689
+<v Pena.ext, Manuel>es para crear esos objetos que
+necesitamos. Entonces,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2725-5
+00:16:51.689 --> 00:16:56.756
+<v Pena.ext, Manuel>cuando vayamos a hacer el despliegue en
+todos los ambientes, en ese repo va a ir.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2731-0
+00:16:56.876 --> 00:16:58.956
+<v Pena.ext, Manuel>Esa información de esas tablas.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2787-0
+00:16:59.276 --> 00:17:04.158
+<v Garrido, Fernando>Sí, pero listo chicos, no,
+esa ya entendí el punto. Efectivamente,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2787-1
+00:17:04.158 --> 00:17:09.697
+<v Garrido, Fernando>eso está dentro de los queries de del
+viticulsor porque lo acabamos de ver.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2787-2
+00:17:09.697 --> 00:17:12.320
+<v Garrido, Fernando>O sea,
+los beta están incluso ahí y</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2787-3
+00:17:12.320 --> 00:17:17.276
+<v Garrido, Fernando>efectivamente son catálogos que se usan
+para poder definir el peso.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2847-0
+00:17:17.596 --> 00:17:23.369
+<v Garrido, Fernando>¿Que va a tener la característica?
+Porque mira que al final esto es un</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2800-0
+00:17:21.996 --> 00:17:23.116
+<v Pena.ext, Manuel>Aquí mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2847-1
+00:17:23.369 --> 00:17:27.760
+<v Garrido, Fernando>select, ¿no?
+Entonces mira que él lo que hace es mira</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2805-0
+00:17:24.316 --> 00:17:24.676
+<v Pena.ext, Manuel>Sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2847-2
+00:17:27.760 --> 00:17:33.209
+<v Garrido, Fernando>lo que hace este proceso,
+dice code pin persona, ID, buró persona,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2847-3
+00:17:33.209 --> 00:17:36.705
+<v Garrido, Fernando>sí,
+y dice vete a la tabla de reggae state</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2847-4
+00:17:36.705 --> 00:17:37.356
+<v Garrido, Fernando>tempo y.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2890-0
+00:17:37.516 --> 00:17:42.773
+<v Garrido, Fernando>Ve y mira el cálculo de meses, o sea,
+esto lo sacaron cálculo de meses,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2890-1
+00:17:42.773 --> 00:17:46.643
+<v Garrido, Fernando>se calculó en el proceso 242 o en una de
+las tablas.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2890-2
+00:17:46.643 --> 00:17:50.440
+<v Garrido, Fernando>Ustedes deben saber más que eso.
+Entonces con esto,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2890-3
+00:17:50.440 --> 00:17:54.676
+<v Garrido, Fernando>esta es la característica, sí,
+o por ejemplo, miren esta.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2950-0
+00:17:57.516 --> 00:18:04.853
+<v Garrido, Fernando>acá lo que está diciendo es si es válida
+le pone o sea empieza a sumar todas las</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2950-1
+00:18:04.853 --> 00:18:12.010
+<v Garrido, Fernando>que son válidas y las que no le ponen
+pues no la suma sí Y para cuánto lo hace</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2950-2
+00:18:12.010 --> 00:18:15.996
+<v Garrido, Fernando>entonces aquí dice crea tabla cóctel 001
+sí</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3003-0
+00:18:16.676 --> 00:18:22.601
+<v Garrido, Fernando>esto crea esta tablita a partir de esta
+información y con eso sacan esta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3003-1
+00:18:22.601 --> 00:18:28.445
+<v Garrido, Fernando>característica van a sacar la
+característica code cero uno del teléfono</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3003-2
+00:18:28.445 --> 00:18:34.614
+<v Garrido, Fernando>sí cero 22 como la hacen y ahí si cruzan
+con el beta sí del beta trate esta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/2989-0
+00:18:32.316 --> 00:18:32.636
+<v Pena.ext, Manuel>Y.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3003-3
+00:18:34.614 --> 00:18:36.156
+<v Garrido, Fernando>variable para saber</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3061-0
+00:18:36.716 --> 00:18:42.286
+<v Garrido, Fernando>cómo se calcula esa característica
+entonces del beta lo que pasa es que aquí</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3061-1
+00:18:42.286 --> 00:18:48.073
+<v Garrido, Fernando>no ponen el b y no me es fácil saber de
+dónde viene el campo pero entonces aquí</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3061-2
+00:18:48.073 --> 00:18:53.282
+<v Garrido, Fernando>dicen esta variable o sea esto sí
+vuélvelo un valor y el valor del beta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3042-0
+00:18:52.596 --> 00:18:52.916
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3061-3
+00:18:53.282 --> 00:18:57.116
+<v Garrido, Fernando>míralo acá cierto multiplícalo por el
+valor del beta</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3053-0
+00:18:55.356 --> 00:18:55.436
+<v Pena.ext, Manuel>Y.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3063-0
+00:18:57.276 --> 00:18:57.716
+<v Garrido, Fernando>Sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3062-0
+00:18:58.236 --> 00:18:59.476
+<v Pena.ext, Manuel>Correcto, ajá.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3084-0
+00:18:58.756 --> 00:19:04.916
+<v Garrido, Fernando>Que es acá y así lo hace para todos los
+procesos y efectivamente es un catálogo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3082-0
+00:19:03.116 --> 00:19:04.316
+<v Pena.ext, Manuel>Eso tal cual.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3158-0
+00:19:05.996 --> 00:19:10.213
+<v Pena.ext, Manuel>Bien, eso era lo que queríamos saber.
+Entonces vamos a buscar ahí por interno a</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3158-1
+00:19:10.213 --> 00:19:12.638
+<v Pena.ext, Manuel>John,
+a lo que ya tenga como mejor conexión y</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3158-2
+00:19:12.638 --> 00:19:16.539
+<v Pena.ext, Manuel>le pedimos el fack que nos ayude.
+Este nos había apoyado antes para sacar</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3115-0
+00:19:13.156 --> 00:19:13.436
+<v Garrido, Fernando>Hmm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3158-3
+00:19:16.539 --> 00:19:20.756
+<v Pena.ext, Manuel>este mismo tipo de información de lo que
+teníamos, claridad que eran catálogos.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3152-0
+00:19:21.596 --> 00:19:22.556
+<v Garrido, Fernando>sí, de una.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3175-0
+00:19:21.836 --> 00:19:24.125
+<v Pena.ext, Manuel>Acá sí teníamos como la duda,
+entonces listo,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3175-1
+00:19:24.125 --> 00:19:26.316
+<v Pena.ext, Manuel>la conversación aquí no sirve para
+gracias.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3182-0
+00:19:27.516 --> 00:19:28.236
+<v Garrido, Fernando>Listo, pues.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3192-0
+00:19:27.676 --> 00:19:30.896
+<v Pena.ext, Manuel>¿Alguna pregunta, Andrés,
+algo más que de pronto se me está</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3192-1
+00:19:30.896 --> 00:19:31.916
+<v Pena.ext, Manuel>quedando por fuera?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3197-0
+00:19:35.116 --> 00:19:36.956
+<v Andres Bonilla>¿Con relación a los betas, no?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3266-0
+00:19:39.276 --> 00:19:43.849
+<v Garrido, Fernando>De hecho, mira que yo les decía,
+no me acuerdo bien del tema de la</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3266-1
+00:19:43.849 --> 00:19:49.172
+<v Garrido, Fernando>multiplicación, pero al final es eso.
+Mira que al final él toma, por ejemplo,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3266-2
+00:19:49.172 --> 00:19:53.950
+<v Garrido, Fernando>para esta dirección física,
+el o de o de este de este que es el score</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3266-3
+00:19:53.950 --> 00:19:57.636
+<v Garrido, Fernando>de celulares o el score de mira lo que
+está haciendo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3267-0
+00:19:57.756 --> 00:19:58.236
+<v Garrido, Fernando>Sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3274-0
+00:19:59.356 --> 00:20:02.276
+<v Garrido, Fernando>Empieza a sumar todos los scorts, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3301-0
+00:20:03.236 --> 00:20:06.166
+<v Garrido, Fernando>O sea,
+esos son todos los pesos y todos estos</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3301-1
+00:20:06.166 --> 00:20:10.116
+<v Garrido, Fernando>pesos al final los suma y a eso le dice
+este es el score, sí.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3300-0
+00:20:10.356 --> 00:20:10.676
+<v Pena.ext, Manuel>Mhm.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3307-0
+00:20:12.636 --> 00:20:15.676
+<v Pena.ext, Manuel>Estoy bien entendido.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3308-0
+00:20:17.116 --> 00:20:18.036
+<v Garrido, Fernando>It stop us.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3319-0
+00:20:18.476 --> 00:20:20.036
+<v Pena.ext, Manuel>Listo, vale, muchas gracias.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3333-0
+00:20:18.796 --> 00:20:23.335
+<v Garrido, Fernando>Pero entonces ya van bastante avanzados,
+si quieren decir que ya están en el</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3333-1
+00:20:23.335 --> 00:20:24.396
+<v Garrido, Fernando>pedazo final, ¿no?</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3369-0
+00:20:25.676 --> 00:20:33.603
+<v Pena.ext, Manuel>No quisiera decir que vamos muy avanzados,
+pero vamos con el programa más bien, vale,</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3350-0
+00:20:28.316 --> 00:20:28.996
+<v Garrido, Fernando>Sure.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3375-0
+00:20:32.476 --> 00:20:36.196
+<v Garrido, Fernando>Bueno, listo, listo,
+ese pues ese proceso es el más pesado de</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3369-1
+00:20:33.603 --> 00:20:34.156
+<v Pena.ext, Manuel>listo.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3379-0
+00:20:35.996 --> 00:20:38.796
+<v Pena.ext, Manuel>Sí, eso es más pesado, sí, sí, señor.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3375-1
+00:20:36.196 --> 00:20:36.556
+<v Garrido, Fernando>hecho.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3387-0
+00:20:40.076 --> 00:20:41.756
+<v Garrido, Fernando>Bueno, chicos, gracias, chao.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3393-0
+00:20:41.316 --> 00:20:43.276
+<v Pena.ext, Manuel>Listo, vale, muchas gracias hasta luego.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3394-0
+00:20:42.476 --> 00:20:44.116
+<v Andres Bonilla>Listo, muchas gracias.</v>
+
+18ef9e84-9b81-4c70-835c-ec8a36f182f0/3399-0
+00:20:45.356 --> 00:20:46.316
+<v Canchila.ext, Clara>I'm the okay, Simon.</v>
