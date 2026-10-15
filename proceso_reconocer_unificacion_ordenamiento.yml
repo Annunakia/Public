@@ -1,0 +1,62 @@
+# ============================================================
+# Framework Batch — Proceso RECONOCER end-to-end: UNIFICACION + ORDENAMIENTO
+# Reconocer / Experian Colombia · cluster consumidor reconocerbatch / dba_rncr_batch
+#
+# UN SOLO proceso que corre, en orden, en la misma corrida:
+#   Unificacion (R1->R2->R3, resuelve FULL/DELTA) -> GEO -> Ordenamiento (scoring).
+#
+# COMO FUNCIONA (resumen):
+#   - El Framework Batch se dispara con un archivo .val en S3 y lee este YAML
+#     desde el bucket de definiciones.
+#   - Ejecuta los "procedimientos" por NIVEL: secuencial ENTRE niveles,
+#     paralelo DENTRO de un mismo nivel.
+#   - Cada step_procedure expone la firma estandar de 6 parametros VARCHAR y vive
+#     en el schema bdm_stage (wrappers). El Framework los invoca por Redshift
+#     Data API (cross-account).
+#
+# ORDEN DE NEGOCIO (por que estos niveles):
+#   Nivel 0  Unificacion  -> produce bdm_datos.unificacion_direccion
+#   Nivel 1  GEO          -> UNLOAD de candidatos sin coordenadas a S3 (si aplica)
+#   Nivel 2  Ordenamiento -> consume la unificacion y calcula rpu_orden_prioridad
+#   El Ordenamiento DEPENDE de la Unificacion: por eso va en un nivel posterior.
+#
+# IMPORTANTE antes de usar en Alpha/QA/Prod:
+#   1) Reemplazar PPXXXX por el MNEMOTECNICO real del proceso (tabla de
+#      resolucion NIT del Framework Batch).
+#   2) Confirmar que los SP wrapper existen en bdm_stage (desplegados por el repo
+#      pgm): sp_unificacion_ciclo / sp_geo_exportar_insumo / sp_ordenamiento_ejecucion.
+#   3) current_database() debe devolver reconocerbatch / dba_rncr_batch.
+#   4) Si la corrida no requiere refresco GEO, se puede omitir el Nivel 1.
+# ============================================================
+
+procesos:
+  directorio:
+    # Mnemotecnico/ruta del proceso en el bucket de definiciones.
+    # TODO: reemplazar PPXXXX por el mnemotecnico real.
+    ruta: PPXXXXreconocerunificacionordenamiento
+
+  niveles:
+
+    # ── Nivel 0 — UNIFICACION (R1 -> R2 + motor -> R3) ────────────────────
+    # sp_unificacion_ciclo es el orquestador maestro: resuelve el MODO
+    # (FULL/DELTA) a partir de los 6 parametros del Framework_Batch y encadena
+    # internamente R1 -> R2 -> Ciclo_GEO -> R3. Produce unificacion_direccion.
+    - nivel: 0
+      procedimientos:
+        - step_procedure: bdm_stage.sp_unificacion_ciclo
+
+    # ── Nivel 1 — GEO (opcional / si aplica en la corrida) ────────────────
+    # Exportador GEO: selecciona candidatos sin coordenadas y hace UNLOAD a S3.
+    # Omitir este nivel si la corrida no requiere refresco GEO.
+    - nivel: 1
+      procedimientos:
+        - step_procedure: bdm_stage.sp_geo_exportar_insumo
+
+    # ── Nivel 2 — ORDENAMIENTO (scoring + consolidacion) ──────────────────
+    # Orquestador EDF: preparar_insumos -> scoring DIR/TEL/CEL/EMA ->
+    # consolidacion (rpu_orden_prioridad) -> drop_staging.
+    # Un unico step: el encadenamiento de las 4 fases ocurre DENTRO del SP.
+    # Precondicion garantizada por el Nivel 0 (unificacion ya corrio).
+    - nivel: 2
+      procedimientos:
+        - step_procedure: bdm_stage.sp_ordenamiento_ejecucion
