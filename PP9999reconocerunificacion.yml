@@ -1,0 +1,59 @@
+# ============================================================
+# Framework Batch — Proceso RECONOCER: UNIFICACION + GEO (exportador)
+# Ruta/mnemotecnico: PP9999reconocerunificacion
+# Cluster consumidor: reconocerbatch / dba_rncr_batch
+#
+# Los nombres de los SP salen de los scripts run_* del repo dt (deploy.par):
+#   run_unificacion_ejecucion_secuencial.sql -> bdm_datos.sp_unificacion_ciclo
+#   run_geo_exportar_insumo.sql              -> bdm_stage.sp_geo_exportar_insumo
+#   run_geo_ciclo_lote.sql                   -> bdm_stage.sp_geo_ciclo_lote + bdm_stage.sp_geo_reenganchar_r3 (malla diferida, abajo)
+#
+# La orquestacion debe sustituir en sp_unificacion_ciclo (igual que en dt):
+#   :MODO  -> slot 4 (FULL | DELTA | vacio => FULL)
+#   :LOTE  -> slot 5 (entero, OBLIGATORIO: si falta, el SP aborta)
+#   :FECHA -> slot 6 (YYYY-MM-DD | vacio => hoy)
+# ============================================================
+
+procesos:
+  pipeline: RECONOCER
+  directorio:
+    ruta: PP9999reconocerunificacion
+  niveles:
+
+    - nivel: 1
+      descripcion: "Unificacion de direcciones (R1 -> R2 -> GEO -> R3, modo FULL/DELTA)"
+      procedimientos:
+        - step_name: "pp9999_1"
+          step_procedure: bdm_datos.sp_unificacion_ciclo
+          step_description: "Orquestador maestro: resuelve FULL/DELTA, encadena R1->R2->GEO->R3 y genera unificacion_direccion."
+
+    # OJO: sp_unificacion_ciclo ya llama internamente al helper GEO (bdm_datos.sp_geo_exportar_insumo)
+    # con el modo real de la corrida. Este wrapper fuerza barrido FULL, asi que en DELTA
+    # repite el UNLOAD completo. Dejalo solo si quieres esa segunda exportacion.
+    - nivel: 2
+      descripcion: "Exportacion GEO (UNLOAD a S3 de candidatos sin coordenadas)"
+      procedimientos:
+        - step_name: "pp9999_2"
+          step_procedure: bdm_stage.sp_geo_exportar_insumo
+          step_description: "Exportador GEO: selecciona candidatos sin coordenadas y hace UNLOAD a S3."
+
+    # MALLA GEO-CARGA DIFERIDA (run_geo_ciclo_lote.sql del repo dt) — NO activar en esta corrida.
+    # Corre despues de que ArcGIS deja resultados en reconocer_output/ y necesita las rutas
+    # S3 (:S3_GEOREF, :S3_DISTANCIAS) y el :LOTE; sin esos archivos el COPY falla.
+    # Va en una corrida/YAML aparte. Orden: ciclo_lote (nivel 0) y luego reenganchar_r3 (nivel 1).
+    # - nivel: 3
+    #   procedimientos:
+    #     - step_name: "pp9999_geo_carga"
+    #       step_procedure: bdm_stage.sp_geo_ciclo_lote
+    #     - step_name: "pp9999_geo_r3"
+    #       step_procedure: bdm_stage.sp_geo_reenganchar_r3
+
+    # ORDENAMIENTO: no esta en los scripts de dt ni en el SQL de pgm del zip. En la documentacion
+    # el orquestador es bdm_datos.sp_ordenamiento_ejecucion_edf(BOOLEAN), que NO tiene la firma de
+    # 6 VARCHAR del Framework (necesita wrapper). Se agrega cuando exista.
+
+  archivos:
+    obligatorios:
+      - .val
+  salidas:
+    aplica: false
