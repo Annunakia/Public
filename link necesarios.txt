@@ -4,3 +4,34 @@ https://us-east-1.console.aws.amazon.com/s3/buckets/dev-651706752126-fwdynbtch-d
 https://us-east-1.console.aws.amazon.com/states/home?region=us-east-1#/v2/executions/details/arn:aws:states:us-east-1:651706752126:execution:dev-651706752126-Sfn-fwdynbtch-dynamic-batch-main-batch:2d94b720-5748-41af-ab1a-6c1f4ff0adb4
 
 
+
+procesos:
+  pipeline: RECONOCER
+  directorio:
+    ruta: PP9998reconocermock
+  niveles:
+    - nivel: 1
+      descripcion: "Unificacion mock"
+      procedimientos:
+        - step_name: "unificacion_mock"
+          step_procedure: bdm_datos.sp_unificacion_mock_ciclo
+          step_description: "Reglas 1, 2 y 3 sobre datos mock"
+    - nivel: 2
+      descripcion: "Ordenamiento mock"
+      procedimientos:
+        - step_name: "ordenamiento_mock"
+          step_procedure: bdm_datos.sp_ordenamiento_ejecucion_mock
+          step_description: "Scoring de contactabilidad de los cuatro canales"
+    - nivel: 3
+      descripcion: "Novedades mock"
+      procedimientos:
+        - step_name: "novedades_mock"
+          step_procedure: bdm_datos.sp_novedades_mock_ciclo
+          step_description: "Ubicacion, Actividad Economica y Ubicacion Agregada"
+  archivos:
+    obligatorios:
+      - .val
+  salidas:
+    aplica: false
+
+
